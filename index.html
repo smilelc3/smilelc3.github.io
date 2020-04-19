@@ -786,7 +786,7 @@ R(\phi^{ij})\begin{bmatrix} u_i \\ v_i\end{bmatrix} - \begin{bmatrix} u_j \\ v_j
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-19 11:43:39" itemprop="dateModified" datetime="2020-04-19T11:43:39+08:00">2020-04-19</time>
+                <time title="修改时间：2020-04-19 11:46:33" itemprop="dateModified" datetime="2020-04-19T11:46:33+08:00">2020-04-19</time>
               </span>
 
           <br>
@@ -1205,7 +1205,7 @@ m(x,y) &amp;= \sqrt{(L(x+1, y) - L(x-1,y))^2+(L(x,y+1)-L(x,y-1))^2} \\
 <h3 id="计算采样区域梯度直方图">计算采样区域梯度直方图</h3>
 <p>将旋转后区域划分为<span class="math inline">\(d\times d\)</span>个子区域（每个区域间隔为<span class="math inline">\(m\sigma\)</span> 像元），在子区域内计算8个方向的梯度直方图，绘制每个方向梯度方向的累加值，形成一个种子点。 与求主方向不同的是，此时，每个子区域梯度方向直方图将0°~360°划分为8个方向区间，每个区间为45°。即每个种子点有8个方向区间的梯度强度信息。由于存在<span class="math inline">\(d\times d\)</span>，即<span class="math inline">\(4\times 4\)</span>个子区域，所以最终共有<span class="math inline">\(4\times 4 \times 8 = 128\)</span>个数据（Lowe建议的数据），形成128维SIFT特征矢量。</p>
 <p><img src="https://8ny92w.bn.files.1drv.com/y4mfqZUHPwTh7fYT2VZA-oPXhafiJb7Yn_vBUalEyijVlJsl42QXOshbdKMR9GSixbTvokwPYqVagxELvLO16BPI57YVV24xz6dhzeUbXJmLgkPIee5vRFb-LBczwlToTBUP3kDZk9GPOxl5w_r8_pgG83meNFbZHLHOhNhsUSehaKrPFA0JOvRhjtz2oA0CP78Y6GBEceYvsJLU5OFLJ3UEA?width=1024&amp;height=448&amp;cropmode=none" /></p>
-<p>对特征矢量需要加权处理，加权采用<span class="math inline">\(\frac{m\sigma d}{2}\)</span>的标准高斯函数。为了除去光照变化影响，还有一步归一化处理。</p>
+<p>对特征矢量需要加权处理，加权采用<span class="math inline">\(\frac{m\sigma d}{2}\)</span>的标准高斯函数。为了除去光照变化影响，还有进一步归一化处理。</p>
 <p>至此SIFT描述子生成，SIFT算法也基本完成了。</p>
 
       
