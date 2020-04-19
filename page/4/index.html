@@ -175,6 +175,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/09/python+opencv%20%E6%A3%80%E6%B5%8B%E5%92%8C%E8%B7%9F%E8%B8%AA%E8%BF%90%E5%8A%A8%E7%89%A9%E4%BD%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/07/09/python+opencv%20%E6%A3%80%E6%B5%8B%E5%92%8C%E8%B7%9F%E8%B8%AA%E8%BF%90%E5%8A%A8%E7%89%A9%E4%BD%93/" class="post-title-link" itemprop="url">python+opencv 检测和跟踪运动物体</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2017-07-09T00:00:00+08:00">2017-07-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-03-20 12:39:42" itemprop="dateModified" datetime="2019-03-20T12:39:42+08:00">2019-03-20</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="效果展示">效果展示</h1>
+<p><img src="https://me6veg.bn.files.1drv.com/y4mXNOvPBpWRhuLGF_qEHWSpNebSFjWgUBlK51ztBAu9xUtQTevnaXIQLgl8QzU22ZkZTKRI9Zh5zviMdFJBGgqniVWg1BoksWm9tGhkBLMxc1EH5VIPoF9QVa-kIFqrfK7iQ2-GfNXp547jATOrY6t6SVLBKtFZ4Sj6Z8qoFnsCpowqBBt40YX8HmrgkBBtxcXtONkIUfS8M0VBOPmfCHZgA?width=640&amp;height=480&amp;cropmode=none" /></p>
+<p><strong>最终效果视频</strong></p>
+<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124363&amp;authkey=AHrRqWgsnymLWnA" width="320" height="240" frameborder="0" scrolling="no" allowfullscreen>
+</iframe>
+<p><strong>监控+差值+黑白二值图像</strong></p>
+<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124364&amp;authkey=AE4oTGF__5N5jh8" width="320" height="240" frameborder="0" scrolling="no" allowfullscreen>
+</iframe>
+<h1 id="代码">代码</h1>
+<ul>
+<li>该程序<strong>计算量要求较低</strong>，可以部署在<strong>树莓派</strong>类的物联网设备上</li>
+</ul>
+<h2 id="python包配置">python包配置</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install argparse <span class="comment">#用于解析参数</span></span><br><span class="line">sudo pip install imutils <span class="comment">#用于修改图片格式大小</span></span><br><span class="line">sudo apt-get install libopencv-dev  </span><br><span class="line">sudo apt-get install python-opencv  <span class="comment">#安装opencv</span></span><br></pre></td></tr></table></figure>
+<h2 id="python代码">python代码</h2>
+<p>代码写的相当详细，注释的极其详细，不再赘述。（python版本2.7）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"><span class="comment">#必要的包</span></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> imutils</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建参数解释器并解析参数</span></span><br><span class="line">ap = argparse.ArgumentParser()</span><br><span class="line">ap.add_argument(<span class="string">"-v"</span>, <span class="string">"--video"</span>, help=<span class="string">"path to the video file"</span>)</span><br><span class="line">ap.add_argument(<span class="string">"-a"</span>, <span class="string">"--min-area"</span>, type=int, default=<span class="number">1000</span>, help=<span class="string">"minimum area size"</span>)</span><br><span class="line">args = vars(ap.parse_args())</span><br><span class="line"></span><br><span class="line"><span class="comment">#如果video参数为None, 那么我们从摄像头读取数据</span></span><br><span class="line"><span class="keyword">if</span> args.get(<span class="string">"video"</span>, <span class="literal">None</span>) <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    camera = cv2.VideoCapture(<span class="number">0</span>)</span><br><span class="line">    originaltime = time.time()<span class="comment">#记录时间</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    camera = cv2.VideoCapture(args[<span class="string">"video"</span>])</span><br><span class="line"><span class="comment">#初始化视频流的第一帧</span></span><br><span class="line">firstFrame = <span class="literal">None</span></span><br><span class="line">num=<span class="number">0</span></span><br><span class="line"><span class="comment">#遍历视频的每一帧</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">if</span> time.time()-originaltime &lt;= <span class="number">2</span>:  <span class="comment">#等待摄像机开启并稳定</span></span><br><span class="line">        (grabbed, frame) = camera.read()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        (grabbed, frame) = camera.read()</span><br><span class="line">        <span class="comment">#调用camera.read()返回一个２元组。元组第一个值是grabbed，表明是否成功从缓冲中读取frame。元组第二个值为frame本身</span></span><br><span class="line">        text = <span class="string">"not exist"</span></span><br><span class="line">        <span class="comment">#表明正在监控的房间“没有被占领”。如果确实有活动，就更新该字符串</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> grabbed:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="comment">#调整该帧的大小，转换为灰阶图像并且对其进行高斯模糊</span></span><br><span class="line">        frame = imutils.resize(frame, width = <span class="number">500</span>)</span><br><span class="line">        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)<span class="comment">#灰阶图片</span></span><br><span class="line">        gray = cv2.GaussianBlur(gray, (<span class="number">21</span>, <span class="number">21</span>), <span class="number">0</span>)<span class="comment">#高斯模糊</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#如果第一帧是None, 对其进行初始化</span></span><br><span class="line">        <span class="keyword">if</span> firstFrame <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            firstFrame = gray</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#计算当前帧和第一帧的不同</span></span><br><span class="line">        frameDelta = cv2.absdiff(firstFrame, gray)<span class="comment">#两幅图的差的绝对值输出到另一幅图上面来</span></span><br><span class="line"></span><br><span class="line">        thresh = cv2.threshold(frameDelta, <span class="number">25</span>, <span class="number">255</span>, cv2.THRESH_BINARY)[<span class="number">1</span>]<span class="comment">#黑白二值化</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#扩展阈值图像填充孔洞，然后找到阈值图像上的轮廓</span></span><br><span class="line">        thresh = cv2.dilate(thresh, <span class="literal">None</span>, iterations = <span class="number">2</span>)<span class="comment">#图像膨胀</span></span><br><span class="line">        (cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,</span><br><span class="line">                                     cv2.CHAIN_APPROX_SIMPLE</span><br><span class="line">                                     )<span class="comment">#findcontours函数会“原地”修改输入的图像,只检测的外轮廓，仅保存矩形４个顶点</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">#遍历轮廓</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">            <span class="comment">#如果轮廓太小，忽视轮廓</span></span><br><span class="line">            <span class="keyword">if</span> cv2.contourArea(c)&lt;args[<span class="string">"min_area"</span>]:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">#计算轮廓边界，在当前帧中画出该框，并更新text</span></span><br><span class="line">            (x, y, w, h) = cv2.boundingRect(c)</span><br><span class="line">            cv2.rectangle(frame, (x, y), (x + w,y + h), (<span class="number">0</span>, <span class="number">255</span>, <span class="number">255</span>), <span class="number">2</span>)</span><br><span class="line">            text = <span class="string">"exist"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#在当前帧上写文字以及时间戳</span></span><br><span class="line">        cv2.putText(frame, <span class="string">"room stats:&#123;&#125;"</span>.format(text), (<span class="number">10</span>, <span class="number">20</span>),</span><br><span class="line">                    cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.5</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">1</span>)</span><br><span class="line">        cv2.putText(frame, datetime.datetime.now().strftime(<span class="string">"%A %d %B %Y %I:%M:%S%p"</span>),</span><br><span class="line">                    (<span class="number">10</span>, frame.shape[<span class="number">0</span>] - <span class="number">10</span>), cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.4</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#显示当前帧</span></span><br><span class="line">        cv2.imshow(<span class="string">"二值化图像"</span>, thresh)</span><br><span class="line">        cv2.imshow(<span class="string">"差值图像"</span>, frameDelta)</span><br><span class="line">        cv2.imshow(<span class="string">"监控"</span>, frame)</span><br><span class="line">        cv2.waitKey(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#对环境渐变的适应</span></span><br><span class="line">        flag = <span class="literal">True</span><span class="comment">#标记是否值得更新（第一帧）背景帧</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">            <span class="keyword">if</span> cv2.contourArea(c)&gt;args[<span class="string">"min_area"</span>]//<span class="number">4</span>:</span><br><span class="line">                flag = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span>  flag <span class="keyword">is</span> <span class="literal">True</span>:<span class="comment">#新背景＝旧背景＊(1-0.618)＋当前无物体背景＊(0.618)</span></span><br><span class="line">            firstFrame = cv2.addWeighted(firstFrame, <span class="number">1</span><span class="number">-0.618</span>, gray, <span class="number">0.618</span>, <span class="number">0.0</span>)</span><br><span class="line">        <span class="comment">#cv2.imwrite("Security Feed.png", frame)</span></span><br><span class="line">        <span class="comment">#cv2.imwrite("Thresh.png", thresh)</span></span><br><span class="line">        <span class="comment">#cv2.imwrite("Frame delta.png", frameDelta)</span></span><br><span class="line">        <span class="comment">#cv2.waitKey(0)</span></span><br><span class="line"><span class="comment">#清理摄像机资源并关闭打开的窗口</span></span><br><span class="line">camera.release()</span><br><span class="line">cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/01/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1257,137 +1352,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/26/python%E5%AD%A6%E4%B9%A0%E4%B8%AA%E4%BA%BA%E7%9C%8B%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/26/python%E5%AD%A6%E4%B9%A0%E4%B8%AA%E4%BA%BA%E7%9C%8B%E6%B3%95/" class="post-title-link" itemprop="url">python学习个人看法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-05-26 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-26T00:00:00+08:00">2017-05-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-19 20:20:51" itemprop="dateModified" datetime="2019-03-19T20:20:51+08:00">2019-03-19</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://pk73bq.bn.files.1drv.com/y4mYNsMJusveiNSrGmCDm_8OaeBwJbb-y8F3cS-XkjSkpuWFnUldhB6R1WeXbWeypZO9_NCCu7xjYY2_Gup9iVY5J-YuBpDlfJwBHsQ8p1E0WXugjLFC80W1-sA3bgcko-2AYBuXTEl6NeQrkXBMG-31ezoT6XP14rO8s29V-laKwYXy67M2MT1ziWenRPyzulbOywKim19UH8aRtFJZ4IPvQ?width=687&amp;height=238&amp;cropmode=none" /></p>
-<p><strong><u><em>life is short, we need python!</em></u></strong></p>
-<h1 id="python介绍">python介绍</h1>
-<h2 id="一种编程语言">一种编程语言</h2>
-<blockquote>
-<p>完成同一个任务，C语言要写1000行代码，Java只需要写100行，而Python可能只要20行。用Python完成项目，编写的代码量更少，代码简短可读性强，python编程简单直接。</p>
-</blockquote>
-<h2 id="适合快速开发">适合快速开发</h2>
-<p>Python是美国主流大学受欢迎的入门编程语言，诞生至今已经过25个年头。相对于其他语言，它更加易学、易读，非常适合快速开发。Python编程简单直接，难度低于java，更适合初学编程者，让初学者专注于编程逻辑，而不是困惑于晦涩的语法细节上。</p>
-<h1 id="学习主要平台">学习主要平台</h1>
-<p>慕课网 <a href="http://www.imooc.com/" target="_blank" rel="noopener">www.imooc.com</a></p>
-<p>实验楼 <a href="http://www.shiyanlou.com/" target="_blank" rel="noopener">www.shiyanlou.com</a></p>
-<h3 id="平台特点">平台特点：</h3>
-<ul>
-<li>慕课网</li>
-</ul>
-<p>偏重于python基础语法学习，包括且不限于右侧内容。其平台内容较为简单，很适合初学者学习；同时它可以在线评测答案，且有较为浓厚的讨论氛围。当然也是免费的。</p>
-<ul>
-<li>实验楼</li>
-</ul>
-<p>宗旨是随时随地，动手实验。网站提供的不是培训视频，而是配置好的虚拟机，通过虚拟的实验环境，学习者可以边看文档便动手操作，但针对某些较为热门的实验，需要付一定的费用。</p>
-<h3 id="学习流程建议">学习流程建议：</h3>
-<p><em>python入门 -&gt; 实验楼简单实验 -&gt; python(进阶) -&gt; 实验楼有难度的实验+python爬虫</em></p>
-<hr />
-<h4 id="python入门">python入门</h4>
-<p>​ <a href="http://www.imooc.com/learn/177" target="_blank" rel="noopener" class="uri">http://www.imooc.com/learn/177</a></p>
-<h4 id="实验楼简单实验">实验楼简单实验</h4>
-<p>​ <a href="https://www.shiyanlou.com/courses/368" target="_blank" rel="noopener">200行Python代码实现2048</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/370" target="_blank" rel="noopener">Python 图片转字符画</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/637" target="_blank" rel="noopener">Python3 &amp; OpenCV 视频转字符动画</a></p>
-<h4 id="python进阶">python(进阶)</h4>
-<p>​ <a href="http://www.imooc.com/learn/317" target="_blank" rel="noopener" class="uri">http://www.imooc.com/learn/317</a></p>
-<h4 id="实验楼有难度的实验python爬虫">实验楼有难度的实验+python爬虫</h4>
-<p>​ <a href="https://www.shiyanlou.com/courses/777" target="_blank" rel="noopener">k-近邻算法实现手写数字识别系统–《机器学习实战 》</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/744" target="_blank" rel="noopener">深度学习初探——入门DL主流框架</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/686" target="_blank" rel="noopener">川普撞脸希拉里(基于 OpenCV 的面部特征交换</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/623" target="_blank" rel="noopener">Python3 实现火车票查询工具</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/593" target="_blank" rel="noopener">神经网络实现手写字符识别系统</a></p>
-<hr />
-<h6 id="补充实验楼的项目很多很多有意思的也很多很多还是鼓励大家多看看">补充：实验楼的项目很多很多，有意思的也很多很多，还是鼓励大家多看看</h6>
-<p>另附python语法学习建议：</p>
-<ul>
-<li><p>基础知识包括：变量和数据类型，List和Tuple，条件判断和循环，Dict和Set，函数，切片，迭代和列表生式</p>
-<p>​ 注意：学习基础知识切莫着急，一定要打好基础，这样才会更好的应用python</p></li>
-<li><p>进阶知识：学完掌握基础知识之后，纪要学习进阶知识了。</p>
-<p>进阶知识包括：函数式编程，模块，面向对象编程基础，类的继承和定制类</p></li>
-<li><p>python装饰器：装饰器是很重要的一个知识点</p></li>
-</ul>
-<p>​ 关于装饰器需要涉及导函数作用域，闭包的使用和修饰器的概念基础及使用</p>
-<ul>
-<li>​ 高阶知识：文件处理，错误和异常，正则表达式</li>
-<li>​ 提升阶段：数据库操作，Django框架和爬虫技术</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1457,7 +1421,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1494,12 +1458,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">119k</span>
+    <span title="站点总字数">146k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:48</span>
+    <span title="站点阅读时长">2:13</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>

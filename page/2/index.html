@@ -175,6 +175,115 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/09/%E4%BD%BF%E7%94%A8PyCharm%E8%BF%9B%E8%A1%8C%E8%BF%9C%E7%A8%8B%E5%BC%80%E5%8F%91%E5%92%8CDjango%E8%B0%83%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/08/09/%E4%BD%BF%E7%94%A8PyCharm%E8%BF%9B%E8%A1%8C%E8%BF%9C%E7%A8%8B%E5%BC%80%E5%8F%91%E5%92%8CDjango%E8%B0%83%E8%AF%95/" class="post-title-link" itemprop="url">使用PyCharm进行远程开发和Django调试</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-09 00:00:00" itemprop="dateCreated datePublished" datetime="2018-08-09T00:00:00+08:00">2018-08-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-19 00:26:41" itemprop="dateModified" datetime="2020-04-19T00:26:41+08:00">2020-04-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>存在这样一种情况，经常在非服务器环境下开发python程序，即使在本地运行良好，但是在服务器的环境下就会存在问题，如何保证开发环境跟运行环境一致呢？</p>
+<p>这里通过<code>PyCharm</code>的<code>远程解释器</code>加上自动文件同步功能，实现</p>
+<ul>
+<li>本地编译 -&gt; 同步到服务器 -&gt; 远程debug</li>
+</ul>
+<p>的方式来调试程序。</p>
+<h1 id="远程服务器的同步配置">远程服务器的同步配置</h1>
+<p>局域网下的服务器IP地址为: <code>192.168.2.192</code>，python版本3.6, 且在项目下已有虚拟环境，开启ssh服务。</p>
+<p>首先我们需要配置PyCharm通服务器的代码同步，打开Tools | Deployment | Configuration</p>
+<p>点击左边的“+”添加一个部署配置，输入名字，类型选SFTP</p>
+<p><img src="https://n07fha.bn.files.1drv.com/y4mZwUAf5Ed0BE1DC1dy0iMUN1REeUM4bqrVF2w9CGvJJnFm-zA_UtnAz-iZrcthx-AhqcFY43B_wevLApBgQ_VEgObovpR_tln_jHzyGIs49dWX_YalhjEI5raez1D79kGqLQNl3izwMXaq8NafXqZQHT5UxwSY0C65Btk7uWupqb66XVsZbDUuxQRCYICBz-T2JkTnfSyavjBFScta8PTYA?width=394&amp;height=206&amp;cropmode=none" /></p>
+<p>确定之后，再配置远程服务器的ip、端口、用户名和密码。root path是文件上传的根目录，注意这个目录必须用户名有权限创建文件。</p>
+<p><img src="https://n06pha.bn.files.1drv.com/y4mX86uDo7bHMZO0eoBWW_pkCjEa6VePinoQvDLlvwCIIxIAfSPtqrpKt5LCQbNDPBKOYxK4iz6zqiXKe5shqYSEkF5R1V4Ny3zKUcz7ER75R1gsK_kR6TBHeVXOrMMSZ-znznIXX0jgecmTp2ac-Qj6gy7YvCO0iJ5Yvta8q6R00bk0nWfmJe6RTjCF6VkQFy1V5L_tKgt_FvFMyDl-wg2bg?width=800&amp;height=656&amp;cropmode=none" /></p>
+<p>然后配置映射，local path是你的工程目录，就是需要将本地这个目录同步到服务器上面，我填的是项目根目录。 Deploy path on server 这里填写相对于root path的目录，下面那个web path不用管先</p>
+<p><img src="https://n06qha.bn.files.1drv.com/y4mVfSBXetUv2sF6TyELEUKFH08Z4ATjbHiWihelqww8YU1zHPbFZrch9mX5o2T_Oe_TnljXyDIXthMw1SWbJPHraEpUox5GaK1jALGCCqbqlOGdKPmYdcYyNdfzhpAspBLNstNPrw2eTa4hN9gMaWvXb9npKHfyTjMAEaiRx34byiGb1amqEiVraF_CbvL68etoI-MYqSE9QS26JC3xYjDbA?width=800&amp;height=373&amp;cropmode=none" /></p>
+<p>还有一个设置，打开Tools | Deployment | Options，将”Create Empty directories”打上勾，要是指定的文件夹不存在，会自动创建。</p>
+<h1 id="上传和下载文件">上传和下载文件</h1>
+<p>有几种方法可以实现本地和远程文件的同步，手动和当文件保存后自动触发。这里我选中<code>Automatic upload</code>。</p>
+<p>手动上传方式很简单，选择需要同步的文件或文件夹，然后选择 Tools | Deployment | Upload to sftp(这个是刚刚配置的部署名称)</p>
+<p>如果在服务器存在已有项目，选择Compare with … ，然后全部接受服务器端的文件。</p>
+<p><img src="https://n07aha.bn.files.1drv.com/y4mITXEk8lrpICsqMYsWaYjzF-Aid83K6KuAC-UTxfCR6Nce5YtoroqPZx5oUOnEKA0U3KO_AMSIWfrgFD-uUwmzcsgni2vJMBgV7ZwgqbdYeGJwzdjA9Fd2WZrelZXqVrSTODADHae8J0ZaW-JuAb3qHoDhZPOxEe29INFIaqBFnH5t1MKqeSx4AyD1UpDtK2M0bUNRahD5KNCoJHb28iofg?width=441&amp;height=288&amp;cropmode=none" /></p>
+<h1 id="比较远程和本地文件">比较远程和本地文件</h1>
+<p>有时候你并不确定远程和本地版本的完全一致，需要去比较看看。PyCharm提供了对比视图来为你解决这个问题。</p>
+<p>选择Tools | Deployment | Browse Remote Host，打开远程文件视图，在右侧窗口就能看到远程主机中的文件</p>
+<p><img src="https://n07bha.bn.files.1drv.com/y4mTph4cJu7hb5Y-VO4K9HICxBaa4C7uo-COutat-ZkJ6iOXPzfRM5cl_oelToBfWLXHnRh_ZrXfSyGXF_BTiYB2BpKfL9_wjKNFx0DFo6uWWVz_AFGCHhRUyz3G35BkkGxu3MFoTEBO3InnZsttwu1RGnDAOeDEQJU0czI5J8tQYZbKH1-uAvviNZfDB2xF6Qah5aSTLGvVokSPuU_5ALFFw?width=295&amp;height=349&amp;cropmode=none" /></p>
+<p>选择一个你想要对比的文件夹，点击右键-&gt;Sync with Local，打开同步对比窗口，使用左右箭头来同步内容。</p>
+<h1 id="配置远程python解释器">配置远程Python解释器</h1>
+<p>新建一个python解释器，选择SSH 解释器，由于我上面配置过就直接选模板， 这里请仔细看我的Python解释器是虚拟环境virtualenv，这个要在服务器上面先创建好虚拟环境。 <img src="https://n07kha.bn.files.1drv.com/y4mjnwhj6Q7nB0Mz1PDlvO1aCn4R4XZWScaFKJp1y1FEaOoLTCpMf9znJ0vFKOCP6m4e8ZqbmYy5MJRtzJhj5DWcWOT4sPwGBDA5U4-l3ObROWG0RVJIRSS50KgWY1FXSvTxuqidyPAFttu-D8xdAtRPg31q_92-2DAa70o_7yFuj6GVMR6VXdJ1NnWhPlL2WQJ-wB1dBgllv8RAELOl2yQyA?width=943&amp;height=536&amp;cropmode=none" /></p>
+<h1 id="配置django运行参数">配置Django运行参数</h1>
+<p>指定启动<code>Host</code>为<code>0.0.0.0</code>，表示允许所有ip进行调试 若需要启动web浏览器，指定下地址为服务器端的ip</p>
+<p><img src="https://n07lha.bn.files.1drv.com/y4m6ggEXfQTG-S_pNmNtBGnElTb1BKf5wdfSJKlNvLn61pK1rp0XjqBM-2KrMf2rhFIZEfr_DiD6WFb1qPVnUG9shu25NON9CSrNC9MNKVnc5GmXdxN428uHVZJaf8WvQGWPrdr8jywiEdeiFctR6k-RRZoeQtzpJaUktdgefkq5QqIJIQ4Rre9u-Zqa8yTXOOXCACNITR-_wU66d1oBjqRFw?width=752&amp;height=513&amp;cropmode=none" /></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/04/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E2%80%9CBTBU%E6%9F%A5%E8%AF%A2%E2%80%9D%E7%9A%84%E9%9A%90%E7%A7%81%E6%94%BF%E7%AD%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1186,164 +1295,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/27/LaTeX%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%EF%BC%88Linux&Win%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/01/27/LaTeX%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%EF%BC%88Linux&Win%EF%BC%89/" class="post-title-link" itemprop="url">LaTeX环境配置（Linux&Win）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-01-27 00:00:00" itemprop="dateCreated datePublished" datetime="2018-01-27T00:00:00+08:00">2018-01-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-20 15:23:04" itemprop="dateModified" datetime="2019-03-20T15:23:04+08:00">2019-03-20</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://pk6seg.bn.files.1drv.com/y4mqO57Ix1hXVE7cvi8K2IKjDk-IUMFL77Ry9wCu7sSB5eWPmXJcVZipcAnJUDIXFU6pihT4CeTa10q2H0ISh_J_7tSrTh-KXzzlur8i6rvvV7uRtOwYNAl6aPuQNQDtEdH77HRAJyw7poDkb6sq2DNoNDxdHHJoLdYa9FaUM-EYFeaEX9whmnQkRGaHu9ORqTHYt6SsGEUo0lTERNpFK1zXw?width=500&amp;height=191&amp;cropmode=none" /></p>
-<h1 id="latex介绍">LaTeX介绍</h1>
-<p><code>LaTex</code>是一种基于<code>TeX</code>的排版系统，最初由美国计算机学家Leslie Lamport在20四级80年代初开发，在对于生成包含<strong>复杂表格和数学公式的书籍质量的印刷品</strong>，<code>TeX</code>发挥着强大功能。</p>
-<p><code>TeX</code>在不同的系统下有不同的实现版本(<em>MiKTeX、pdfTeX、xelaTeX、CTeX</em>)，有时一种操作系统中也会有几种<code>TeX</code>系统。目前系统对应推荐关系如下：</p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Unix(mac)</th>
-<th style="text-align: center;">类Unix(Linux)</th>
-<th style="text-align: center;">windows</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">MacTex</td>
-<td style="text-align: center;">Texlive</td>
-<td style="text-align: center;">MikTex</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>CTeX指的是CTeX中文套装的简称，是把MiKTeX和一些常用的相关工具，如GSview，WinEdt 等包装在一起制作的一个简易安装程序，并对其中的中文支持部分进行了配置，使得安装后马上就可以使用中文。</p>
-</blockquote>
-<blockquote>
-<p>TeXLive 是由国际 TeX 用户组织 TUG 开发的 TeX 系统，支持不同的操作系统平台。其 Windows 版本又称 fpTeX ， Unix/Linux 版本即著名的 teTeX 。</p>
-</blockquote>
-<h1 id="linux环境下latex配置">linux环境下LaTeX配置</h1>
-<p><strong>总体方案介绍</strong></p>
-<blockquote>
-<p><em>TexLive + Atom编译器（3个Atom插件） + 添加win字体</em></p>
-</blockquote>
-<h2 id="latex基础环境配置">LaTeX基础环境配置</h2>
-<ul>
-<li>在有<em>apt</em>包管理的Linux发行版本上，如(ubuntu,deepin,debian)，其安装相对容易。命令如下：</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install texlive-full</span><br></pre></td></tr></table></figure>
-<p>其中，<code>-full</code>注明安装所有扩展组件（xelaTeX、语言字体包等），建议直接安装<code>-full</code>版本，虽然硬盘空间占用较大，但免去了单个配置的苦恼。</p>
-<ul>
-<li>非<em>apt</em>的Linux发行版本可能需要自行texlive官网下载最发行版本并安装。</li>
-</ul>
-<h2 id="atomide相关配置">atom(IDE)相关配置</h2>
-<blockquote>
-<p>Atom 是github专门为程序员推出的一个跨平台文本编译器。具有简洁和直观的图形用户界面，经过简单的配置，足够胜任各类语言的IDE(集成开发环境)</p>
-</blockquote>
-<p>因为atom在大多数的linux发行版本中均未有收录，需要自行添加仓库源，或者去官网下载安装，这里为了便于更新，提供添加apt源，以及apt安装方式介绍：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:webupd8team/atom</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install atom</span><br></pre></td></tr></table></figure>
-<p>atom若作为latex的开发环境，需要配合以下插件使用(直接在atom中安装)：</p>
-<ul>
-<li><code>atom-latex</code></li>
-<li><code>language-latex</code></li>
-<li><code>pdf-view</code></li>
-</ul>
-<p>另外建议安装<code>simplified-chinese-menu</code>插件，对atom菜单进行汉化。</p>
-<p>因对兼容性的设置，若对一般latex编写，建议Latex编译器使用xelatex，在<code>atom-latex</code>插件中设置如下：</p>
-<ul>
-<li><code>Toolchain to use</code> 选择 <code>custom Toolchain</code></li>
-<li><code>LaTeX compiler to use</code> 修改为 <code>xelatex</code></li>
-<li><code>bibTeX compiler to use</code> 修改为 <code>xelatex</code></li>
-<li><code>Preview PDF after building process</code> 选择 <code>Do nothng</code></li>
-</ul>
-<h2 id="将win下字库迁移到linux下">将win下字库迁移到linux下</h2>
-<p>因为win下大多字体均是微软公司授权或其他公司向用户授权，大多是非开源字体，因此在<code>Linux</code>或<code>TeX</code>发型版本中均不自带。但在发型书籍时候，使用的大多字体：英文下的新罗马字体（<strong><em>Times New Roman</em></strong>），中文下宋体(SimSun)，楷体（KaiTi）均为非开源字体。若在Linux下使用，需要自行移植安装。</p>
-<p><strong>注意：不能直接安装，直接安装后会存在于本用户的目录下，texlive仅仅调用系统共有字体文件夹下所有字体步骤如下</strong></p>
-<h3 id="复制win字体到linux字体文件夹">复制win字体到Linux字体文件夹</h3>
-<p>windows字体文件夹位置：<em>C://WINDOWS/Fonts</em></p>
-<p>Linux下字体文件夹位置：<em>/usr/share/fonts</em></p>
-<p>建议将windows下所有字体复制到/usr/share/fonts/windows-fonts下，使用cp命令。</p>
-<p>例如在windows字体文件夹下打开终端</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /usr/share/fonts/windows-fonts</span><br><span class="line">sudo cp * /usr/share/fonts/windows-fonts</span><br></pre></td></tr></table></figure>
-<h3 id="刷新字体缓存使字体生效">刷新字体缓存，使字体生效</h3>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fc-cache -f -v</span><br></pre></td></tr></table></figure>
-<h1 id="win环境下latex配置">Win环境下LaTeX配置</h1>
-<p>windows环境下方案很多，这里推荐直接安装相同的Texlive套件，其直接包含<strong>MiKTeX</strong>和<strong>CTeX</strong></p>
-<p><a href="https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/Images/" target="_blank" rel="noopener">点击转至Texlive国内清华源</a></p>
-<p>下载文件类型为ios，请解压或挂载后安装。</p>
-<p>针对前端的IDE仍建议使用Atom，有了能力者可以使用WinEdt。</p>
-<ul>
-<li>Atom 配置见2.2，但注意：请从官网直接下载atom并安装，其余配置一致；</li>
-<li>因为不存在字体缺失问题，直接使用即可。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1413,7 +1364,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1450,12 +1401,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">119k</span>
+    <span title="站点总字数">146k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:48</span>
+    <span title="站点阅读时长">2:13</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>

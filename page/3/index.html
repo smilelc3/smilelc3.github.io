@@ -175,6 +175,164 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/27/LaTeX%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%EF%BC%88Linux&Win%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/01/27/LaTeX%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%EF%BC%88Linux&Win%EF%BC%89/" class="post-title-link" itemprop="url">LaTeX环境配置（Linux&Win）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-27 00:00:00" itemprop="dateCreated datePublished" datetime="2018-01-27T00:00:00+08:00">2018-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-03-20 15:23:04" itemprop="dateModified" datetime="2019-03-20T15:23:04+08:00">2019-03-20</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://pk6seg.bn.files.1drv.com/y4mqO57Ix1hXVE7cvi8K2IKjDk-IUMFL77Ry9wCu7sSB5eWPmXJcVZipcAnJUDIXFU6pihT4CeTa10q2H0ISh_J_7tSrTh-KXzzlur8i6rvvV7uRtOwYNAl6aPuQNQDtEdH77HRAJyw7poDkb6sq2DNoNDxdHHJoLdYa9FaUM-EYFeaEX9whmnQkRGaHu9ORqTHYt6SsGEUo0lTERNpFK1zXw?width=500&amp;height=191&amp;cropmode=none" /></p>
+<h1 id="latex介绍">LaTeX介绍</h1>
+<p><code>LaTex</code>是一种基于<code>TeX</code>的排版系统，最初由美国计算机学家Leslie Lamport在20四级80年代初开发，在对于生成包含<strong>复杂表格和数学公式的书籍质量的印刷品</strong>，<code>TeX</code>发挥着强大功能。</p>
+<p><code>TeX</code>在不同的系统下有不同的实现版本(<em>MiKTeX、pdfTeX、xelaTeX、CTeX</em>)，有时一种操作系统中也会有几种<code>TeX</code>系统。目前系统对应推荐关系如下：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Unix(mac)</th>
+<th style="text-align: center;">类Unix(Linux)</th>
+<th style="text-align: center;">windows</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">MacTex</td>
+<td style="text-align: center;">Texlive</td>
+<td style="text-align: center;">MikTex</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>CTeX指的是CTeX中文套装的简称，是把MiKTeX和一些常用的相关工具，如GSview，WinEdt 等包装在一起制作的一个简易安装程序，并对其中的中文支持部分进行了配置，使得安装后马上就可以使用中文。</p>
+</blockquote>
+<blockquote>
+<p>TeXLive 是由国际 TeX 用户组织 TUG 开发的 TeX 系统，支持不同的操作系统平台。其 Windows 版本又称 fpTeX ， Unix/Linux 版本即著名的 teTeX 。</p>
+</blockquote>
+<h1 id="linux环境下latex配置">linux环境下LaTeX配置</h1>
+<p><strong>总体方案介绍</strong></p>
+<blockquote>
+<p><em>TexLive + Atom编译器（3个Atom插件） + 添加win字体</em></p>
+</blockquote>
+<h2 id="latex基础环境配置">LaTeX基础环境配置</h2>
+<ul>
+<li>在有<em>apt</em>包管理的Linux发行版本上，如(ubuntu,deepin,debian)，其安装相对容易。命令如下：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install texlive-full</span><br></pre></td></tr></table></figure>
+<p>其中，<code>-full</code>注明安装所有扩展组件（xelaTeX、语言字体包等），建议直接安装<code>-full</code>版本，虽然硬盘空间占用较大，但免去了单个配置的苦恼。</p>
+<ul>
+<li>非<em>apt</em>的Linux发行版本可能需要自行texlive官网下载最发行版本并安装。</li>
+</ul>
+<h2 id="atomide相关配置">atom(IDE)相关配置</h2>
+<blockquote>
+<p>Atom 是github专门为程序员推出的一个跨平台文本编译器。具有简洁和直观的图形用户界面，经过简单的配置，足够胜任各类语言的IDE(集成开发环境)</p>
+</blockquote>
+<p>因为atom在大多数的linux发行版本中均未有收录，需要自行添加仓库源，或者去官网下载安装，这里为了便于更新，提供添加apt源，以及apt安装方式介绍：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:webupd8team/atom</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install atom</span><br></pre></td></tr></table></figure>
+<p>atom若作为latex的开发环境，需要配合以下插件使用(直接在atom中安装)：</p>
+<ul>
+<li><code>atom-latex</code></li>
+<li><code>language-latex</code></li>
+<li><code>pdf-view</code></li>
+</ul>
+<p>另外建议安装<code>simplified-chinese-menu</code>插件，对atom菜单进行汉化。</p>
+<p>因对兼容性的设置，若对一般latex编写，建议Latex编译器使用xelatex，在<code>atom-latex</code>插件中设置如下：</p>
+<ul>
+<li><code>Toolchain to use</code> 选择 <code>custom Toolchain</code></li>
+<li><code>LaTeX compiler to use</code> 修改为 <code>xelatex</code></li>
+<li><code>bibTeX compiler to use</code> 修改为 <code>xelatex</code></li>
+<li><code>Preview PDF after building process</code> 选择 <code>Do nothng</code></li>
+</ul>
+<h2 id="将win下字库迁移到linux下">将win下字库迁移到linux下</h2>
+<p>因为win下大多字体均是微软公司授权或其他公司向用户授权，大多是非开源字体，因此在<code>Linux</code>或<code>TeX</code>发型版本中均不自带。但在发型书籍时候，使用的大多字体：英文下的新罗马字体（<strong><em>Times New Roman</em></strong>），中文下宋体(SimSun)，楷体（KaiTi）均为非开源字体。若在Linux下使用，需要自行移植安装。</p>
+<p><strong>注意：不能直接安装，直接安装后会存在于本用户的目录下，texlive仅仅调用系统共有字体文件夹下所有字体步骤如下</strong></p>
+<h3 id="复制win字体到linux字体文件夹">复制win字体到Linux字体文件夹</h3>
+<p>windows字体文件夹位置：<em>C://WINDOWS/Fonts</em></p>
+<p>Linux下字体文件夹位置：<em>/usr/share/fonts</em></p>
+<p>建议将windows下所有字体复制到/usr/share/fonts/windows-fonts下，使用cp命令。</p>
+<p>例如在windows字体文件夹下打开终端</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /usr/share/fonts/windows-fonts</span><br><span class="line">sudo cp * /usr/share/fonts/windows-fonts</span><br></pre></td></tr></table></figure>
+<h3 id="刷新字体缓存使字体生效">刷新字体缓存，使字体生效</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fc-cache -f -v</span><br></pre></td></tr></table></figure>
+<h1 id="win环境下latex配置">Win环境下LaTeX配置</h1>
+<p>windows环境下方案很多，这里推荐直接安装相同的Texlive套件，其直接包含<strong>MiKTeX</strong>和<strong>CTeX</strong></p>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/Images/" target="_blank" rel="noopener">点击转至Texlive国内清华源</a></p>
+<p>下载文件类型为ios，请解压或挂载后安装。</p>
+<p>针对前端的IDE仍建议使用Atom，有了能力者可以使用WinEdt。</p>
+<ul>
+<li>Atom 配置见2.2，但注意：请从官网直接下载atom并安装，其余配置一致；</li>
+<li>因为不存在字体缺失问题，直接使用即可。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/27/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%86%85%E5%AE%B9%E8%80%83%E7%82%B9%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1522,101 +1680,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/09/python+opencv%20%E6%A3%80%E6%B5%8B%E5%92%8C%E8%B7%9F%E8%B8%AA%E8%BF%90%E5%8A%A8%E7%89%A9%E4%BD%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/07/09/python+opencv%20%E6%A3%80%E6%B5%8B%E5%92%8C%E8%B7%9F%E8%B8%AA%E8%BF%90%E5%8A%A8%E7%89%A9%E4%BD%93/" class="post-title-link" itemprop="url">python+opencv 检测和跟踪运动物体</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2017-07-09T00:00:00+08:00">2017-07-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-20 12:39:42" itemprop="dateModified" datetime="2019-03-20T12:39:42+08:00">2019-03-20</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="效果展示">效果展示</h1>
-<p><img src="https://me6veg.bn.files.1drv.com/y4mXNOvPBpWRhuLGF_qEHWSpNebSFjWgUBlK51ztBAu9xUtQTevnaXIQLgl8QzU22ZkZTKRI9Zh5zviMdFJBGgqniVWg1BoksWm9tGhkBLMxc1EH5VIPoF9QVa-kIFqrfK7iQ2-GfNXp547jATOrY6t6SVLBKtFZ4Sj6Z8qoFnsCpowqBBt40YX8HmrgkBBtxcXtONkIUfS8M0VBOPmfCHZgA?width=640&amp;height=480&amp;cropmode=none" /></p>
-<p><strong>最终效果视频</strong></p>
-<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124363&amp;authkey=AHrRqWgsnymLWnA" width="320" height="240" frameborder="0" scrolling="no" allowfullscreen>
-</iframe>
-<p><strong>监控+差值+黑白二值图像</strong></p>
-<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124364&amp;authkey=AE4oTGF__5N5jh8" width="320" height="240" frameborder="0" scrolling="no" allowfullscreen>
-</iframe>
-<h1 id="代码">代码</h1>
-<ul>
-<li>该程序<strong>计算量要求较低</strong>，可以部署在<strong>树莓派</strong>类的物联网设备上</li>
-</ul>
-<h2 id="python包配置">python包配置</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install argparse <span class="comment">#用于解析参数</span></span><br><span class="line">sudo pip install imutils <span class="comment">#用于修改图片格式大小</span></span><br><span class="line">sudo apt-get install libopencv-dev  </span><br><span class="line">sudo apt-get install python-opencv  <span class="comment">#安装opencv</span></span><br></pre></td></tr></table></figure>
-<h2 id="python代码">python代码</h2>
-<p>代码写的相当详细，注释的极其详细，不再赘述。（python版本2.7）</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"><span class="comment">#必要的包</span></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> imutils</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建参数解释器并解析参数</span></span><br><span class="line">ap = argparse.ArgumentParser()</span><br><span class="line">ap.add_argument(<span class="string">"-v"</span>, <span class="string">"--video"</span>, help=<span class="string">"path to the video file"</span>)</span><br><span class="line">ap.add_argument(<span class="string">"-a"</span>, <span class="string">"--min-area"</span>, type=int, default=<span class="number">1000</span>, help=<span class="string">"minimum area size"</span>)</span><br><span class="line">args = vars(ap.parse_args())</span><br><span class="line"></span><br><span class="line"><span class="comment">#如果video参数为None, 那么我们从摄像头读取数据</span></span><br><span class="line"><span class="keyword">if</span> args.get(<span class="string">"video"</span>, <span class="literal">None</span>) <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    camera = cv2.VideoCapture(<span class="number">0</span>)</span><br><span class="line">    originaltime = time.time()<span class="comment">#记录时间</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    camera = cv2.VideoCapture(args[<span class="string">"video"</span>])</span><br><span class="line"><span class="comment">#初始化视频流的第一帧</span></span><br><span class="line">firstFrame = <span class="literal">None</span></span><br><span class="line">num=<span class="number">0</span></span><br><span class="line"><span class="comment">#遍历视频的每一帧</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">if</span> time.time()-originaltime &lt;= <span class="number">2</span>:  <span class="comment">#等待摄像机开启并稳定</span></span><br><span class="line">        (grabbed, frame) = camera.read()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        (grabbed, frame) = camera.read()</span><br><span class="line">        <span class="comment">#调用camera.read()返回一个２元组。元组第一个值是grabbed，表明是否成功从缓冲中读取frame。元组第二个值为frame本身</span></span><br><span class="line">        text = <span class="string">"not exist"</span></span><br><span class="line">        <span class="comment">#表明正在监控的房间“没有被占领”。如果确实有活动，就更新该字符串</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> grabbed:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="comment">#调整该帧的大小，转换为灰阶图像并且对其进行高斯模糊</span></span><br><span class="line">        frame = imutils.resize(frame, width = <span class="number">500</span>)</span><br><span class="line">        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)<span class="comment">#灰阶图片</span></span><br><span class="line">        gray = cv2.GaussianBlur(gray, (<span class="number">21</span>, <span class="number">21</span>), <span class="number">0</span>)<span class="comment">#高斯模糊</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#如果第一帧是None, 对其进行初始化</span></span><br><span class="line">        <span class="keyword">if</span> firstFrame <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            firstFrame = gray</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#计算当前帧和第一帧的不同</span></span><br><span class="line">        frameDelta = cv2.absdiff(firstFrame, gray)<span class="comment">#两幅图的差的绝对值输出到另一幅图上面来</span></span><br><span class="line"></span><br><span class="line">        thresh = cv2.threshold(frameDelta, <span class="number">25</span>, <span class="number">255</span>, cv2.THRESH_BINARY)[<span class="number">1</span>]<span class="comment">#黑白二值化</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#扩展阈值图像填充孔洞，然后找到阈值图像上的轮廓</span></span><br><span class="line">        thresh = cv2.dilate(thresh, <span class="literal">None</span>, iterations = <span class="number">2</span>)<span class="comment">#图像膨胀</span></span><br><span class="line">        (cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,</span><br><span class="line">                                     cv2.CHAIN_APPROX_SIMPLE</span><br><span class="line">                                     )<span class="comment">#findcontours函数会“原地”修改输入的图像,只检测的外轮廓，仅保存矩形４个顶点</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">#遍历轮廓</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">            <span class="comment">#如果轮廓太小，忽视轮廓</span></span><br><span class="line">            <span class="keyword">if</span> cv2.contourArea(c)&lt;args[<span class="string">"min_area"</span>]:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">#计算轮廓边界，在当前帧中画出该框，并更新text</span></span><br><span class="line">            (x, y, w, h) = cv2.boundingRect(c)</span><br><span class="line">            cv2.rectangle(frame, (x, y), (x + w,y + h), (<span class="number">0</span>, <span class="number">255</span>, <span class="number">255</span>), <span class="number">2</span>)</span><br><span class="line">            text = <span class="string">"exist"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#在当前帧上写文字以及时间戳</span></span><br><span class="line">        cv2.putText(frame, <span class="string">"room stats:&#123;&#125;"</span>.format(text), (<span class="number">10</span>, <span class="number">20</span>),</span><br><span class="line">                    cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.5</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">1</span>)</span><br><span class="line">        cv2.putText(frame, datetime.datetime.now().strftime(<span class="string">"%A %d %B %Y %I:%M:%S%p"</span>),</span><br><span class="line">                    (<span class="number">10</span>, frame.shape[<span class="number">0</span>] - <span class="number">10</span>), cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.4</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#显示当前帧</span></span><br><span class="line">        cv2.imshow(<span class="string">"二值化图像"</span>, thresh)</span><br><span class="line">        cv2.imshow(<span class="string">"差值图像"</span>, frameDelta)</span><br><span class="line">        cv2.imshow(<span class="string">"监控"</span>, frame)</span><br><span class="line">        cv2.waitKey(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#对环境渐变的适应</span></span><br><span class="line">        flag = <span class="literal">True</span><span class="comment">#标记是否值得更新（第一帧）背景帧</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">            <span class="keyword">if</span> cv2.contourArea(c)&gt;args[<span class="string">"min_area"</span>]//<span class="number">4</span>:</span><br><span class="line">                flag = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span>  flag <span class="keyword">is</span> <span class="literal">True</span>:<span class="comment">#新背景＝旧背景＊(1-0.618)＋当前无物体背景＊(0.618)</span></span><br><span class="line">            firstFrame = cv2.addWeighted(firstFrame, <span class="number">1</span><span class="number">-0.618</span>, gray, <span class="number">0.618</span>, <span class="number">0.0</span>)</span><br><span class="line">        <span class="comment">#cv2.imwrite("Security Feed.png", frame)</span></span><br><span class="line">        <span class="comment">#cv2.imwrite("Thresh.png", thresh)</span></span><br><span class="line">        <span class="comment">#cv2.imwrite("Frame delta.png", frameDelta)</span></span><br><span class="line">        <span class="comment">#cv2.waitKey(0)</span></span><br><span class="line"><span class="comment">#清理摄像机资源并关闭打开的窗口</span></span><br><span class="line">camera.release()</span><br><span class="line">cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1686,7 +1749,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1723,12 +1786,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">119k</span>
+    <span title="站点总字数">146k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:48</span>
+    <span title="站点阅读时长">2:13</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
