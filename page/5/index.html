@@ -175,7 +175,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/26/python%E5%AD%A6%E4%B9%A0%E4%B8%AA%E4%BA%BA%E7%9C%8B%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/17/Ubuntu%EF%BC%9A%E5%9F%BA%E4%BA%8ENginx%E5%92%8Cvsftpd%E6%90%AD%E5%BB%BA%E5%9B%BE%E7%89%87%E6%9C%8D%E5%8A%A1%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -189,7 +189,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/05/26/python%E5%AD%A6%E4%B9%A0%E4%B8%AA%E4%BA%BA%E7%9C%8B%E6%B3%95/" class="post-title-link" itemprop="url">python学习个人看法</a>
+            <a href="/2018/04/17/Ubuntu%EF%BC%9A%E5%9F%BA%E4%BA%8ENginx%E5%92%8Cvsftpd%E6%90%AD%E5%BB%BA%E5%9B%BE%E7%89%87%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="post-title-link" itemprop="url">Ubuntu：基于Nginx和vsftpd搭建图片服务器</a>
         </h2>
 
         <div class="post-meta">
@@ -199,14 +199,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-05-26 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-26T00:00:00+08:00">2017-05-26</time>
+              <time title="创建时间：2018-04-17 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-17T00:00:00+08:00">2018-04-17</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-19 20:20:51" itemprop="dateModified" datetime="2019-03-19T20:20:51+08:00">2019-03-19</time>
+                <time title="修改时间：2020-04-19 00:23:14" itemprop="dateModified" datetime="2020-04-19T00:23:14+08:00">2020-04-19</time>
               </span>
 
           <br>
@@ -215,14 +215,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
+              <span>1.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -234,59 +234,55 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img src="https://pk73bq.bn.files.1drv.com/y4mYNsMJusveiNSrGmCDm_8OaeBwJbb-y8F3cS-XkjSkpuWFnUldhB6R1WeXbWeypZO9_NCCu7xjYY2_Gup9iVY5J-YuBpDlfJwBHsQ8p1E0WXugjLFC80W1-sA3bgcko-2AYBuXTEl6NeQrkXBMG-31ezoT6XP14rO8s29V-laKwYXy67M2MT1ziWenRPyzulbOywKim19UH8aRtFJZ4IPvQ?width=687&amp;height=238&amp;cropmode=none" /></p>
-<p><strong><u><em>life is short, we need python!</em></u></strong></p>
-<h1 id="python介绍">python介绍</h1>
-<h2 id="一种编程语言">一种编程语言</h2>
+          <p><img src="https://p06qeg.bn.files.1drv.com/y4mAso1mnd9X5lLiCiKaJeGAPjpCA-MX6re496_Js_5ncOarRpmPFGwL95n70jU2rCGe4jB8kPjKA-sw8afqQg_-GNZwP5EIkSRzgCEpk3lX7Z61iRc2GW-68DA7Ce2pp4b4EcFhZCRJZ0fl6nhpsZLcAR3WBbkHFyHr1CB3k86mVPGUfwcDoHXARHzQhBH7YJcMI5ulnoKkTRJqAOL0Y-NfQ?width=275&amp;height=183&amp;cropmode=none" /></p>
+<p>首先，此次项目正好需要对某云服务商的帮助文档进行全文抓取，涉及到对图片进行转存，需要重新搭建一个图片服务器方便管理，也避免数据丢失，经过多方案尝试，最终选择如下的方法，话不多说，开始行动。</p>
+<h1 id="环境说明">环境说明</h1>
+<ul>
+<li>系统 <code>Ubuntu 18.04</code></li>
+<li>已开放 21号端口（ftp），80号端口（http）</li>
+</ul>
+<h1 id="安装nginx">安装Nginx</h1>
+<h3 id="安装所需依赖库">安装所需依赖库</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install build-essential # 安装gcc g++依赖库</span><br><span class="line">sudo apt-get install libpcre3 libpcre3-dev # 安装prce依赖库</span><br><span class="line">sudo apt-get install zlib1g-dev # 安装 zlib依赖库</span><br><span class="line">sudo apt-get install openssl # 安装 ssl依赖库</span><br></pre></td></tr></table></figure>
+<h3 id="编译nginx">编译Nginx</h3>
+<p>先下载<a href="http://nginx.org/en/download.htmlhttp://" target="_blank" rel="noopener">Nginx</a>对应的最新版本（linux） 我当前的最新版本是：1.13.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf nginx-*   #解压下载下来的压缩包</span><br><span class="line">cd nginx-*  #进入解压目录</span><br><span class="line">./configure --prefix=/usr/local/nginx   #配置并生成makefile，自行配置安装位置</span><br><span class="line">sudo make   #编译 </span><br><span class="line">make install    #安装</span><br><span class="line">/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf #启动Nginx</span><br></pre></td></tr></table></figure>
+<p>此时Nginx就安装完成了，会使用默认的80端口启动，如果有启动，启动完成可直接通过服务器ip或者云解析的域名查看默认网页。</p>
+<p>默认网页如图所示：</p>
+<p><img src="https://p06reg.bn.files.1drv.com/y4m501YRAxcVtB5wOjlHNzi-eUZCZ5T9H1gwA2YNXEzhjIZyUdH2RvLlxyeR3MNmNeRfwTYZhNk-31CIzpsso7c08G7-xxfDQiiA4d1FRZCU6jtJlNw6oqALWmCWRIxNIYBKVfXOnhhPL4W3UOOdAYwnrYm1lJ-kpGz_3aPH-oWRdOlt-tmIMYMAz9T9nQ1L9tomWCTT1zcpfhQb_cv4FxW4A?width=541&amp;height=201&amp;cropmode=none" /></p>
+<h1 id="安装与配置vsftpd">安装与配置vsftpd</h1>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install vsftpd #安装vsftpd</span><br><span class="line">sudo service vsftpd start   #启动vsftpd服务</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>完成同一个任务，C语言要写1000行代码，Java只需要写100行，而Python可能只要20行。用Python完成项目，编写的代码量更少，代码简短可读性强，python编程简单直接。</p>
+<p>下面方法目的在于单独为ftp建立一个用户，并建立images文件夹存储图片</p>
 </blockquote>
-<h2 id="适合快速开发">适合快速开发</h2>
-<p>Python是美国主流大学受欢迎的入门编程语言，诞生至今已经过25个年头。相对于其他语言，它更加易学、易读，非常适合快速开发。Python编程简单直接，难度低于java，更适合初学编程者，让初学者专注于编程逻辑，而不是困惑于晦涩的语法细节上。</p>
-<h1 id="学习主要平台">学习主要平台</h1>
-<p>慕课网 <a href="http://www.imooc.com/" target="_blank" rel="noopener">www.imooc.com</a></p>
-<p>实验楼 <a href="http://www.shiyanlou.com/" target="_blank" rel="noopener">www.shiyanlou.com</a></p>
-<h3 id="平台特点">平台特点：</h3>
-<ul>
-<li>慕课网</li>
-</ul>
-<p>偏重于python基础语法学习，包括且不限于右侧内容。其平台内容较为简单，很适合初学者学习；同时它可以在线评测答案，且有较为浓厚的讨论氛围。当然也是免费的。</p>
-<ul>
-<li>实验楼</li>
-</ul>
-<p>宗旨是随时随地，动手实验。网站提供的不是培训视频，而是配置好的虚拟机，通过虚拟的实验环境，学习者可以边看文档便动手操作，但针对某些较为热门的实验，需要付一定的费用。</p>
-<h3 id="学习流程建议">学习流程建议：</h3>
-<p><em>python入门 -&gt; 实验楼简单实验 -&gt; python(进阶) -&gt; 实验楼有难度的实验+python爬虫</em></p>
-<hr />
-<h4 id="python入门">python入门</h4>
-<p>​ <a href="http://www.imooc.com/learn/177" target="_blank" rel="noopener" class="uri">http://www.imooc.com/learn/177</a></p>
-<h4 id="实验楼简单实验">实验楼简单实验</h4>
-<p>​ <a href="https://www.shiyanlou.com/courses/368" target="_blank" rel="noopener">200行Python代码实现2048</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/370" target="_blank" rel="noopener">Python 图片转字符画</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/637" target="_blank" rel="noopener">Python3 &amp; OpenCV 视频转字符动画</a></p>
-<h4 id="python进阶">python(进阶)</h4>
-<p>​ <a href="http://www.imooc.com/learn/317" target="_blank" rel="noopener" class="uri">http://www.imooc.com/learn/317</a></p>
-<h4 id="实验楼有难度的实验python爬虫">实验楼有难度的实验+python爬虫</h4>
-<p>​ <a href="https://www.shiyanlou.com/courses/777" target="_blank" rel="noopener">k-近邻算法实现手写数字识别系统–《机器学习实战 》</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/744" target="_blank" rel="noopener">深度学习初探——入门DL主流框架</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/686" target="_blank" rel="noopener">川普撞脸希拉里(基于 OpenCV 的面部特征交换</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/623" target="_blank" rel="noopener">Python3 实现火车票查询工具</a></p>
-<p>​ <a href="https://www.shiyanlou.com/courses/593" target="_blank" rel="noopener">神经网络实现手写字符识别系统</a></p>
-<hr />
-<h6 id="补充实验楼的项目很多很多有意思的也很多很多还是鼓励大家多看看">补充：实验楼的项目很多很多，有意思的也很多很多，还是鼓励大家多看看</h6>
-<p>另附python语法学习建议：</p>
-<ul>
-<li><p>基础知识包括：变量和数据类型，List和Tuple，条件判断和循环，Dict和Set，函数，切片，迭代和列表生式</p>
-<p>​ 注意：学习基础知识切莫着急，一定要打好基础，这样才会更好的应用python</p></li>
-<li><p>进阶知识：学完掌握基础知识之后，纪要学习进阶知识了。</p>
-<p>进阶知识包括：函数式编程，模块，面向对象编程基础，类的继承和定制类</p></li>
-<li><p>python装饰器：装饰器是很重要的一个知识点</p></li>
-</ul>
-<p>​ 关于装饰器需要涉及导函数作用域，闭包的使用和修饰器的概念基础及使用</p>
-<ul>
-<li>​ 高阶知识：文件处理，错误和异常，正则表达式</li>
-<li>​ 提升阶段：数据库操作，Django框架和爬虫技术</li>
-</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /home/ftpuser    #新建ftpuser目录作为ftp主目录</span><br><span class="line">sudo useradd -d /home/ftpuser -s /bin/bash ftpuser  #新建ftpuser用户指定用户主目录</span><br><span class="line">passwd ftpuser  #设置用户密码</span><br><span class="line">chown ftpuser /home/ftpuser #制定用户组</span><br><span class="line">chmod 777 -R /home/ftpuser  #为ftpuser下所有文件开放访问权限</span><br></pre></td></tr></table></figure>
+<h3 id="新建文件etcvsftpd.user_list用于存放允许访问ftp的用户">新建文件/etc/vsftpd.user_list，用于存放允许访问ftp的用户</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/vsftpd.user_list</span><br></pre></td></tr></table></figure>
+<p>文本中添加ftpuser用户名</p>
+<p><img src="https://p06seg.bn.files.1drv.com/y4m5EztP7RGfuKVUZVsKbyAMjdjYNzR8Kfe2JIli8OlnuLEfzuYLhn4zO4hpOvgMVXNdC0Zdwo0NdYRqTdD5w6xur53Q-Zb92GhjkE6iWpMzoTbyi9vD6V8XQgaLbrQhLppQTD2QnWImyTY92S30luRrsYqalSnYz9RvrlXUdZ4mKJUwtSlilbwdmWfCzpHL6riJFmEyhHbOtQR7iHwqey-xQ?width=632&amp;height=68&amp;cropmode=none" /></p>
+<h3 id="编辑vsftpd配置文件">编辑vsftpd配置文件</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/vsftpd.conf</span><br></pre></td></tr></table></figure>
+<p>作如下修改</p>
+<ol type="1">
+<li>去除注释 <code>write_enable=YES</code></li>
+<li>末尾添加 <code>userlist_file=/etc/vsftpd.user_list</code></li>
+<li>末尾添加 <code>userlist_enable=YES</code></li>
+<li>末尾添加 <code>userlist_deny=NO</code></li>
+</ol>
+<p><em>保存，退出</em></p>
+<h3 id="重启vsftpd服务">重启vsftpd服务</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service vsftpd restart</span><br></pre></td></tr></table></figure>
+<p>用<code>filezilla</code>或其他ftp软件，并使用刚刚新建的<strong>用户名</strong>和<strong>密码</strong>访问测试是否成功。</p>
+<h3 id="创建存储图片的根目录">创建存储图片的根目录</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo su </span><br><span class="line">cd /home/ftpuser</span><br><span class="line">mkdir -p www/images #这里使用www/images为例</span><br><span class="line">mkdir /usr/local/nginx/html/images  #在nginx目录下创建images目录</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /usr/local/nginx/conf/nginx.conf    #在默认的server里再添加一个location并指定实际路径</span><br></pre></td></tr></table></figure>
+<p>插入内容为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location /images/ &#123;</span><br><span class="line">    root  /home/ftpuser/www/;</span><br><span class="line">    autoindex on;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://p06beg.bn.files.1drv.com/y4mR7SA-w0k7DSRvNtPHRNMJjq0H4c-mw3nS-Ff5SBgzrpR6rYcvcT-qB81fcoCrj51ckWG9j-1j4cHrPVbGizOebJrFSzm3pR8dhO8JKSa_dPEefmr7ezSWLPSkelJsp-BptZwI-thzh0xXkfRiS46gHa1Km6XEHAu9Rsn0-TaXjCcZ0vqkzUUWkSp04pX3UCb7klITml7iaMx6btZdiS7vA?width=436&amp;height=220&amp;cropmode=none" /></p>
+<p>停用与重新载入nginx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx -s stop</span><br><span class="line">&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx -c &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx.conf</span><br></pre></td></tr></table></figure>
+<h1 id="最后测试">最后测试</h1>
+<p><img src="https://p06ceg.bn.files.1drv.com/y4m-ive4iZkWnw_uOXRpjBNYf2ZaHniqr430QHkWCX9hSdWUUs7hL9YliHir0DevgvoVqZKYSedP9ZCC-RmOZzzckJFxZYJ0KuK7j-YeMYQJaCw587Ep_LcRRVuT0hfc1_U-49T2fH6P2KYNF3gkdsp0Z31mrzSM-g8zV1ifXhYeQ0TeMFiYI0hDvBMiMEEpb2zDvE1VQTcSLq_BNfyWD3gXA?width=953&amp;height=581&amp;cropmode=none" /></p>
 
       
     </div>
@@ -306,7 +302,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/25/SPFA%E7%AE%97%E6%B3%95%EF%BC%9Aqueue+vector%E7%9A%84%E5%AE%9E%E7%8E%B0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/26/python%E7%88%AC%E8%99%AB%E4%B9%8BBeatifulSoup%20Select%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -320,7 +316,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/05/25/SPFA%E7%AE%97%E6%B3%95%EF%BC%9Aqueue+vector%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">SPFA算法：queue+vector的实现</a>
+            <a href="/2018/03/26/python%E7%88%AC%E8%99%AB%E4%B9%8BBeatifulSoup%20Select%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">python爬虫之BeatifulSoup Select方法总结</a>
         </h2>
 
         <div class="post-meta">
@@ -330,14 +326,113 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-05-25 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-25T00:00:00+08:00">2017-05-25</time>
+              <time title="创建时间：2018-03-26 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-26T00:00:00+08:00">2018-03-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-19 20:05:42" itemprop="dateModified" datetime="2019-03-19T20:05:42+08:00">2019-03-19</time>
+                <time title="修改时间：2019-03-20 15:34:39" itemprop="dateModified" datetime="2019-03-20T15:34:39+08:00">2019-03-20</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>703</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://p06teg.bn.files.1drv.com/y4mclDYNDigc0gHDmZ5XDouTmCEeu-ylGC1dHlLnmr4vqMuQMRtLZ6vvFnXbpry000EzeJBZxpRb81XhimQTct8sw--c2dHHj9tbb61CcAWkxolDY1uigSC9AdohZDCtlctUTz3MHyTBDGLXLAFGrapspubNqSWH26E5gKxEqb0gWFXG_LmfjGksCLw47RYsMudBxVR-nWgMSLipvPbQTKjPQ?width=434&amp;height=299&amp;cropmode=none" /></p>
+<h1 id="简介">简介</h1>
+<blockquote>
+<p><code>BeautifulSoup</code>提供一些简单的、<code>python</code>式的函数用来处理导航、搜索、修改分析树等功能。它是一个工具箱，通过解析文档为用户提供需要抓取的数据，因为简单，所以不需要多少代码就可以写出一个完整的应用程序。 <code>BeautifulSoup</code>自动将输入文档转换为<code>Unicode</code>编码，输出文档转换为utf-8编码。你不需要考虑编码方式，除非文档没有指定一个编码方式，这时，<code>Beautiful Soup</code>就不能自动识别编码方式了。然后，你仅仅需要说明一下原始编码方式就可以了。 <code>BeautifulSoup</code>已成为和<code>lxml</code>、<code>html6lib</code>一样出色的python解释器，为用户灵活地提供不同的解析策略或强劲的速度。</p>
+</blockquote>
+<h1 id="css-选择器">CSS 选择器</h1>
+<h4 id="通过标签名查找">通过标签名查找</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(soup.select(<span class="string">'title'</span>))</span><br><span class="line">print(soup.select(<span class="string">'a'</span>))</span><br></pre></td></tr></table></figure>
+<hr />
+<h4 id="通过类名查找">通过类名查找</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(soup.select(<span class="string">'.sister'</span>))</span><br></pre></td></tr></table></figure>
+<hr />
+<h4 id="通过id查找">通过id查找</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(soup.select(<span class="string">'#link1'</span>))</span><br></pre></td></tr></table></figure>
+<hr />
+<h4 id="组合查找">组合查找</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(soup.select(<span class="string">'p #link1'</span>))    		<span class="comment">#查找p标签中内容为id属性为link1的标签</span></span><br><span class="line">print(soup.select(<span class="string">"head &gt; title"</span>))   	<span class="comment">#直接查找子标签(绝对路径)</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h4 id="属性查找">属性查找</h4>
+<p>查找时还可以加入属性元素，属性需要用中括号括起来，注意属性和标签属于同一节点，所以中间不能加空格，否则会无法匹配到。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(soup.select(<span class="string">'a[class="sister"]'</span>))</span><br><span class="line">print(soup.select(<span class="string">'a[href="http://example.com/elsie"]'</span>))</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/26/%E4%B9%8C%E7%8F%AD%E5%9B%BEMySQL%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/03/26/%E4%B9%8C%E7%8F%AD%E5%9B%BEMySQL%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">乌班图MySQL安装</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-03-26 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-26T00:00:00+08:00">2018-03-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-19 00:29:55" itemprop="dateModified" datetime="2020-04-19T00:29:55+08:00">2020-04-19</time>
               </span>
 
           <br>
@@ -365,13 +460,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img src="https://pk72bq.bn.files.1drv.com/y4mYptCSz0KFyMNl1NwDNzeW-T-fxs3GPJM66VRR5zUUv-1xpF8OoVznWkz9PA_T97M4lI3Iwn5DjO8Pzg24BOCGBFBP_ZX7gsc9Ngb5lOXJ0iHE3f4xVAJJYrV61ixXnPlaSjuECx1JIPsIOAkeoIAtr5iiLlngpj9SaaVd6-Gm8u_OALtgfF7cK1zGnMIh3N-PJ9vSAiqSta7bm2Rp3JKyA?width=418&amp;height=295&amp;cropmode=none" /></p>
-<p><strong>SPFA</strong>（Shortest Path Faster Algorithm）（队列优化）算法是求单源最短路径的一种算法，它还有一个重要的功能是判负环（在差分约束系统中会得以体现），在<em>Bellman-ford</em>算法的基础上加上一个队列优化，减少了冗余的松弛操作，是一种高效的最短路算法。</p>
-<p>spfa的算法思想（<u>动态逼近法</u>）：</p>
-<p>​ 设立一个先进先出的队列q用来保存待优化的结点，优化时每次取出队首结点u，并且用u点当前的最短路径估计值对离开u点所指向的结点v进行松弛操作，如果v点的最短路径估计值有所调整，且v点不在当前的队列中，就将v点放入队尾。这样不断从队列中取出结点来进行松弛操作，直至队列空为止。</p>
-<p>​ 松弛操作的原理是著名的定理：“<strong>三角形两边之和大于第三边</strong>”，在信息学中我们叫它<strong>三角不等式</strong>。所谓对结点i,j进行松弛，就是判定是否dis[j]&gt;dis[i]+w[i,j]，如果该式成立则将dis[j]减小到dis[i]+w[i,j]，否则不动。</p>
-<p>以前代码主要是模拟队列+二维数组，今特地采用c++中STL模板(<strong>queue+vector</strong>), 减少不必的空间开销以及提高代码易读性</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span>  N = <span class="number">20000</span>+<span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">queue</span> &lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; next[N];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; val[N];</span><br><span class="line"><span class="keyword">bool</span> vis[N];</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> dis[N];</span><br><span class="line"><span class="keyword">int</span> n,m,start=<span class="number">1</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">spfa</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(!q.empty())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> tem=q.front();</span><br><span class="line">        q.pop();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;next[tem].<span class="built_in">size</span>();i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(dis[next[tem][i]]&gt;dis[tem]+val[tem][i])</span><br><span class="line">            &#123;</span><br><span class="line">                dis[next[tem][i]]=dis[tem]+val[tem][i];</span><br><span class="line">                <span class="keyword">if</span>(vis[next[tem][i]]==<span class="literal">false</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    vis[next[tem][i]]=<span class="literal">true</span>;</span><br><span class="line">                    q.push(next[tem][i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;dis[i]&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    input();</span><br><span class="line">    init();</span><br><span class="line">    spfa();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">input</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n&gt;&gt;m;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> a,b,t;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b&gt;&gt;t;</span><br><span class="line">        next[a].push_back(b);</span><br><span class="line">        val[a].push_back(t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(vis,<span class="literal">false</span>,<span class="keyword">sizeof</span>(vis));</span><br><span class="line">    <span class="built_in">memset</span>(dis,<span class="number">0x3f3f3f3f</span>,<span class="keyword">sizeof</span>(dis));</span><br><span class="line">    dis[start]=<span class="number">0</span>;</span><br><span class="line">    q.push(start);</span><br><span class="line">    vis[start]=<span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p><img src="https://p06peg.bn.files.1drv.com/y4mm5APcOIb1-chauC6p3Mq4ebFgsR0DaV-nPTxXskfoEcuyKfS3HSeMuH8es2BFnLRuAPdZPE3X5VrG-ZLF7i5uDOH4s0mAHOTCmnm-h_3wA_SIdoiSy_rU6e5N1tgxLZllxncREn1w9MSqaSTfcLw6lUDw8azqaAnvRmN4Rl6CSZxqYOOdNz47r0wk1mFdL680OQ97vnGXbkzTt3IPdf0fQ?width=1024&amp;height=530&amp;cropmode=none" /></p>
+<h1 id="mysql安装">MySQL安装</h1>
+<p><strong>首先在命令行中输入三个命令：</strong></p>
+<ol type="1">
+<li><p>```bash sudo apt-get install mysql-server <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2. &#96;&#96;&#96;bash</span><br><span class="line">   sudo apt install mysql-client</span><br></pre></td></tr></table></figure></p></li>
+<li><p>```bash sudo apt install libmysqlclient-dev <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">**接下来确认系统是否已经安装上Mysql:**</span><br><span class="line">输入命令：&#96;mysql --help&#96;</span><br><span class="line">出现如下一大串help，即为成功：</span><br><span class="line">![](https:&#x2F;&#x2F;p06ueg.bn.files.1drv.com&#x2F;y4mNAe06cdjT6CqEklVdezSTWyalrQwVgPqFxaTs5cJ2q2QdEnvJsCMsJs7Ge0SvUFrBCYJtPgJyeQf5Jqe_LP4zspTpKdNmUj64e6xAmLUShjA4BbBCeZ7NXBNsv2Cc39u2ya-tk53ynjv4kU-3jbTr4bOJnpgdOSRzn1A9nuNal2tACfRIajJaef0bMGdiiAOmsD5R1VvhL93lKh3Cxc4qA?width&#x3D;735&amp;height&#x3D;382&amp;cropmode&#x3D;none)</span><br><span class="line">可以通过如下命令进入MySQL服务：</span><br><span class="line">&#96;mysql -uroot -p&#96;</span><br><span class="line">会让你输入密码，在安装的时候有时候会出现让你设置密码，有些是默认登录。</span><br><span class="line">![](https:&#x2F;&#x2F;p06veg.bn.files.1drv.com&#x2F;y4mIW7MdhJAY-igcVXDXwcqeX4_UXQ3OvFvYsvO4UTyYXax3r47Tfd2vOvWrjdHnX2-EdTPWq0YxOczucbzJbMyjeTSxgawUOWAvMksXchd0QOX2KJL-YWdcJhkJMGkrLN9md7NaGPe7YR1qe1f3sbbkx3tRaX2x-vYJy-yW05GmWkxMeYM4Br-wy6mIK34RWllkxK6DUucEsqUqwFZ-hawYg?width&#x3D;732&amp;height&#x3D;243&amp;cropmode&#x3D;none)</span><br><span class="line"></span><br><span class="line">现在设置mysql允许远程访问，首先编辑文件 &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;mysqld.cnf：</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;bash</span><br><span class="line">sudo nano &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;mysqld.cnf</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<p>注释掉<strong><em>bind-address = 127.0.0.1</em></strong>： <code>sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf</code> <img src="https://ne7cha.bn.files.1drv.com/y4mQb9DVkANMfETZF6_0-xkxRkcXScb72aYdGeeq7j7iNSKNTv_dfReFsRpBRwPr8w3EDbQ-nsKlY0eBhMRBxVEzBLpYpXGectH9Cz2-8kAKLszCH1jvBoGt5EMH7pcx3g1YDEZNfMnyLMEkR6jAPO2HaYZXsL4WUg7rHGyMFUtnnKtPq271X3bxpMTvv2jhYjV7nGPXBW3q6vWPBDeEwpVNQ?width=664&amp;height=40&amp;cropmode=none" /></p>
+<p>保存退出，然后进入mysql服务，执行授权命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Grant all on *.* to &#39;root&#39;@&#39;%&#39; identified by &#39;root用户的密码&#39; with grant option;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+<p>然后执行quit命令退出mysql服务，执行如下命令重启mysql：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysql restart</span><br></pre></td></tr></table></figure>
+<p>补充：在进入MySQL时，输入<code>mysql -uroot -p</code>命令时，会出现 &gt; ERROR 1045 (28000): Access denied for user ‘root’@’localhost’这种情况。于是在网上查了许多技术网站，发现一篇不错的，据此解决。链接： https://blog.csdn.net/learner_lps/article/details/62887343</p>
 
       
     </div>
@@ -391,7 +492,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/25/win64%E7%8E%AF%E5%A2%83aishub%E6%95%B0%E6%8D%AE%E7%88%AC%E8%99%AB%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/19/Google%20BBR%20%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%EF%BC%8C%E5%AE%9E%E7%8E%B0TCP%E5%8A%A0%E9%80%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -405,7 +506,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2017/05/25/win64%E7%8E%AF%E5%A2%83aishub%E6%95%B0%E6%8D%AE%E7%88%AC%E8%99%AB%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">win64环境aishub数据爬虫配置方案</a>
+            <a href="/2018/03/19/Google%20BBR%20%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%EF%BC%8C%E5%AE%9E%E7%8E%B0TCP%E5%8A%A0%E9%80%9F/" class="post-title-link" itemprop="url">Google BBR 优化算法，实现TCP加速</a>
         </h2>
 
         <div class="post-meta">
@@ -415,14 +516,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-05-25 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-25T00:00:00+08:00">2017-05-25</time>
+              <time title="创建时间：2018-03-19 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-19T00:00:00+08:00">2018-03-19</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-19 20:00:09" itemprop="dateModified" datetime="2019-03-19T20:00:09+08:00">2019-03-19</time>
+                <time title="修改时间：2019-03-20 15:32:08" itemprop="dateModified" datetime="2019-03-20T15:32:08+08:00">2019-03-20</time>
               </span>
 
           <br>
@@ -431,7 +532,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>922</span>
+              <span>997</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -450,253 +551,45 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><img src="https://pk71bq.bn.files.1drv.com/y4mTOKJPnQ4_TFD6KZdYxE0Ptb7Io31Wqj1aif9U4mrzN6bIXcLsj7OmoPkzos_Qt9yt2zq7_23dJCfBdz4pdBoYx_v4uw1XfaBluYxr_zOhjlDbOPKHO15WJEwmeAd4ZxTkF5U7s3Znv65-OgdN2dUwImkLZEp8QDXcjYcb2rQ4H5NS0fnx0-rSIxrPJ5OzXZYhnmAbLABasP3l4DAzHqjGg?width=999&amp;height=609&amp;cropmode=none" /></p>
-<h1 id="python-3.6.1">Python 3.6.1</h1>
-<ul>
-<li><strong>下载地址</strong>：<a href="https://www.python.org/ftp/python/3.6.1/python-3.6.1-amd64.exe" target="_blank" rel="noopener">python-3.6.1-amd64.exe</a></li>
-<li><strong>系统需求</strong>：64位/32位</li>
-<li><strong>备注</strong>：python需加入系统path，并能够以python链接到</li>
-</ul>
-<h1 id="mongodb-3.4.4">Mongodb 3.4.4</h1>
-<ul>
-<li><strong>下载地址</strong>：<a href="https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-3.4.4-signed.msi" target="_blank" rel="noopener">mongodb-win32-x86_64-2008plus-ssl-3.4.4-signed.msi</a></li>
-<li>系统需求：64位</li>
-<li>安装位置：C:.4</li>
-<li>系统path：C:.4</li>
-<li>配置文件位置：‪C:.4.config</li>
-<li>config文件内容：</li>
-</ul>
+          <p><img src="https://pk6ceg.bn.files.1drv.com/y4mnLfkbjzcBX8gXFbniP9PeL1ZvEPpZHrnlwnkxX4O78ih7XLEKnKttGTHlGU2oggl5Z1F5iHodmH7uXFBNkogDvcG_HDhZdctL7NAycjrK5rXi-hHff__5cKe0S9jQfRVV3TkARfmHY0sXp3iGZ62ECWZGaWqJE35MKgADNgpGFCaMn9QhJ1mmSuEZYl9TGhh-LO3Li24Y3Lb9Mc122oaCQ?width=600&amp;height=450&amp;cropmode=none" /></p>
 <blockquote>
-<p>数据库文件目录： dbpath=C:/mongoDB3.4.4/data</p>
+<p>最近，Google 开源了其 TCP BBR 拥塞控制算法，并提交到了 Linux 内核，从 4.9 开始，Linux 内核已经用上了该算法。根据以往的传统，Google 总是先在自家的生产环境上线运用后，才会将代码开源，此次也不例外。 根据实地测试，在部署了最新版内核并开启了 TCP BBR 的机器上，网速甚至可以提升好几个数量级。 于是我根据目前三大发行版的最新内核，开发了一键安装最新内核并开启 TCP BBR 脚本。</p>
 </blockquote>
-<blockquote>
-<p>日志目录： logpath=C:/mongoDB3.4.4/log/mongo.log diaglog=3</p>
-</blockquote>
+<h1 id="本脚本适用环境">本脚本适用环境</h1>
 <ul>
-<li>安装服务至系统服务</li>
+<li>系统支持：Ubuntu 12+</li>
+<li>虚拟技术：OpenVZ 以外的，比如 KVM、Xen、VMware 等</li>
+<li>内存要求：≥128M</li>
+<li>日期：2018 年 03 月 20 日</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod –config C:\mongoDB3.4.4\bin\mongodb.config –install</span><br></pre></td></tr></table></figure>
-<ul>
-<li>启动与关闭mongoDB：</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net start MongoDB</span><br><span class="line">net stop MongoDB</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看aishub数据库状态命令：</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongo </span><br><span class="line">use aishub</span><br><span class="line">db.status()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>数据导出命令(默认csv格式)：</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongoexport -d aishub -c sheet1 -o c:\data.csv</span><br></pre></td></tr></table></figure>
-<ul>
-<li>数据集合（sheet1）删除</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use aishubdb.sheet1.drop()</span><br></pre></td></tr></table></figure>
-<h1 id="python-依赖包">Python 依赖包</h1>
-<h4 id="pip-国内源">Pip 国内源</h4>
-<p>阿里云 <a href="http://mirrors.aliyun.com/pypi/simple/" target="_blank" rel="noopener">http://mirrors.aliyun.com/pypi/simple/</a></p>
-<p>中国科技大学 <a href="https://pypi.mirrors.ustc.edu.cn/simple/" target="_blank" rel="noopener">https://pypi.mirrors.ustc.edu.cn/simple/</a></p>
-<p>豆瓣 <a href="http://pypi.douban.com/simple/" target="_blank" rel="noopener">http://pypi.douban.com/simple/</a></p>
-<p>清华大学 <a href="https://pypi.tuna.tsinghua.edu.cn/simple/" target="_blank" rel="noopener">https://pypi.tuna.tsinghua.edu.cn/simple/</a></p>
-<p>中国科学技术大学 <a href="http://pypi.mirrors.ustc.edu.cn/simple/" target="_blank" rel="noopener">http://pypi.mirrors.ustc.edu.cn/simple/pip</a></p>
-<h4 id="pip使用">pip使用</h4>
-<p>后面加上-i参数，指定pip源</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapy -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
-<h4 id="pip更新">Pip更新</h4>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m pip install –upgrade pip</span><br></pre></td></tr></table></figure>
-<h4 id="依赖包">依赖包</h4>
-<ul>
-<li>beautifulsoup4</li>
-<li>requests</li>
-<li>pymongo</li>
-<li>lxml</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/25/%E4%B8%96%E7%95%8C%EF%BC%8C%E6%82%A8%E5%A5%BD%EF%BC%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/25/%E4%B8%96%E7%95%8C%EF%BC%8C%E6%82%A8%E5%A5%BD%EF%BC%81/" class="post-title-link" itemprop="url">世界，您好！</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-05-25 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-25T00:00:00+08:00">2017-05-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-19 00:27:43" itemprop="dateModified" datetime="2020-04-19T00:27:43+08:00">2020-04-19</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>56</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://p072bq.bn.files.1drv.com/y4mKCA5zoYDkiAd2gwJoluuS9K33Om0aStMYmMuCRNSgkPEkuNJDbRTUoicrsNlOSu73DbwrxB6DseO50DWotaJl5CO_Rpiyo-YaSB8Id_irHrqjfy9o-e2LpZrQf14b0lSKgp0LmslybbrQTs6UdvQ60tTLGk_xQq-4IKawTdTnaabE0kBBDfzytJU79JNY26rCdqwckzp1uPgEEi7mjs9TQ?width=500&amp;height=500&amp;cropmode=none" /></p>
-<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124297&amp;authkey=AGPmPJO3IuL8zHE" width="98" height="120" frameborder="0" scrolling="no">
-</iframe>
-<h3 id="这是smile先生的第一个博客">这是smile先生的第一个博客</h3>
-<h3 id="我不希望她被废弃">我不希望她<strong>被废弃</strong></h3>
-<h3 id="我会好好的维护她">我会好好的<strong>维护她</strong></h3>
-<h3 id="正如我的梦">正如<strong>《我的梦》</strong></h3>
-<h3 id="借用自己的空闲时间">借用自己的空闲时间</h3>
-<h3 id="实现自己的小小梦想">实现自己的<strong>小小梦想</strong></h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/25/%E7%9C%9F%E6%AD%A3%E7%9A%84%E7%94%B5%E9%9F%B3Cymatics/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/25/%E7%9C%9F%E6%AD%A3%E7%9A%84%E7%94%B5%E9%9F%B3Cymatics/" class="post-title-link" itemprop="url">真正的电音：Cymatics</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-05-25 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-25T00:00:00+08:00">2017-05-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-21 09:25:55" itemprop="dateModified" datetime="2019-03-21T09:25:55+08:00">2019-03-21</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>196</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://pk70bq.bn.files.1drv.com/y4mRhsCFc4XPRfefXR0SMs16gs3FC1s-hG26oZ3vBH1mtq91cWVHp0_jJasaWymbicyMRfBf8XdMtLNBVpq5-1fXT2P_V8jnLLgYGl2AC_7Rw1Pqgk_v0qdMDhJmQuK1nxVhyfyv6QUdN7LNaudxeM0MsJW0nQbEd6qBSNRo7E-RAdFRJ1BfCxreOwY74wspmHMmm7cN3wZNM2H4sxDAWiLhA?width=3840&amp;height=1748&amp;cropmode=none" /></p>
-<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124283&amp;authkey=AOtNQ1lUjQnXoGo" width="98" height="120" frameborder="0" scrolling="no">
-</iframe>
-<blockquote>
-<h4 id="歌曲cymatics">歌曲：Cymatics*</h4>
-<h4 id="歌手cymatics"><em>歌手：Cymatics</em></h4>
-<h4 id="所属专辑-solar-echoes">所属专辑： <a href="https://music.163.com/#/album?id=3070750" target="_blank" rel="noopener">Solar Echoes</a></h4>
-</blockquote>
-<blockquote>
-<p>cymatics是使声音形象化的过程，基本上借由沙或水等媒介的振动来达成。——百度百科</p>
-</blockquote>
-<h3 id="这才是电音该有的样子"><em>这才是电音该有的样子</em></h3>
-<h3 id="旋律和节奏穿过物理的障碍"><em>旋律和节奏穿过物理的障碍</em></h3>
-<h3 id="透过波形和几何"><em>透过波形和几何</em></h3>
-<h3 id="把宇宙和神的秘密射给你"><em>把宇宙和神的秘密射给你</em></h3>
-<h3 id="直达肉眼凡胎"><em>直达肉眼凡胎</em></h3>
-<h3 id="这是音乐的神祇"><em>这是音乐的神祇</em></h3>
-<h3 id="源自心灵的电波"><em>源自心灵的电波</em></h3>
-<h3 id="和他人无关"><em>和他人无关</em></h3>
-<h3 id="原点即是本我的自己"><em>原点即是本我的自己</em></h3>
-<p><em>MV外链：</em><a href="http://music.163.com/#/mv?id=375405" target="_blank" rel="noopener" class="uri">http://music.163.com/#/mv?id=375405</a></p>
+<h1 id="关于本脚本">关于本脚本</h1>
+<ol type="1">
+<li>本脚本已在 digitalocean 上的 VPS 全部测试通过。</li>
+<li>当脚本检测到 VPS 的虚拟方式为 OpenVZ 时，会提示错误，并自动退出安装。</li>
+<li>脚本运行完重启发现开不了机的，打开 VPS 后台控制面板的 VNC, 开机卡在 grub 引导, 手动选择内核即可。</li>
+<li>由于是使用最新版系统内核，最好请勿在生产环境安装，以免产生不可预测之后果。</li>
+</ol>
+<h1 id="使用方法">使用方法</h1>
+<ol type="1">
+<li><p>使用root用户登录，运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh</span><br></pre></td></tr></table></figure>
+<p>安装完成后，脚本会提示需要重启 VPS，输入 y 并回车后重启。</p></li>
+<li><p>重启完成后，进入 VPS，验证一下是否成功安装最新内核并开启 TCP BBR，输入以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname -r</span><br></pre></td></tr></table></figure>
+<p>查看内核版本，显示为最新版就表示 OK 了</p></li>
+<li><p>检查</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl net.ipv4.tcp_available_congestion_control</span><br></pre></td></tr></table></figure>
+<p>返回值一般为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.ipv4.tcp_available_congestion_control &#x3D; bbr cubic reno</span><br></pre></td></tr></table></figure></li>
+<li><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl net.ipv4.tcp_congestion_control</span><br></pre></td></tr></table></figure>
+<p>返回值一般为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.ipv4.tcp_congestion_control = bbr</span><br></pre></td></tr></table></figure></li>
+<li><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl net.core.default_qdisc</span><br></pre></td></tr></table></figure>
+<p>返回值一般为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.core.default_qdisc = fq</span><br></pre></td></tr></table></figure></li>
+<li><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsmod | grep bbr</span><br></pre></td></tr></table></figure>
+<p>返回值有 tcp_bbr 模块即说明 bbr 已启动。注意：并不是所有的 VPS 都会有此返回值，若没有也属正常。</p></li>
+</ol>
 
       
     </div>
@@ -715,7 +608,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
