@@ -2082,11 +2082,10 @@ R(\phi^{ij})\begin{bmatrix} u_i \\ v_i\end{bmatrix} - \begin{bmatrix} u_j \\ v_j
 \end{align}
 \]</span></p>
 <p>并且<span class="math inline">\(\lambda_z=1000\)</span>，使得<span class="math inline">\(\Omega\)</span>中的图像可能被指定为零旋转，即保持它们的原始方向。</p>
-<p><strong>旋转选择（3D方法）。</strong>在此方法中，我们使用在本节开头估计的3D旋转矩阵<span class="math inline">\({\rm R}_i\)</span>。我们首先分解3D旋转矩阵<span class="math inline">\({\rm R}_i\)</span>以获得相对于<span class="math inline">\(z\)</span>轴的旋转角<span class="math inline">\(\alpha_i\)</span>。两个相邻图像<span class="math inline">\(I_i\)</span>和<span class="math inline">\(I_j\)</span>之间的相对旋转可以确定为<span class="math inline">\(\alpha^{ij}=\alpha_j-\alpha_i\)</span>。如果<span class="math inline">\(\alpha^{ij} \in \Theta^{ij}\)</span>，则意味着估计是合理的并且可以使用。否则，我们应该使用MLDR的相对旋转<span class="math inline">\(\phi^{ij}\)</span>。设<span class="math inline">\(\Omega\)</span>是使用<span class="math inline">\(\phi^{ij}\)</span>的配对集，<span class="math inline">\(\bar{\Omega}={\rm J}-\Omega\)</span>为其他部分。通过最小化确定旋转角度</p>
-<p><span class="math display">\[
-\sum_{(i,j)\in \Omega}\Bigg\|R(\phi^{ij}) \begin{bmatrix} u_i \\ v_i \end{bmatrix} -\begin{bmatrix} u_j \\ v_j \end{bmatrix} \Bigg \|^2 + \lambda_r \sum_{(i,j)\in \bar{\Omega}} \Bigg\| R(\alpha^{ij}) \begin{bmatrix} u_i \\ v_i\end{bmatrix} - \begin{bmatrix} u_j \\ v_j \end{bmatrix} \Bigg\|^2 \tag{13}
+<p><strong>旋转选择（3D方法）。</strong>在此方法中，我们使用在本节开头估计的3D旋转矩阵<span class="math inline">\({\rm R}_i\)</span>。我们首先分解3D旋转矩阵<span class="math inline">\({\rm R}_i\)</span>以获得相对于<span class="math inline">\(z\)</span>轴的旋转角<span class="math inline">\(\alpha_i\)</span>。两个相邻图像<span class="math inline">\(I_i\)</span>和<span class="math inline">\(I_j\)</span>之间的相对旋转可以确定为<span class="math inline">\(\alpha^{ij}=\alpha_j-\alpha_i\)</span>。如果<span class="math inline">\(\alpha^{ij} \in \Theta^{ij}\)</span>，则意味着估计是合理的并且可以使用。否则，我们应该使用MLDR的相对旋转<span class="math inline">\(\phi^{ij}\)</span>。设<span class="math inline">\(\Omega\)</span>是使用<span class="math inline">\(\phi^{ij}\)</span>的配对集，<span class="math inline">\(\bar{\Omega}={\rm J}-\Omega\)</span>为其他部分。通过最小化确定旋转角度 <span class="math display">\[
+\sum_{(i,j)\in \Omega}\Bigg\|R(\phi^{ij}) \begin{bmatrix} u_i \\ v_i \end{bmatrix} -\begin{bmatrix} u_j \\ v_j \end{bmatrix} \Bigg \|^2 + \lambda_{\gamma} \sum_{(i,j)\in \bar{\Omega}} \Bigg\| R(\alpha^{ij}) \begin{bmatrix} u_i \\ v_i\end{bmatrix} - \begin{bmatrix} u_j \\ v_j \end{bmatrix} \Bigg\|^2 \tag{13}
 \]</span></p>
-<p>我们设置<span class="math inline">\(\lambda_r = 10\)</span>以给予3D旋转更多权重。</p>
+<p>我们设置<span class="math inline">\(\lambda_\gamma = 10\)</span>以给予3D旋转更多权重。</p>
 <table>
 <thead>
 <tr class="header">
