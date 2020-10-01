@@ -175,6 +175,114 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/01/Tmux%20%E5%BF%AB%E6%8D%B7%E9%94%AE%E9%80%9F%E6%9F%A5%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/01/Tmux%20%E5%BF%AB%E6%8D%B7%E9%94%AE%E9%80%9F%E6%9F%A5%E8%A1%A8/" class="post-title-link" itemprop="url">Tmux 快捷键速查表</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-10-01 00:00:00 / 修改时间：17:10:19" itemprop="dateCreated datePublished" datetime="2020-10-01T00:00:00+08:00">2020-10-01</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="tmux-快捷键速查表">Tmux 快捷键速查表</h1>
+<p>启动新会话：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux [new -s 会话名 -n 窗口名]</span><br></pre></td></tr></table></figure>
+<p>恢复会话：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux at [-t 会话名]</span><br></pre></td></tr></table></figure>
+<p>列出所有会话：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux ls</span><br></pre></td></tr></table></figure>
+<p>关闭会话：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux kill-session -t 会话名</span><br></pre></td></tr></table></figure>
+<p>关闭除指定会话外的所有会话：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux kill-session -a -t 会话名</span><br></pre></td></tr></table></figure>
+<p>销毁所有会话并停止<code>Tmux</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux kill-server</span><br></pre></td></tr></table></figure>
+<h1 id="在-tmux-中按下-tmux-前缀-ctrlb然后">在 Tmux 中，按下 Tmux 前缀 <code>ctrl+b</code>，然后：</h1>
+<h2 id="会话">会话</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">:new&lt;回车&gt;  	启动新会话</span><br><span class="line">s           列出所有会话</span><br><span class="line">$           重命名当前会话</span><br></pre></td></tr></table></figure>
+<h2 id="窗口">窗口</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">c	创建新窗口</span><br><span class="line">w	列出所有窗口</span><br><span class="line">n	后一个窗口</span><br><span class="line">p	前一个窗口</span><br><span class="line">f	查找窗口</span><br><span class="line">,	重命名当前窗口；这样便于识别</span><br><span class="line">.	修改当前窗口编号；相当于窗口重新排序</span><br><span class="line">&amp;	关闭当前窗口</span><br></pre></td></tr></table></figure>
+<h2 id="调整窗口排序">调整窗口排序</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">:swap-window -s 2 -t 0	交换2号和0号窗口</span><br><span class="line">:swap-window -t 0		交换当前和0号窗口</span><br><span class="line">:move-window -t 0		移动当前窗口到0号</span><br></pre></td></tr></table></figure>
+<h2 id="窗格分割窗口">窗格（分割窗口）</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">%	垂直分割</span><br><span class="line">&quot;	水平分割</span><br><span class="line">o	交换窗格</span><br><span class="line">x	关闭窗格</span><br><span class="line">sapce(空格键)	切换布局</span><br><span class="line">q	显示每个窗格是第几个，当数字出现的时候按数字几就选中第几个窗格</span><br><span class="line">&#123;	与上一个窗格交换位置</span><br><span class="line">&#125;	与下一个窗格交换位置</span><br><span class="line">z	切换窗格最大化&#x2F;最小化</span><br></pre></td></tr></table></figure>
+<h2 id="同步窗格">同步窗格</h2>
+<p>如果您将窗口划分为多个窗格，则可以使用<code>synchronize-panes</code>选项同时向每个窗格发送相同的键盘输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:setw synchronize-panes [on&#x2F;off]</span><br></pre></td></tr></table></figure>
+<p>你可以指定开启<code>on</code>或停用<code>off</code>，否则重复执行命令会在两者间切换。 这个选项值针对当前个窗口有效，不会影响别的会话和窗口。 完事儿之后再次执行命令来关闭。</p>
+<figure>
+<img src="https://y7td3w.bn.files.1drv.com/y4mlaDIjQcsjfpBk5ev72u1lBIpfQTbVfhojojkafHpIiVKOwjJxoPyOyUmtKF0cwiX-MOo-jLbtaPKAfDSES-2npAj68eZ38r4_2QB0d1m4PRTA0-ZLFkhSqlHxv43Zgd2r_fq8jI5rLUlaW_vZCyRjbzOKuxcwdg-FadaixWuU8hxKJomhAjRCaNG0JaifNZPleDjNuH-G3r-lOR3JiS9rA" alt="" /><figcaption>synchronize-panes</figcaption>
+</figure>
+<h2 id="调整窗格尺寸">调整窗格尺寸</h2>
+<p>如果你不喜欢默认布局，可以重调窗格的尺寸。虽然这很容易实现，但一般不需要这么干。这几个命令用来调整窗格：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">:resize-pane -D          当前窗格向下扩大 1 格</span><br><span class="line">:resize-pane -U          当前窗格向上扩大 1 格</span><br><span class="line">:resize-pane -L          当前窗格向左扩大 1 格</span><br><span class="line">:resize-pane -R          当前窗格向右扩大 1 格</span><br><span class="line">:resize-pane -D 20       当前窗格向下扩大 20 格</span><br><span class="line">:resize-pane -t 2 -L 20  编号为 2 的窗格向左扩大 20 格</span><br></pre></td></tr></table></figure>
+<h2 id="杂项">杂项</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">d  退出 tmux（tmux 仍在后台运行）</span><br><span class="line">t  窗口中央显示一个数字时钟</span><br><span class="line">?  列出所有快捷键</span><br><span class="line">:  命令提示符</span><br></pre></td></tr></table></figure>
+<h2 id="配置选项">配置选项</h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 鼠标支持 - 设置为 on 来启用鼠标</span><br><span class="line">:set -g mouse on</span><br><span class="line"></span><br><span class="line"># 设置默认终端模式为 256color</span><br><span class="line">:set -g default-terminal &quot;screen-256color&quot;</span><br><span class="line"></span><br><span class="line"># 启用活动警告</span><br><span class="line">:setw -g monitor-activity on</span><br><span class="line">:set -g visual-activity on</span><br><span class="line"></span><br><span class="line"># 窗口名列表居中</span><br><span class="line">:set -g status-justify centre</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/18/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -611,97 +719,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/01/python%E4%B8%AD%E5%B8%B8%E9%87%8F%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/01/python%E4%B8%AD%E5%B8%B8%E9%87%8F%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">python中常量类的实现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-01 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-01T00:00:00+08:00">2020-01-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-18 22:11:02" itemprop="dateModified" datetime="2020-04-18T22:11:02+08:00">2020-04-18</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>众所周知，在Python中其实并没有一个严格定义的常量类概念。</p>
-<p>目前所采用的常用约定俗成的方式是采用命名全为<strong>大写字母</strong>的方式来标识别常量。</p>
-<p>但实际上这种方式并不能起到防止修改的功能，而只是从语义和可读性上做了区分。</p>
-<p>现已有了一种基于__setter__和__delattr__的实现方法：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">_const</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls, *args, **kw)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> hasattr(cls, <span class="string">'_instance'</span>):</span><br><span class="line">            orig = super(_const, cls)</span><br><span class="line">            cls._instance = orig.__new__(cls, *args, **kw)</span><br><span class="line">        <span class="keyword">return</span> cls._instance</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 已存在</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">ConstBuiltError</span><span class="params">(TypeError)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">            self.msg = <span class="string">"Can't rebind const instance attribute (%s)"</span> % name</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">'error msg: &#123;&#125;'</span>.format(self.msg)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 非全大写错误（可下划线）</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">ConstCaseError</span><span class="params">(TypeError)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">            self.msg = <span class="string">'const name "%s" is not all uppercase'</span> % name</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">'error msg: &#123;&#125;'</span>.format(self.msg)</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">            <span class="keyword">return</span> self.__str__()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 删除错误</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">ConstDelError</span><span class="params">(TypeError)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">            self.msg = <span class="string">"Can't delete const instance attribute (%s)"</span> % name</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">'error msg: &#123;&#125;'</span>.format(self.msg)</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span></span><br><span class="line">            <span class="keyword">return</span> self.__str__()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建时核对是否重复或全大写</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__setattr__</span><span class="params">(self, name, value)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.__dict__.__contains__(name):</span><br><span class="line">            <span class="keyword">raise</span> self.ConstBuiltError(name)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> name.isupper():</span><br><span class="line">            <span class="keyword">raise</span> self.ConstCaseError(name)</span><br><span class="line">        self.__dict__[name] = value</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 禁止删除</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__delattr__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.__dict__.__contains__(name):</span><br><span class="line">            <span class="keyword">raise</span> self.ConstDelError(name)</span><br><span class="line">        <span class="keyword">raise</span> self.ConstDelError(name)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化一个类</span></span><br><span class="line">Const = _const()</span><br><span class="line">Const.TEST = <span class="string">'test'</span></span><br></pre></td></tr></table></figure>
-<p>假设文件保存为constClass使用的时候只要<em>from constClass import Const</em>，便可以直接定义常量了，比如：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> constClass <span class="keyword">import</span> Const</span><br><span class="line">print(Const.TEST)				<span class="comment"># 已有定义</span></span><br><span class="line">Const.AUTHOR = <span class="string">'smile'</span>			<span class="comment"># 首次定义</span></span><br><span class="line">Const.AUTHOR = <span class="string">'smilelc'</span>		<span class="comment"># 修改</span></span><br><span class="line">Const.author = <span class="string">'smile'</span>          <span class="comment"># 小写定义</span></span><br><span class="line"><span class="keyword">del</span> Const.AUTHOR                <span class="comment"># 删除</span></span><br></pre></td></tr></table></figure>
-<ol type="1">
-<li>已有定义时，如<code>Const.TEST = 'test'</code>，可直接调用；</li>
-<li>上面的<code>Const.AUTHOR</code>定义后便不可再更改，因此<code>Const.AUTHOR = ‘smilelc’</code>会抛出<code>ConstBuiltError</code>异常；</li>
-<li>而常量名称如果小写，如<code>Const.author ='smile'</code>，也会抛出<code>ConstCaseError</code>异常；</li>
-<li>一旦定义完后，若删除，会抛出<code>ConstDelError</code>。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -771,7 +788,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -808,12 +825,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">147k</span>
+    <span title="站点总字数">148k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:13</span>
+    <span title="站点阅读时长">2:14</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>

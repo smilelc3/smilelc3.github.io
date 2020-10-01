@@ -175,6 +175,124 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/20/%E8%A7%86%E5%90%AC%E8%AF%B4%E5%9C%A8%E7%BA%BF%E5%B9%B3%E5%8F%B0%EF%BC%88Unipus%EF%BC%89%E7%BD%91%E9%A1%B5%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%8F%90%E4%BA%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/09/20/%E8%A7%86%E5%90%AC%E8%AF%B4%E5%9C%A8%E7%BA%BF%E5%B9%B3%E5%8F%B0%EF%BC%88Unipus%EF%BC%89%E7%BD%91%E9%A1%B5%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%8F%90%E4%BA%A4/" class="post-title-link" itemprop="url">视听说在线平台（Unipus）网页漏洞的提交</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-09-20 00:00:00" itemprop="dateCreated datePublished" datetime="2017-09-20T00:00:00+08:00">2017-09-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-03-20 14:28:39" itemprop="dateModified" datetime="2019-03-20T14:28:39+08:00">2019-03-20</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://mu6qeg.bn.files.1drv.com/y4mRsuhRHYwGvWJdzuIoNN_cWjqR_VFbjBevPVheQqh7e7bPt57okjJNQoGRHoz26FgNVVErmjA7pfh9RA2g_UbTU10LYKewIVg5_pu903GBoBcygeGZtjWVRiyS-NeXaVTvQ_k-_STS2YTFFZQmPV85mbaKrb6GYbW6bxR3JjlAoiPmNISydgDYjfMYksiWuI7vILzg4qIN_7S6WpUC0_Elw?width=1024&amp;height=768&amp;cropmode=none" /></p>
+<blockquote>
+<p>——致北京工商大学外国语学院的一封信</p>
+</blockquote>
+<p>北京工商大学向来致力为各位学生提供一个优质，公平的教育环境，为培养学生成为各方面并同发展的未来国家栋梁人才而全力以赴。在英语学习方面，学校尤为重视，特设定英语四级考试通过为毕业条件；同时为四、六级成绩优异考生提供奖金支持。因此，在平时课堂练习时，学校采用了《新标准大学英语》系列教材，该教材配套的《视听说教程》为一个优秀的在线教育平台，为同学们提供了口语练习，写作练习，填空，选择题等多种多样的强化学习方式。</p>
+<p>​ 但人无完人，再好的平台也有其欠缺的一面。近日，我在使用《视听说3》时，运用对网页源码解析的方式，发现以下问题：</p>
+<ol type="1">
+<li><strong>登录密码全部采用默认密码nhce111</strong></li>
+</ol>
+<p>该情况是多年的一个问题，我承认，设置默认密码，便于教室端对学生学习进度以及学习成绩进行掌握。该问题为同学间互相查看答案提供了一个途径，也为我接下来发现的一个更为严重的问题提供了便捷。</p>
+<ol start="2" type="1">
+<li><strong>在网页源码中保存有答案信息</strong></li>
+</ol>
+<p>Unipus平台中各章节均有固定的网址格式(以视听说3为例)：</p>
+<p><a href="http://192.168.115.248:81/book/book183/U2_S2_2.php" target="_blank" rel="noopener" class="uri">http://192.168.115.248:81/book/book183/U2_S2_2.php</a></p>
+<p>其访问结构为：</p>
+<blockquote>
+<p>服务器IP:81端口/book/book/book183(书本信息)/U(章号)<em>S(节号)</em>(小节号).php</p>
+</blockquote>
+<p>通过对所有本书任务进度表格（图1）的解析</p>
+<p><img src="https://me6ceg.bn.files.1drv.com/y4mzkl8u3xnWUb6eYIl_SdDmNpxNHj84XCttlf47r05FtIIYYcApOm_gWO-_-C7mmVe8mqwQxq2WHPgqdV2W_RW0c7uat8yDY4nDIzWmn1zzUI-vMvU9Bk5f-gk2zSwAcdbdewQby3MGNDee2S9kby2y6ph4vSzdOkzebp1wQxn6fC7KMr-Vr31kkuX5lwqPILxccX5qTHFmm97Gz0vRUZIMA?width=459&amp;height=927&amp;cropmode=none" /></p>
+<p>不难推测出所有作业所对应的php网址，如下图所示代码。</p>
+<p><img src="https://mu6teg.bn.files.1drv.com/y4m780YFt25R0_dCymeMMNxyWUoK50hGEknkr8khf7Jnk82v-dYDjnlNnenaPZVs-sN8scnNKhESLXr8eyxZcZuVlCNB0pCK6SjSuSg8M58z24bCwdoogXTvbDmMPpQLO3R9zD9bI37B6BzLrp7FrmJ-PdEpBPvfD6k360H15t6YvPX3b4Sc8mq-s_SqQR30YfjCUJlinOLCUFiocp7jIddug?width=1113&amp;height=396&amp;cropmode=none" /></p>
+<p>通过运用chrome浏览器的开发者工具箱，我通过对源码的分析，发现在php脚本script标签的下，存在#answer函数下。其中保存有用户所填的答案，以及该题的正确答案，见下图：</p>
+<p><img src="https://mu6ueg.bn.files.1drv.com/y4mJgxfHRFExf3ptPJLySeNv2M9a2q6j4i-F3lYIfZnWuwibWsF5IbJXM-YHodAIC4IMan-KmprvmyIfyhzLTNqIAAwCjhISYbd_5PXLzPn6MfVxp6bwqkV3lcaPwpPJoUQzuru0V1aQIMnGC_xf8aJJ1iueG9avIeSR6w0EMMoOnsN2e0yg59woQcs4zvKjlhm81i0KF6daNK8zAKFtKYyNQ?width=354&amp;height=231&amp;cropmode=none" /></p>
+<p><img src="https://mu6veg.bn.files.1drv.com/y4mYfDmR9aS9tJlNNWHz5E-r5zSa9C91o5oKcg5p468LL6VdrdZGLd1eh-MAzk95c81fo4EvX1cMnlOmgecI32p4mOyP_nKqwjKgCR0egPa8rnLKryI0lMw-yE9YK6LbESZ4M3_IL3PE-FJtiRSEZqW5sC7VVxvi18YqY13dT3v2VrUJ0GQSCRJHO5ln8I8z3UN1mks4hY5_eY9MvBMMI1bdQ?width=597&amp;height=99&amp;cropmode=none" /></p>
+<p>上图即是该题的正确答案（#^符号分割）。即认为：视听说3教程的答案对用户是公开的，任何人要可以对源码进行解析，都可以挖掘出正确答案。这一点，无异于考试时，直接把答案印在某些人的试卷上，破坏公平竞争。</p>
+<p>可能老师认为这一点并无关大碍，认为只有极少数人员会采用这种方式，但如果该情况被其他一些有心人发现，并针对该漏洞进行开发，会实现下列功能。</p>
+<p>因为大家基本都采用默认密码形式，因此只需要掌握全体同学学号，既可以模拟登录。并通过get协议保存服务器所保存的cookies值，访问各章节的url，保存答案。最后通过伪造登录信息，构建data form，批量用post协议提交答案。</p>
+<p>通过以上的方式，简单来说，就可以轻松达到：只需要账号（学号），就可以刷章节满分答案！而且单账号处理时间&lt; 3s，效果如图：</p>
+<p><img src="https://mu6weg.bn.files.1drv.com/y4mgCU8i0RSW_zIGmXl3VdcRtGAInbiitJmZ42lMzQYcrMmCOubUkgK4CVmOWKYhC_J5X8odlnCeDRuDPXIXmT2x181d-AUMex9m-JpN2ztJIh32na9JP2R6n2yGDbAoCN4UMmFfkh6Z4Eq3TGFyrU2W81kmZmCcBxzv1G-_js775dd3F87_QWlm7GpvNfbzWr6iqr-J7dxhjJl-CALjG5gNw?width=147&amp;height=273&amp;cropmode=none" /></p>
+<p><strong>而且更可能的情况是，通过对提交的答案的控制，亦可以控制分数使其为代码执行者所想的分数。</strong></p>
+<p>希望学校能稍稍重视该问题，也是我的一点荣幸。</p>
+<p>2017-9-14</p>
+<hr />
+<p><em>备注：以下代码均由本人进行开发，并未对外进行公布和流传，仅仅做实验性质。如果需要，可立即对代码源文件进行删除</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># main.py</span></span><br><span class="line"><span class="keyword">from</span> ans_deal <span class="keyword">import</span> work</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">map= [</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line"></span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line"></span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line"></span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line"></span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">]</span><br><span class="line">cookies = input()</span><br><span class="line">post_headers = &#123;</span><br><span class="line">    <span class="string">'Host'</span>: <span class="string">'192.168.115.248:81'</span>,</span><br><span class="line">    <span class="string">'Connection'</span>: <span class="string">'keep-alive'</span>,</span><br><span class="line">    <span class="string">'Pragma'</span>: <span class="string">'no-cache'</span>,</span><br><span class="line">    <span class="string">'Cache-Control'</span>: <span class="string">'no-cache'</span>,</span><br><span class="line">    <span class="string">'Upgrade-Insecure-Requests'</span>: <span class="string">'1'</span>,</span><br><span class="line">    <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36'</span>,</span><br><span class="line">    <span class="string">'Accept'</span>: <span class="string">'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'</span>,</span><br><span class="line">    <span class="comment"># 'Referer': 'http://192.168.115.248:81/book/book183/U1_S2_5.php',</span></span><br><span class="line">    <span class="string">'Accept-Encoding'</span>: <span class="string">'gzip, deflate'</span>,</span><br><span class="line">    <span class="string">'Accept-Language'</span>: <span class="string">'zh,zh-CN;q=0.8'</span>,</span><br><span class="line">    <span class="string">'Cookie'</span>: <span class="string">'NCCE='</span> + cookies</span><br><span class="line">&#125;</span><br><span class="line">need = <span class="number">2</span></span><br><span class="line">SectionID = <span class="number">0</span></span><br><span class="line">SisterID = <span class="number">0</span></span><br><span class="line">ItemID = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> col <span class="keyword">in</span> range(<span class="number">0</span>, need):</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">23</span>):</span><br><span class="line">        UnitID = col + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> row &lt;= <span class="number">4</span>:</span><br><span class="line">            SectionID = <span class="number">1</span></span><br><span class="line">            SisterID = row + <span class="number">1</span></span><br><span class="line">        <span class="keyword">elif</span> row &lt;= <span class="number">9</span>:</span><br><span class="line">            SectionID = <span class="number">2</span></span><br><span class="line">            SisterID = row - <span class="number">4</span></span><br><span class="line">        <span class="keyword">elif</span> row &lt;= <span class="number">15</span>:</span><br><span class="line">            SectionID = <span class="number">3</span></span><br><span class="line">            SisterID = row - <span class="number">9</span></span><br><span class="line">        <span class="keyword">elif</span> row &lt;= <span class="number">17</span>:</span><br><span class="line">            SectionID = <span class="number">4</span></span><br><span class="line">            SisterID = row - <span class="number">15</span></span><br><span class="line">        <span class="keyword">elif</span> row &lt;= <span class="number">22</span>:</span><br><span class="line">            SectionID = <span class="number">4</span></span><br><span class="line">            SisterID = row - <span class="number">17</span></span><br><span class="line">        <span class="keyword">if</span> map[row][col] == <span class="number">1</span>:</span><br><span class="line">            url = <span class="string">'http://192.168.115.248:81/book/book183/U'</span>+str(UnitID)+<span class="string">'_S'</span>+str(SectionID)+<span class="string">'_'</span>+str(SisterID)+<span class="string">'.php'</span></span><br><span class="line">            TestID = str(SectionID) + <span class="string">'.'</span> + str(SisterID)</span><br><span class="line">            KidID = <span class="string">'1'</span></span><br><span class="line">            ItemID = col *<span class="number">23</span> + row + <span class="number">1</span></span><br><span class="line">            print(url)</span><br><span class="line">            ans = work(url, cookies)</span><br><span class="line">            form = &#123;</span><br><span class="line">                <span class="string">'UnitID'</span>: str(UnitID),</span><br><span class="line">                <span class="string">'SectionID'</span>: str(SectionID),</span><br><span class="line">                <span class="string">'SisterID'</span>: str(SisterID),</span><br><span class="line">                <span class="string">'TestID'</span>: TestID,</span><br><span class="line">                <span class="string">'KidID'</span>: KidID,</span><br><span class="line">                <span class="string">'ItemID'</span>: str(ItemID),</span><br><span class="line">                <span class="string">'Item_0'</span>:<span class="string">''</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> x,t <span class="keyword">in</span> enumerate(ans):</span><br><span class="line">                form[<span class="string">'Item_'</span> + str(x)] = t</span><br><span class="line">            print(form)</span><br><span class="line">            requests.post(url=url, headers = post_headers, data= form)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#ans_deal.py</span></span><br><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">deal_answer</span><span class="params">(list)</span>:</span></span><br><span class="line">    <span class="comment">#list格式 A^B^C^D^</span></span><br><span class="line">    ans =[]</span><br><span class="line">    word = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> i,t <span class="keyword">in</span> enumerate(list):</span><br><span class="line">        <span class="keyword">if</span> t != <span class="string">'^'</span>:</span><br><span class="line">            word += t</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">if</span> word[<span class="number">-1</span>]==<span class="string">'#'</span>:</span><br><span class="line">                word = word[:<span class="number">-1</span>]</span><br><span class="line">            <span class="keyword">if</span> word.find(<span class="string">'|'</span>) != <span class="number">-1</span>:</span><br><span class="line">                word = word[:word.find(<span class="string">'|'</span>)]</span><br><span class="line">            ans.append(word)</span><br><span class="line">            word = <span class="string">''</span></span><br><span class="line">    <span class="keyword">return</span> ans</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">work</span><span class="params">(url, cookies)</span>:</span></span><br><span class="line">    <span class="comment">#url = 'http://192.168.115.248:81/book/book183/U1_S3_5.php'</span></span><br><span class="line">    <span class="comment"># 选择题'http://192.168.115.248:81/book/book183/U1_S3_3.php'</span></span><br><span class="line">    <span class="comment"># 填空题'http://192.168.115.248:81/book/book183/U1_S3_4.php'</span></span><br><span class="line">    <span class="comment"># 排序题'http://192.168.115.248:81/book/book183/U1_S3_5.php'</span></span><br><span class="line">    <span class="comment"># 表格勾选题 'http://192.168.115.248:81/book/book183/U2_S3_5.php'</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#cookies = 'ac51297530abeb41668a2fe69aec80a8'</span></span><br><span class="line"></span><br><span class="line">    get_headers = &#123;</span><br><span class="line">        <span class="string">'Host'</span>: <span class="string">'192.168.115.248:81'</span>,</span><br><span class="line">        <span class="string">'Connection'</span>: <span class="string">'keep-alive'</span>,</span><br><span class="line">        <span class="string">'Pragma'</span>: <span class="string">'no-cache'</span>,</span><br><span class="line">        <span class="string">'Cache-Control'</span>: <span class="string">'no-cache'</span>,</span><br><span class="line">        <span class="string">'Origin'</span>: <span class="string">'http://192.168.115.248:81'</span>,</span><br><span class="line">        <span class="string">'Upgrade-Insecure-Requests'</span>: <span class="string">'1'</span>,</span><br><span class="line">        <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36'</span>,</span><br><span class="line">        <span class="string">'Content-Type'</span>: <span class="string">'application/x-www-form-urlencoded'</span>,</span><br><span class="line">        <span class="string">'Accept'</span>: <span class="string">'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'</span>,</span><br><span class="line">        <span class="comment"># 'Referer': 'http://192.168.115.248:81/book/book183/U1_S2_5.php',</span></span><br><span class="line">        <span class="string">'Accept-Encoding'</span>: <span class="string">'gzip, deflate'</span>,</span><br><span class="line">        <span class="string">'Accept-Language'</span>: <span class="string">'zh,zh-CN;q=0.8'</span>,</span><br><span class="line">        <span class="string">'Cookie'</span>: <span class="string">'NCCE='</span> + cookies</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wb_data = requests.get(url, headers=get_headers)</span><br><span class="line"></span><br><span class="line">    wb_data.encoding = <span class="string">'utf-8'</span></span><br><span class="line">    <span class="comment"># print(wb_data.apparent_encoding)</span></span><br><span class="line">    soup = BeautifulSoup(wb_data.text, <span class="string">'lxml'</span>)</span><br><span class="line"></span><br><span class="line">    answers = soup.find_all(<span class="string">'script'</span>)[<span class="number">-1</span>].get_text()</span><br><span class="line">    <span class="comment"># print(answers)</span></span><br><span class="line">    answer = <span class="string">''</span></span><br><span class="line">    <span class="comment"># 选择题</span></span><br><span class="line">    <span class="comment"># judgeRadio('.question','','C^B^A^C^D^A')</span></span><br><span class="line">    num = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> answers.find(<span class="string">"judgeRadio"</span>) != <span class="number">-1</span>:</span><br><span class="line">        <span class="keyword">for</span> x, t <span class="keyword">in</span> enumerate(answers[answers.find(<span class="string">"judgeRadio"</span>): len(answers) + <span class="number">1</span>]):</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">';'</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">'\''</span>:</span><br><span class="line">                num += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">5</span> <span class="keyword">and</span> t != <span class="string">'\''</span>:</span><br><span class="line">                answer += t</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">6</span>:</span><br><span class="line">                answer += <span class="string">'^'</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> answers != <span class="string">''</span>:</span><br><span class="line">            ans = deal_answer(answer)</span><br><span class="line">            print(ans)</span><br><span class="line">    <span class="comment"># 排序题</span></span><br><span class="line">    <span class="comment"># judgeDragQuestion('.content-right .content-div','','D^B^E^A^C','^',&#123;top:0,left:-487&#125;)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> answers.find(<span class="string">"judgeDragQuestion"</span>) != <span class="number">-1</span>:</span><br><span class="line">        <span class="keyword">for</span> x, t <span class="keyword">in</span> enumerate(answers[answers.find(<span class="string">"judgeDragQuestion"</span>): len(answers) + <span class="number">1</span>]):</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">';'</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">'\''</span>:</span><br><span class="line">                num += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">5</span> <span class="keyword">and</span> t != <span class="string">'\''</span>:</span><br><span class="line">                answer += t</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">6</span>:</span><br><span class="line">                answer += <span class="string">'^'</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> answers != <span class="string">''</span>:</span><br><span class="line">            ans = deal_answer(answer)</span><br><span class="line">            tem = <span class="string">''</span></span><br><span class="line">            <span class="keyword">for</span> x, t <span class="keyword">in</span> enumerate(ans):</span><br><span class="line">                <span class="keyword">if</span> x != len(ans) - <span class="number">1</span>:</span><br><span class="line">                    tem += t + <span class="string">','</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    tem += t</span><br><span class="line">            ans = []</span><br><span class="line">            ans.append(tem)</span><br><span class="line">            print(ans)</span><br><span class="line">    <span class="comment"># 表格勾选题</span></span><br><span class="line">    <span class="comment"># judgeTableQuestion('table input[type=checkbox]','','0^3^4^7^9^11^12','^')</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> answers.find(<span class="string">"judgeTableQuestion"</span>) != <span class="number">-1</span>:</span><br><span class="line">        <span class="keyword">for</span> x, t <span class="keyword">in</span> enumerate(answers[answers.find(<span class="string">"judgeTableQuestion"</span>): len(answers) + <span class="number">1</span>]):</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">';'</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">'\''</span>:</span><br><span class="line">                num += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">5</span> <span class="keyword">and</span> t != <span class="string">'\''</span>:</span><br><span class="line">                answer += t</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">6</span>:</span><br><span class="line">                answer += <span class="string">'^'</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> answers != <span class="string">''</span>:</span><br><span class="line">            ans = deal_answer(answer)</span><br><span class="line">            tem = <span class="string">''</span></span><br><span class="line">            <span class="keyword">for</span> x, t <span class="keyword">in</span> enumerate(ans):</span><br><span class="line">                <span class="keyword">if</span> x != len(ans) - <span class="number">1</span>:</span><br><span class="line">                    tem += t + <span class="string">','</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    tem += t</span><br><span class="line">            ans = []</span><br><span class="line">            ans.append(tem)</span><br><span class="line">            print(ans)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 填空题</span></span><br><span class="line">    <span class="comment"># judgeCompletion('.content-inner input[name^=Item_]','','looking forward#^apart from#^on#^used to get very cross#^angel#^pretty sad#^some cash','#^')</span></span><br><span class="line">    <span class="keyword">if</span> answers.find(<span class="string">"judgeCompletion"</span>) != <span class="number">-1</span>:</span><br><span class="line">        <span class="keyword">for</span> x, t <span class="keyword">in</span> enumerate(answers[answers.find(<span class="string">"judgeCompletion"</span>): len(answers) + <span class="number">1</span>]):</span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">';'</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> t == <span class="string">'\''</span>:</span><br><span class="line">                num += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">5</span> <span class="keyword">and</span> t != <span class="string">'\''</span>:</span><br><span class="line">                answer += t</span><br><span class="line">            <span class="keyword">if</span> num == <span class="number">6</span>:</span><br><span class="line">                answer += <span class="string">'^'</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> answers != <span class="string">''</span>:</span><br><span class="line">            ans = deal_answer(answer)</span><br><span class="line">            print(ans)</span><br><span class="line">    <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure>
+<p><strong>学校的回复</strong></p>
+<p><img src="https://mu6peg.bn.files.1drv.com/y4mR15h6s96YFujUZTDV5lCCqUuCAjki_H9jvpxzwMVodnppHcKIS2JyYbwVlLnH1h4pVKyrgvvYYiXmH2nSTovPKH4eKL5zwHvZn06zj4260JwE66QnefOsxQl9SEs4QH1cUL97Oo3AgPyfxgeuyt23M7XP_l7NhkVhB218U2mRKg_EPJIx8JoFkPpIrkeSftbHLzbdNt0cpc8GSda8juBIg?width=1600&amp;height=1051&amp;cropmode=none" /></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/24/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%81%9A%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -613,213 +731,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/01/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/07/01/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/" class="post-title-link" itemprop="url">树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-07-01 00:00:00" itemprop="dateCreated datePublished" datetime="2017-07-01T00:00:00+08:00">2017-07-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-20 12:26:05" itemprop="dateModified" datetime="2019-03-20T12:26:05+08:00">2019-03-20</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>前段时间的，新生工程体验课上，两人一组，靠厂家提供的元器件和烧录代码，焊接了了一台智能小车。</p>
-<p>最进，碰巧手头有空闲的一块树莓派，本来打算用树莓派去实现远程控制空调，但发现空调的红外编码带有逻辑控制，只能退而求其次，试试远程控制小车，大体框架结构如图。</p>
-<hr />
-<p>2017-07-03更新，已经实现对空调类带逻辑编码设备的简单控制。</p>
-<hr />
-<p><img src="https://m06peg.bn.files.1drv.com/y4msTddIzDlB-uN8GR7yLOqA49fSv94Y_V9tiHFlE8ey3qnUTzIanfI6FiphriaISDPoXV6mqiZlMDhgJ7cFFcXM3ktloPe68IBKFc2M08BlhO4u_AicdiFhMT8yVbm93MevAfaU0y6TEPfH_uttcU6LSIceWe2e3rwUVkvZJtU2qmxCLEprCKxfg_k1maQdQtwdyBKHJYkUuVjPJ7ssgRN2A?width=452&amp;height=490&amp;cropmode=none" /></p>
-<h1 id="烧录系统">烧录系统</h1>
-<p>几乎所有的新手教程都使用<a href="https://sourceforge.net/projects/win32diskimager/" target="_blank" rel="noopener">Win32DiskImager</a>作为系统安装工具——中文的、英文的、官方的、eLinux wiki的，不一而足。 但是这个工具不支持中文目录名（文件或目录有中文，会出现123错误），不支持压缩，必须先插好SD卡，再开软件。 而<a href="https://www.techspot.com/downloads/6355-usb-image-tool.html" target="_blank" rel="noopener">USB Image Tool</a>，就是Win32DiskImager的一个更方便的替代品。</p>
-<p><img src="https://m06qeg.bn.files.1drv.com/y4m2NpNSKAuJvozocrZ_xw5PgmkwzrjGvJCTFprdCxqp-hDikxWBp5bqzjxo1TdYqFP5hLtfPygKoeFYedWQaTR2xhTRMqrPETT4d7qozj51w833TKMmtnqi3eaen_t1oOxfTdF9d2Vsr5Dk-gslRzx1lAASRIKhL7GXctq53et50P6TvK7PmO5TLpNooYc9Tnz3aNjoXyMe0gkd1afOc6PNw?width=511&amp;height=421&amp;cropmode=none" /></p>
-<h2 id="写sd卡直接读取zip压缩包">写SD卡：直接读取zip压缩包</h2>
-<p>USB Image Tool可以直读.zip压缩包。网上下载的zip格式系统镜像，下完直接可以烧录。 点击<strong>Restore</strong>，选择.zip文件即可。注意打开对话框中默认看不到.zip文件，在“文件类型”处选择“<strong>All Files (<em>.</em>)</strong>”即可。</p>
-<h2 id="ssh无法连接问题">SSH无法连接问题</h2>
-<p>自从2016年11月开始，树莓派官方推荐 <a href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank" rel="noopener">Raspbian</a> 系统镜像关闭了默认<em>ssh</em>连接，重新开启也很简单，把SD卡拔下来，进入到根目录，新建一个名为<em>ssh</em>的空白文件(无后缀)就可以。</p>
-<p>好了然后再把卡插回树莓派，就可以使用SSH了。</p>
-<ul>
-<li>初始用户名：<strong>pi</strong></li>
-<li>初始密码：<strong>raspberry</strong></li>
-</ul>
-<h1 id="将红外接受管和发射管连接至树莓派gpio接口">将红外接受管和发射管连接至树莓派GPIO接口</h1>
-<p><strong>材料：</strong></p>
-<p>红外接受管（3pin），红外接受管（2pin）,杜邦线若干。</p>
-<p>根据不同树莓派版本，查看GPIO的引线图，该实验采用B+版，具体实物对应图和<strong>GPIO</strong>与pin对应图如下图：</p>
-<p><img src="https://m06reg.bn.files.1drv.com/y4m63BLLBSvOAlNuxd2fqC_JvtyGEYStvqY2fr2mcMdjVcm08LLqbvAPYVkToP0-amnT1f7QYamAWqXIo9Udf_bT6KDce2ujd8Rtm81qiBeQcL8DAIAFwrwFsCIjgkZoy4woxubCMkD9XZzQ1l9pflQC8oMOmhR6t6DadJA4PCzFUNzbXAI2okLWB30nIAjEw0Z65NwnE1eDuQ35U7ob5PUyA?width=600&amp;height=410&amp;cropmode=none" /></p>
-<p><img src="https://m06seg.bn.files.1drv.com/y4m0E0YCge3N7bAhpIGt1af8V2VTlCVF9V6hxPYWzdoVcviqmgYiO2kQ2tYQ8KNwyk4mOp-gq6erK23pIDz_PfYvJp5lect-KyhW-q0ZkgiflmSF2fxhGLgGVHzrTxe4CapOTQbPVc3DE28yEQBjEiUNdhv3uhjWm6Sieg9s6JpEPbvvcJ78Kis73_mdwhTeTCAO61N9OI2t2o9z8aYrqNlPQ?width=580&amp;height=621&amp;cropmode=none" /></p>
-<h2 id="硬件连接">硬件连接</h2>
-<p><strong>红外接收器</strong></p>
-<ul>
-<li><p>vcc 连 pin1 (3.3v)</p></li>
-<li><p>gnd 连 pin6(ground)</p></li>
-<li><p>data 连 pin12(gpio18)</p></li>
-</ul>
-<p><strong>红外发射器</strong></p>
-<ul>
-<li><p>gnd 连 pin25(ground)</p></li>
-<li><p>data 连 pin11(gpio17)</p></li>
-</ul>
-<p><strong>红外接受器规格见图，左引脚为data，中为接地，右为3.3V供电</strong></p>
-<p><img src="https://m06beg.bn.files.1drv.com/y4mC0hjEBI2mDBlXg6IrX_o9joN0nLTJvLkDW_IEftqu11oNXIdxWXuvw7_0e8NNHF7Hbe7yphiar8eCiDN2cfojMLO-JdndiMQ_p0vHRs0oA4nf0Ub33MdnyxNFZlcDWoK7iSed9f1Z9k0oy7Sxm24OvnrojKNiL9m_cQxEoxc-U_7-uuphNogK5phzeoYPCi7_w2GeZTSKb8bIMXPcfjTmg?width=437&amp;height=515&amp;cropmode=none" /></p>
-<p><strong>红外发射器规格见图，长脚为data,短脚为接地</strong></p>
-<p><img src="https://m06ceg.bn.files.1drv.com/y4mz-3eXo3ojN-LizXl8UwY6OwXx57k8yyFYWRmJHpDCSmF0Kg1cC88Gqhi61SJ4-NR0krEVB6zZXXaTNv4OQm0wrRfiNcRxBp7X4cKV9J1Gz2jSnVOAqy8Z3GtDWeIusFomTlbl-q2N5Q57ZHHbNWbOBq0Zhox7wnhXFk2X9L_0X8qLLvFN4i86_NKKXw_eETATEBC2Qv98Ahot3gpvUVONQ?width=775&amp;height=375&amp;cropmode=none" /></p>
-<p>接收器和发射器通过杜邦线跟树莓派相连，最后的连接实物图</p>
-<p><img src="https://me6teg.bn.files.1drv.com/y4m4ZqCbaOwhp73UZ73KZoZARKnXEFC89LXos3bM7uJ5r1KSCtoqe8si5Yz2FAvvUsQto0yDTP2hAYwSaqN5NKmfiFlCRdOBerCh7hHDOqQ81L3p2vlIDE4B41DApBvVf7eDsPAPUOQAgTeDo7PJTLlMXl1U8ogAtEUmc7VFzkxfk1N7p3CN7m0C8Zh_PspzOpJQQFRMAnaZFuGUwqW3e8ScA?width=610&amp;height=458&amp;cropmode=none" /></p>
-<h1 id="预先解析控制码">预先解析控制码</h1>
-<h2 id="修改-raspbian-仓库默认源">修改 raspbian 仓库默认源</h2>
-<ol type="1">
-<li>修改apt源</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
-<p>例如使用大连东软信息学院软件源镜像，修改之后的内容如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb http://mirrors.aliyun.com/raspbian/raspbian jessie main contrib non-free rpi</span><br></pre></td></tr></table></figure>
-<p>其他可用源如下：</p>
-<ul>
-<li><p>中国科学技术大学 Raspbian <a href="http://mirrors.ustc.edu.cn/raspbian/raspbian/" target="_blank" rel="noopener" class="uri">http://mirrors.ustc.edu.cn/raspbian/raspbian/</a></p></li>
-<li><p>阿里云 Raspbian <a href="http://mirrors.aliyun.com/raspbian/raspbian/" target="_blank" rel="noopener" class="uri">http://mirrors.aliyun.com/raspbian/raspbian/</a></p></li>
-<li><p>清华大学 Raspbian <a href="http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/" target="_blank" rel="noopener" class="uri">http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/</a></p></li>
-<li><p>华中科技大学 Raspbian <a href="http://mirrors.hustunique.com/raspbian/raspbian/" target="_blank" rel="noopener" class="uri">http://mirrors.hustunique.com/raspbian/raspbian/</a> Arch Linux ARM <a href="http://mirrors.hustunique.com/archlinuxarm/" target="_blank" rel="noopener" class="uri">http://mirrors.hustunique.com/archlinuxarm/</a></p></li>
-<li><p>华南农业大学（华南用户） Raspbian <a href="http://mirrors.scau.edu.cn/raspbian/" target="_blank" rel="noopener" class="uri">http://mirrors.scau.edu.cn/raspbian/</a></p></li>
-<li><p>大连东软信息学院源（北方用户） Raspbian <a href="http://mirrors.neusoft.edu.cn/raspbian/raspbian/" target="_blank" rel="noopener" class="uri">http://mirrors.neusoft.edu.cn/raspbian/raspbian/</a></p></li>
-<li><p>重庆大学源（中西部用户）</p>
-<p>Raspbian <a href="http://mirrors.cqu.edu.cn/Raspbian/raspbian/" target="_blank" rel="noopener" class="uri">http://mirrors.cqu.edu.cn/Raspbian/raspbian/</a></p></li>
-</ul>
-<ol start="2" type="1">
-<li>更新软件源和软件</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 更新软件源</span></span><br><span class="line">sudo apt-get update</span><br><span class="line"><span class="comment"># 更新软件</span></span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
-<h2 id="更换vi文本编译器为vim">更换vi文本编译器为vim</h2>
-<p>因为vi在insert模式下，方向键会变为ABCD，故用vim进行替换</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#卸载vi</span></span><br><span class="line">sudo apt-get remove vi-common</span><br><span class="line"><span class="comment">#安装vim</span></span><br><span class="line">sudo apt-get install -y vim</span><br></pre></td></tr></table></figure>
-<h2 id="安装lirc">安装lirc</h2>
-<p>LIRC (<em>Linux Infrared remote control</em>)是一个linux系统下开源的软件包。这个软件可以让Linux系统接收及发送红外线信号。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install lirc</span><br></pre></td></tr></table></figure>
-<p><strong>配置硬件</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sudo vim /boot/config.txt #在文件结尾添加</span></span><br><span class="line"><span class="comment"># 修改一下内容</span></span><br><span class="line">dtoverlay=lirc-rpi</span><br><span class="line">gpio_in_pin=18</span><br><span class="line">gpio_out_pin=17</span><br><span class="line"></span><br><span class="line"><span class="comment"># sudo vim /etc/lirc/hardware.conf  #编辑LRIC的配置文件</span></span><br><span class="line"><span class="comment"># 修改以下内容</span></span><br><span class="line">LIRCD_ARGS=<span class="string">"--uinput"</span></span><br><span class="line">DRIVER=<span class="string">"default"</span></span><br><span class="line">DEVICE=<span class="string">"/dev/lirc0"</span></span><br><span class="line">MODULES=<span class="string">"lirc_rpi"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启生效</span></span><br><span class="line">sudo /etc/init.d/lirc restart</span><br></pre></td></tr></table></figure>
-<p><strong>注意：</strong>配置gpio_in_pin和gpio_out_pin时，编号为GPIO号，并非pin号</p>
-<p><strong>启动测试</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mode2 -d /dev/lirc0</span><br></pre></td></tr></table></figure>
-<p>红外接收器已经打开，处于监听状态。这个时候，利用任何红外发射器（可以是电视遥控器或其他遥控器）对红外接收模块按任意按钮，就可以在树莓派终端上看到类似如下的代码</p>
-<p>看到这个代码便证明红外接收模块是正常工作的。</p>
-<p>如果没有看到，请检查你的接线、电压、以及通过<strong>lsusb</strong>查看是否加载了相应模块。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pulse 1681</span><br><span class="line">space 4816</span><br><span class="line">pulse 1695</span><br><span class="line">space 4784</span><br><span class="line">pulse 1333</span><br><span class="line">space 3638</span><br></pre></td></tr></table></figure>
-<h2 id="录制解析控制码">录制解析控制码</h2>
-<ol type="1">
-<li>开始录制</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irrecord -d /dev/lirc0 ~/lircd.conf <span class="comment">#按照提示操作即可,录制完后会让你输入按键名</span></span><br></pre></td></tr></table></figure>
-<ol start="2" type="1">
-<li>查看可用键名列表</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irrecord --list-namespace</span><br></pre></td></tr></table></figure>
-<ol start="3" type="1">
-<li>将已录制的编码加载进 <em>lirc</em> 配置参数</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp ~/lircd.conf /etc/lirc/lircd.conf</span><br></pre></td></tr></table></figure>
-<h1 id="通过树莓派发射红外编码">通过树莓派发射红外编码</h1>
-<ol type="1">
-<li>启动lircd服务</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo lircd -d /dev/lirc0</span><br></pre></td></tr></table></figure>
-<ol start="2" type="1">
-<li>查看录制好可以使用的键名</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irsend LIST /home/pi/lircd.conf <span class="string">""</span></span><br></pre></td></tr></table></figure>
-<ol start="3" type="1">
-<li>发送红外编码</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irsend SEND_ONCE /home/pi/lircd.conf KEY_XXX</span><br></pre></td></tr></table></figure>
-<p><strong>演示效果</strong></p>
-<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124361&amp;authkey=AOMqcjwHvhLgVcw" width="320" height="180" frameborder="0" scrolling="no" allowfullscreen>
-</iframe>
-<hr />
-<p><strong>关于录制带逻辑编码的红外编码</strong></p>
-<p>一个比较令人兴奋的消息，谢谢博客<a href="http://blog.just4fun.site/raspberrypi-lirc.html" target="_blank" rel="noopener" class="uri">http://blog.just4fun.site/raspberrypi-lirc.html</a>的帮助，直接发送raw原始码就可以实现简单的控制程序。😘</p>
-<p><strong>注意：</strong>其只能使用raw原始码，记录是通过mode2命令实现。</p>
-<ol type="1">
-<li>制作模版（不设置按键，初始化玩直接跳过）</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo /etc/init.d/lirc restart</span><br><span class="line">irrecord  -f -d /dev/lirc0 ~/lircd.conf</span><br></pre></td></tr></table></figure>
-<ol start="2" type="1">
-<li>录制需要实现的按键</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mode2  -d /dev/lirc0 &gt; /tmp/temp.code  </span><br><span class="line">cat /tmp/temp.code | sed -n <span class="string">'2,$p'</span> | grep -o  -E <span class="string">"[0-9]+"</span> | xargs <span class="built_in">echo</span>  <span class="comment"># 移除第一行,之后把所有数字取出</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 把上述指令写入 ~/lircd.conf 的 KEY_OPEN里</span></span><br><span class="line"><span class="comment"># 值得注意的是 ~/lircd.conf文件里的空格十分重要</span></span><br><span class="line"></span><br><span class="line">sudo cp ~/lircd.conf /etc/lirc/lircd.conf</span><br><span class="line">sudo /etc/init.d/lirc restart</span><br><span class="line"><span class="comment"># irsend LIST /home/pi/lircd.conf "" #列出指令</span></span><br></pre></td></tr></table></figure>
-<ol start="3" type="1">
-<li>最后一个参考格式的<strong><em>lircd.conf</em></strong>文件（保证空格正确）</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">begin remote</span><br><span class="line"></span><br><span class="line">  name  /home/pi/lircd.conf</span><br><span class="line">  flags RAW_CODES</span><br><span class="line">  eps            30</span><br><span class="line">  aeps          100</span><br><span class="line"></span><br><span class="line">  gap          8015</span><br><span class="line"></span><br><span class="line">      begin raw_codes</span><br><span class="line"></span><br><span class="line">          name KEY_POWER</span><br><span class="line">               8927 4522 531 1711 551 1706 559 598 549 599 551 600 551 598 551 597 552 1719 558 597 549 1715 549 1724 540 614 535 592 559 597 550 599 551 610 551 602 549 598 553 1706 558 598 549 601 549 599 550 601 548 614 551 593 557 1717 545 598 551 598 552 598 552 599 549 598 553 1720 556 597 563 589 549 600 549 601 549 607 545 593 555 599 551 614 548 598 551 598 551 600 550 594 604 548 555 597 551 599 551 597 573 7967 558 597 549 598 548 603 548 601 554 598 550 599 550 600 545 619 549 600 545 599 556 598 551 600 549 611 541 597 551 599 551 609 548 601 555 598 552 596 554 598 550 598 563 587 551 600 543 615 556 598 550 598 551 599 576 574 552 596 552 598 552 613 538 612 551 595 552 597 553 598 552 599 552 596 552 1720 545 596 552 610 551 599 551 599 575 575 551 593 559 595 553 598 552 598 549 612 552 598 551 1705 559 597 574 1689 550 1724 540 598 552 592 559 609 553 599 548 598 552 1711 551 1705 560 1708 553 1711 550 599 553 1716 563 7970 559 597 551 600 573 578 550 599 551 600 575 573 565 589 575 586 552 1710 554 597 556 596 553 597 549 604 552 600 550 599 551 614 551 598 552 599 552 599 548 602 553 598 550 1713 552 599 552 613 593 558 545 604 564 586 552 598 552 598 554 595 554 601 546 617 546 607 550 597 551 611 541 597 553 598 553 598 580 572 548 615 552 599 554 596 552 599 551 598 554 598 547 614 536 604 552 609 554 1714 548 598 556 597 548 599 553 601 553 1711 553 598 553 593 549</span><br><span class="line"></span><br><span class="line">      end raw_codes</span><br><span class="line"></span><br><span class="line">end remote</span><br></pre></td></tr></table></figure>
-<ol start="4" type="1">
-<li>启动服务，运行指令</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo lircd -d /dev/lirc0</span><br><span class="line">irsend SEND_ONCE /home/pi/lircd.conf KEY_POWER</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -889,7 +800,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -926,12 +837,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">147k</span>
+    <span title="站点总字数">148k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:13</span>
+    <span title="站点阅读时长">2:14</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>

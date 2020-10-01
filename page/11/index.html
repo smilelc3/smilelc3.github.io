@@ -175,6 +175,123 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(4)%E5%8F%91%E7%8E%B0%E7%8E%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(4)%E5%8F%91%E7%8E%B0%E7%8E%AF/" class="post-title-link" itemprop="url">2017第八届蓝桥杯决赛题目解析(4)：发现环</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-29T00:00:00+08:00">2017-05-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-03-19 21:26:51" itemprop="dateModified" datetime="2019-03-19T21:26:51+08:00">2019-03-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>题目描述：</strong></p>
+<blockquote>
+<p>小明的实验室有N台电脑，编号1~N。原本这N台电脑之间有N-1条数据链接相连，恰好构成一个树形网络。在树形网络上，任意两台电脑之间有唯一的路径相连。</p>
+<p>不过在最近一次维护网络时，管理员误操作使得某两台电脑之间增加了一条数据链接，于是网络中出现了环路。环路上的电脑由于两两之间不再是只有一条路径，使得这些电脑上的数据传输出现了BUG。 为了恢复正常传输。小明需要找到所有在环路上的电脑，你能帮助他吗？</p>
+</blockquote>
+<blockquote>
+<p><strong>输入</strong>：</p>
+<p>第一行包含一个整数N。</p>
+<p>以下N行每行两个整数a和b，表示a和b之间有一条数据链接相连。</p>
+<p>对于30%的数据，<span class="math inline">\(1 \le N \le 1000\)</span> 对于100%的数据, <span class="math inline">\(1 \le N \le100000， 1 \le a, b \le N\)</span> 输入保证合法。</p>
+</blockquote>
+<blockquote>
+<p><strong>输出：</strong></p>
+<p>按从小到大的顺序输出在环路上的电脑的编号，中间由一个空格分隔。</p>
+</blockquote>
+<blockquote>
+<p><strong>样例输入：</strong> 5 1 2 3 1 2 4 2 5 5 3</p>
+</blockquote>
+<blockquote>
+<p><strong>样例输出：</strong> 1 2 3 5</p>
+</blockquote>
+<blockquote>
+<p><strong>资源约定：</strong></p>
+<p>峰值内存消耗 &lt; 256M</p>
+<p>CPU消耗 &lt; 1000ms</p>
+<p>请严格按要求输出，不要画蛇添足地打印类似：“请您输入…” 的多余内容。</p>
+<p>所有代码放在同一个源文件中，调试通过后，拷贝提交该源码。</p>
+<p><strong>注意:</strong> main函数需要返回0</p>
+<p><strong>注意:</strong> 只使用ANSI C/ANSI C++ 标准，不要调用依赖于编译环境或操作系统的特殊函数。</p>
+<p><strong>注意:</strong> 所有依赖的函数必须明确地在源文件中 #include <xxx>， 不能通过工程设置而省略常用头文件。提交时，注意选择所期望的编译器类型。</p>
+</blockquote>
+<p><strong>问题分析：</strong></p>
+<p>​ 这题可能是上天对我的照顾，在2016NOIP DAY2的三道题中，我依稀记得是第二道题，当时也是一道类似的题，不过这题是仅单环，那一道题是多环。</p>
+<p>​ 当时所用的策略是遍历-&gt;深搜度为1的点-&gt;删点-&gt;直到点不在减少，但当时有个问题，就是深搜深度过深，导致栈溢出，幸好当时组委会另行通知了这一点，并在评测机器上有所更改。</p>
+<p>​ 但这次最大节点数为10w，并不算大，可以进行dfs</p>
+<p>​ 在存储边上，用vector存储邻接表</p>
+<p>​ 并通过vector,algorithm中的sort进行优化</p>
+<p><strong>代码：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N=<span class="number">10000</span>+<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; next[N];</span><br><span class="line"><span class="keyword">bool</span> vis[N]; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">memset</span>(vis,<span class="literal">false</span>,<span class="keyword">sizeof</span>(vis));</span><br><span class="line">	<span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> a,b;</span><br><span class="line">		<span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</span><br><span class="line">		next[a].push_back(b);<span class="comment">//无向图，存双边 </span></span><br><span class="line">		next[b].push_back(a);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> side=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;next[k].<span class="built_in">size</span>();j++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(vis[next[k][j]]==<span class="literal">false</span>)</span><br><span class="line">			side++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(side==<span class="number">1</span> &amp;&amp; vis[k]==<span class="literal">false</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		vis[k]=<span class="literal">true</span>;</span><br><span class="line">		dfs(next[k][<span class="number">0</span>]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">work</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> remain=n;</span><br><span class="line">	<span class="keyword">int</span> tem_remain;</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">	&#123;</span><br><span class="line">		tem_remain=remain;</span><br><span class="line">		<span class="keyword">bool</span> flag=<span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">int</span> side=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;next[i].<span class="built_in">size</span>();j++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>(vis[next[i][j]]==<span class="literal">false</span>)</span><br><span class="line">					side++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(side==<span class="number">1</span> &amp;&amp; vis[i]==<span class="literal">false</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				vis[i]=<span class="literal">true</span>;</span><br><span class="line">				tem_remain-=<span class="number">1</span>;</span><br><span class="line">				dfs(next[i][<span class="number">0</span>]);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;<span class="keyword">while</span>(tem_remain != remain);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		<span class="keyword">if</span>(vis[i]==<span class="literal">false</span>)</span><br><span class="line">			<span class="built_in">cout</span>&lt;&lt;i&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	init();</span><br><span class="line">	work();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/26/python%E5%AD%A6%E4%B9%A0%E4%B8%AA%E4%BA%BA%E7%9C%8B%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -526,93 +643,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/25/%E4%B8%96%E7%95%8C%EF%BC%8C%E6%82%A8%E5%A5%BD%EF%BC%81/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/25/%E4%B8%96%E7%95%8C%EF%BC%8C%E6%82%A8%E5%A5%BD%EF%BC%81/" class="post-title-link" itemprop="url">世界，您好！</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-05-25 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-25T00:00:00+08:00">2017-05-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-19 00:27:43" itemprop="dateModified" datetime="2020-04-19T00:27:43+08:00">2020-04-19</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>56</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://p072bq.bn.files.1drv.com/y4mKCA5zoYDkiAd2gwJoluuS9K33Om0aStMYmMuCRNSgkPEkuNJDbRTUoicrsNlOSu73DbwrxB6DseO50DWotaJl5CO_Rpiyo-YaSB8Id_irHrqjfy9o-e2LpZrQf14b0lSKgp0LmslybbrQTs6UdvQ60tTLGk_xQq-4IKawTdTnaabE0kBBDfzytJU79JNY26rCdqwckzp1uPgEEi7mjs9TQ?width=500&amp;height=500&amp;cropmode=none" /></p>
-<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124297&amp;authkey=AGPmPJO3IuL8zHE" width="98" height="120" frameborder="0" scrolling="no">
-</iframe>
-<h3 id="这是smile先生的第一个博客">这是smile先生的第一个博客</h3>
-<h3 id="我不希望她被废弃">我不希望她<strong>被废弃</strong></h3>
-<h3 id="我会好好的维护她">我会好好的<strong>维护她</strong></h3>
-<h3 id="正如我的梦">正如<strong>《我的梦》</strong></h3>
-<h3 id="借用自己的空闲时间">借用自己的空闲时间</h3>
-<h3 id="实现自己的小小梦想">实现自己的<strong>小小梦想</strong></h3>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -682,7 +712,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -719,12 +749,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">147k</span>
+    <span title="站点总字数">148k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:13</span>
+    <span title="站点阅读时长">2:14</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
