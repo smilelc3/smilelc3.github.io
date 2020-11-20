@@ -175,6 +175,103 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(2)%E7%93%B7%E7%A0%96%E6%A0%B7%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(2)%E7%93%B7%E7%A0%96%E6%A0%B7%E5%BC%8F/" class="post-title-link" itemprop="url">2017第八届蓝桥杯决赛题目解析(2)：瓷砖样式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-29T00:00:00+08:00">2017-05-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-19 00:19:44" itemprop="dateModified" datetime="2020-04-19T00:19:44+08:00">2020-04-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>问题描述：</strong></p>
+<blockquote>
+<p>小明家的一面装饰墙原来是3*10的小方格。现在手头有一批刚好能盖住2个小方格的长方形瓷砖。</p>
+<p>瓷砖只有两种颜色：黄色和橙色。小明想知道，对于这么简陋的原料，可以贴出多少种不同的花样来。</p>
+<p>小明有个小小的强迫症：忍受不了任何2*2的小格子是同一种颜色。</p>
+<p>（瓷砖不能切割，不能重叠，也不能只铺一部分。另外，只考虑图案，请忽略瓷砖的拼接）</p>
+<p>显然，对于2*3的小格子来说，口算都可以知道：一共10中贴法，如【p1.png所示】</p>
+<p>但对于3*10的格子呢？肯定是个不小的数目，请你利用计算机的威力算出该数字。</p>
+<p>注意：你需要提交的是一个整数，不要填写任何多余的内容（比如：说明性文字）</p>
+</blockquote>
+<p><img src="https://pk4abg.bn.files.1drv.com/y4mipsBWhLerXFhV6jButqO4y2LyMXPXjoc0JgyJODg2yk0wj_DkYdFN__YEOG0SzbIplDlWm1kLzn8kvROFsJsZJOjCKow0YMg7O7sEaosB9bF-3kL8KZB10tfq5GTAsTvdEw8ezsY1CbohLcC4KdWGCCMd3wIkidabGHJi2degrmLEsVbx5jDz4BjRJCDxZSeorLai7BLmmfy6UJk-kUSYw?width=530&amp;height=360&amp;cropmode=none" /></p>
+<p><strong>问题分析：</strong></p>
+<p>​ 题目说的很长，但中心思想一句话就可以概括：用2种2<em>1瓷砖，覆盖10</em>3的墙面，保证没有2*2颜色相同，请问有多少种情况？</p>
+<p>​ 考场上初步想来，直接暴力搜索所有解，最后对所有解进行判定合，足够秒出结果。而且代码简单，不会花费过多时间，为后面大分题准备。</p>
+<p>​ 现在想来，其实不必对所有解进行判合法，在中途选择瓷砖时，就可以进行判定，这样可以降低时间复杂度。</p>
+<p><strong>问题答案：</strong></p>
+<p>​ <strong>114434</strong></p>
+<p><strong>代码：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt; </span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a[<span class="number">5</span>][<span class="number">12</span>];<span class="comment">//-1代表未摆放，1代表黄色，2代表橙色 </span></span><br><span class="line"><span class="keyword">int</span> res=<span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">judge</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(a[x][y]==a[x<span class="number">-1</span>][y<span class="number">-1</span>] &amp;&amp; a[x][y]==a[x<span class="number">-1</span>][y] &amp;&amp; a[x][y]==a[x][y<span class="number">-1</span>])</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">if</span>(a[x][y]==a[x<span class="number">-1</span>][y] &amp;&amp; a[x][y]==a[x<span class="number">-1</span>][y+<span class="number">1</span>] &amp;&amp; a[x][y]==a[x][y+<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">if</span>(a[x][y]==a[x][y<span class="number">-1</span>] &amp;&amp; a[x][y]==a[x+<span class="number">1</span>][y<span class="number">-1</span>] &amp;&amp; a[x][y]==a[x+<span class="number">1</span>][y])</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(x==<span class="number">3</span>&amp;&amp;y==<span class="number">10</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        res++;</span><br><span class="line">        <span class="keyword">return</span>; </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(y&gt;<span class="number">10</span>) </span><br><span class="line">    &#123;</span><br><span class="line">        dfs(x+<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(a[x][y]==<span class="number">-1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(a[x][y+<span class="number">1</span>]==<span class="number">-1</span>)<span class="comment">//竖着铺 </span></span><br><span class="line">        &#123;</span><br><span class="line">            a[x][y]=<span class="number">1</span>;</span><br><span class="line">            a[x][y+<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(judge(x,y))<span class="comment">//边铺边判合法 </span></span><br><span class="line">                dfs(x,y+<span class="number">1</span>);</span><br><span class="line">            a[x][y]=<span class="number">-1</span>;</span><br><span class="line">            a[x][y+<span class="number">1</span>]=<span class="number">-1</span>;</span><br><span class="line">            </span><br><span class="line">            a[x][y]=<span class="number">2</span>;</span><br><span class="line">            a[x][y+<span class="number">1</span>]=<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(judge(x,y))</span><br><span class="line">                dfs(x,y+<span class="number">1</span>);</span><br><span class="line">            a[x][y]=<span class="number">-1</span>;</span><br><span class="line">            a[x][y+<span class="number">1</span>]=<span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(a[x+<span class="number">1</span>][y]==<span class="number">-1</span>)<span class="comment">//横着铺 </span></span><br><span class="line">        &#123;</span><br><span class="line">            a[x][y]=<span class="number">1</span>;</span><br><span class="line">            a[x+<span class="number">1</span>][y]=<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(judge(x,y))</span><br><span class="line">                dfs(x,y+<span class="number">1</span>);</span><br><span class="line">            a[x][y]=<span class="number">-1</span>;</span><br><span class="line">            a[x+<span class="number">1</span>][y]=<span class="number">-1</span>;</span><br><span class="line">            </span><br><span class="line">            a[x][y]=<span class="number">2</span>;</span><br><span class="line">            a[x+<span class="number">1</span>][y]=<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(judge(x,y))</span><br><span class="line">                dfs(x,y+<span class="number">1</span>);</span><br><span class="line">            a[x][y]=<span class="number">-1</span>;</span><br><span class="line">            a[x+<span class="number">1</span>][y]=<span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        dfs(x,y+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">1</span>;i&lt;=<span class="number">3</span>;i++)</span><br><span class="line">        <span class="keyword">for</span>(j=<span class="number">1</span>;j&lt;=<span class="number">10</span>;j++)</span><br><span class="line">            a[i][j]=<span class="number">-1</span>; </span><br><span class="line">    dfs(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;res; </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(4)%E5%8F%91%E7%8E%B0%E7%8E%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -504,145 +601,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/25/win64%E7%8E%AF%E5%A2%83aishub%E6%95%B0%E6%8D%AE%E7%88%AC%E8%99%AB%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/25/win64%E7%8E%AF%E5%A2%83aishub%E6%95%B0%E6%8D%AE%E7%88%AC%E8%99%AB%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">win64环境aishub数据爬虫配置方案</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-05-25 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-25T00:00:00+08:00">2017-05-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-19 20:00:09" itemprop="dateModified" datetime="2019-03-19T20:00:09+08:00">2019-03-19</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>922</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://pk71bq.bn.files.1drv.com/y4mTOKJPnQ4_TFD6KZdYxE0Ptb7Io31Wqj1aif9U4mrzN6bIXcLsj7OmoPkzos_Qt9yt2zq7_23dJCfBdz4pdBoYx_v4uw1XfaBluYxr_zOhjlDbOPKHO15WJEwmeAd4ZxTkF5U7s3Znv65-OgdN2dUwImkLZEp8QDXcjYcb2rQ4H5NS0fnx0-rSIxrPJ5OzXZYhnmAbLABasP3l4DAzHqjGg?width=999&amp;height=609&amp;cropmode=none" /></p>
-<h1 id="python-3.6.1">Python 3.6.1</h1>
-<ul>
-<li><strong>下载地址</strong>：<a href="https://www.python.org/ftp/python/3.6.1/python-3.6.1-amd64.exe" target="_blank" rel="noopener">python-3.6.1-amd64.exe</a></li>
-<li><strong>系统需求</strong>：64位/32位</li>
-<li><strong>备注</strong>：python需加入系统path，并能够以python链接到</li>
-</ul>
-<h1 id="mongodb-3.4.4">Mongodb 3.4.4</h1>
-<ul>
-<li><strong>下载地址</strong>：<a href="https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-3.4.4-signed.msi" target="_blank" rel="noopener">mongodb-win32-x86_64-2008plus-ssl-3.4.4-signed.msi</a></li>
-<li>系统需求：64位</li>
-<li>安装位置：C:.4</li>
-<li>系统path：C:.4</li>
-<li>配置文件位置：‪C:.4.config</li>
-<li>config文件内容：</li>
-</ul>
-<blockquote>
-<p>数据库文件目录： dbpath=C:/mongoDB3.4.4/data</p>
-</blockquote>
-<blockquote>
-<p>日志目录： logpath=C:/mongoDB3.4.4/log/mongo.log diaglog=3</p>
-</blockquote>
-<ul>
-<li>安装服务至系统服务</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod –config C:\mongoDB3.4.4\bin\mongodb.config –install</span><br></pre></td></tr></table></figure>
-<ul>
-<li>启动与关闭mongoDB：</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net start MongoDB</span><br><span class="line">net stop MongoDB</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看aishub数据库状态命令：</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mongo </span><br><span class="line">use aishub</span><br><span class="line">db.status()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>数据导出命令(默认csv格式)：</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongoexport -d aishub -c sheet1 -o c:\data.csv</span><br></pre></td></tr></table></figure>
-<ul>
-<li>数据集合（sheet1）删除</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use aishubdb.sheet1.drop()</span><br></pre></td></tr></table></figure>
-<h1 id="python-依赖包">Python 依赖包</h1>
-<h4 id="pip-国内源">Pip 国内源</h4>
-<p>阿里云 <a href="http://mirrors.aliyun.com/pypi/simple/" target="_blank" rel="noopener">http://mirrors.aliyun.com/pypi/simple/</a></p>
-<p>中国科技大学 <a href="https://pypi.mirrors.ustc.edu.cn/simple/" target="_blank" rel="noopener">https://pypi.mirrors.ustc.edu.cn/simple/</a></p>
-<p>豆瓣 <a href="http://pypi.douban.com/simple/" target="_blank" rel="noopener">http://pypi.douban.com/simple/</a></p>
-<p>清华大学 <a href="https://pypi.tuna.tsinghua.edu.cn/simple/" target="_blank" rel="noopener">https://pypi.tuna.tsinghua.edu.cn/simple/</a></p>
-<p>中国科学技术大学 <a href="http://pypi.mirrors.ustc.edu.cn/simple/" target="_blank" rel="noopener">http://pypi.mirrors.ustc.edu.cn/simple/pip</a></p>
-<h4 id="pip使用">pip使用</h4>
-<p>后面加上-i参数，指定pip源</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapy -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
-<h4 id="pip更新">Pip更新</h4>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m pip install –upgrade pip</span><br></pre></td></tr></table></figure>
-<h4 id="依赖包">依赖包</h4>
-<ul>
-<li>beautifulsoup4</li>
-<li>requests</li>
-<li>pymongo</li>
-<li>lxml</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -712,7 +670,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -749,12 +707,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">148k</span>
+    <span title="站点总字数">149k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:14</span>
+    <span title="站点阅读时长">2:15</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
