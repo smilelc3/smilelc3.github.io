@@ -3957,8 +3957,8 @@ R(\phi^{ij})\begin{bmatrix} u_i \\ v_i\end{bmatrix} - \begin{bmatrix} u_j \\ v_j
 ]]></content>
   </entry>
   <entry>
-    <title>数独求解 go语言版</title>
-    <url>/2020/11/20/%E6%95%B0%E7%8B%AC%E6%B1%82%E8%A7%A3%20go%E8%AF%AD%E8%A8%80%E7%89%88/</url>
+    <title>面向对象编程内容考点总结</title>
+    <url>/2018/01/27/%E6%95%B0%E7%8B%AC%E6%B1%82%E8%A7%A3%20go%E8%AF%AD%E8%A8%80%E7%89%88/</url>
     <content><![CDATA[<h1 id="数独求解-go语言版">数独求解 go语言版</h1>
 <p>源代码<code>github</code>地址：<a href="https://github.com/smilelc3/sudoku-solver" target="_blank" rel="noopener">https://github.com/smilelc3/sudoku-solver</a></p>
 <p>关于数独<code>wiki</code>介绍：<a href="https://zh.wikipedia.org/wiki/%E6%95%B8%E7%8D%A8" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E6%95%B8%E7%8D%A8</a></p>
