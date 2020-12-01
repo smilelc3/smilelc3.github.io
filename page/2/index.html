@@ -175,6 +175,270 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/24/%E4%BD%BF%E7%94%A8vagrant%E6%90%AD%E5%BB%BAhadoop+spark%E7%8E%AF%E5%A2%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/24/%E4%BD%BF%E7%94%A8vagrant%E6%90%AD%E5%BB%BAhadoop+spark%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">使用vagrant搭建hadoop+spark环境</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-24 00:00:00" itemprop="dateCreated datePublished" datetime="2020-02-24T00:00:00+08:00">2020-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-19 00:16:36" itemprop="dateModified" datetime="2020-04-19T00:16:36+08:00">2020-04-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="环境准备">1. 环境准备</h2>
+<ol type="1">
+<li>下载vagrant和virtualbox，并安装</li>
+</ol>
+<ul>
+<li><p>vagrant:https://www.vagrantup.com/</p></li>
+<li><p>virtualbox:https://www.virtualbox.org/</p>
+<p>注意：vagrant2.2.7发布，本次更新主要<strong>添加了对virtualbox6.1.x版本的支持。</strong></p></li>
+</ul>
+<ol start="2" type="1">
+<li>虚拟机配置</li>
+</ol>
+<ul>
+<li>1台master：内存1024MB</li>
+<li>2台slave：内存512MB</li>
+</ul>
+<h2 id="使用vagrant部署虚拟机">2. 使用vagrant部署虚拟机</h2>
+<ol type="1">
+<li><p>安装后vagrant，需提前安装<code>vagrant-hostmanager</code>插件，以便host管理</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant plugin install vagrant-hostmanager</span><br></pre></td></tr></table></figure></li>
+<li><p>从vagrant官网下载ubuntu 16镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant box add ubuntu/xenial64</span><br></pre></td></tr></table></figure>
+<p>也可以使用其他镜像，镜像地址：https://app.vagrantup.com/boxes/search</p></li>
+<li><p>创建hadoopProject文件夹（可自定），并创建两个文件<code>Vagrantfile</code>和<code>init.sh</code></p>
+<p><img src="https://y3vwew.bn.files.1drv.com/y4mW3e64Eq0QcbZC0ZjpVMvzFjC0_wqhh2_AecTUV5-HdJpU2_E9BYO2zdT8sQeQ4gIax_8Z8jAG5-BqpBoJqc_L5mWaVa3sJKfjXysJJfZ9QxiNicylxpZXj_GzJAoijnQ0MxudghsywD-AcsVpgDDfpE-GD4J4QsXEgPU7opBXdt2dW28O_SEApSZHAJuRZ8DWCCzCrbs5zLRHrPNUY8Ttw?width=806&amp;height=146&amp;cropmode=none" /></p>
+<ul>
+<li>VagrantFile是vagrant的<strong>启动配置文件</strong>，</li>
+<li>init.sh是<strong>初始环境的安装脚本</strong></li>
+</ul></li>
+<li><p>编辑VagrantFile文件， 内容如下:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">Vagrant.configure(<span class="string">"2"</span>) <span class="keyword">do</span> <span class="params">|config|</span></span><br><span class="line">    config.vm.define <span class="symbol">:master1</span>, <span class="symbol">primary:</span> <span class="literal">true</span> <span class="keyword">do</span> <span class="params">|master|</span></span><br><span class="line">        master.vm.provider <span class="string">"virtualbox"</span> <span class="keyword">do</span> <span class="params">|v|</span></span><br><span class="line">            v.customize [<span class="string">"modifyvm"</span>, <span class="symbol">:id</span>, <span class="string">"--name"</span>, <span class="string">"hadoop-master1"</span>, <span class="string">"--memory"</span>, <span class="string">"1024"</span>]</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		master.vm.box = <span class="string">"ubuntu/xenial64"</span></span><br><span class="line">		master.vm.hostname = <span class="string">"hadoop-master1"</span></span><br><span class="line">		master.vm.network <span class="symbol">:private_network</span>, <span class="symbol">ip:</span> <span class="string">"192.168.10.10"</span></span><br><span class="line">		master.vm.network <span class="string">"forwarded_port"</span>, <span class="symbol">guest:</span> <span class="number">22</span>, <span class="symbol">host:</span> <span class="number">2222</span>, <span class="symbol">id:</span> <span class="string">"ssh"</span>, <span class="symbol">disabled:</span> <span class="string">"true"</span></span><br><span class="line">		master.vm.network <span class="string">"forwarded_port"</span>, <span class="symbol">guest:</span> <span class="number">22</span>, <span class="symbol">host:</span> <span class="number">2220</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">   (<span class="number">1</span>..<span class="number">2</span>).each <span class="keyword">do</span> <span class="params">|i|</span></span><br><span class="line">    config.vm.define <span class="string">"slave<span class="subst">#&#123;i&#125;</span>"</span> <span class="keyword">do</span> <span class="params">|node|</span></span><br><span class="line">        node.vm.box = <span class="string">"ubuntu/xenial64"</span></span><br><span class="line">        node.vm.hostname = <span class="string">"hadoop-slave<span class="subst">#&#123;i&#125;</span>"</span></span><br><span class="line">        node.vm.network <span class="symbol">:private_network</span>, <span class="symbol">ip:</span> <span class="string">"192.168.10.1<span class="subst">#&#123;i&#125;</span>"</span></span><br><span class="line">		node.vm.network <span class="string">"forwarded_port"</span>, <span class="symbol">guest:</span> <span class="number">22</span>, <span class="symbol">host:</span> <span class="number">2222</span>, <span class="symbol">id:</span> <span class="string">"ssh"</span>, <span class="symbol">disabled:</span> <span class="string">"true"</span></span><br><span class="line">		node.vm.network <span class="string">"forwarded_port"</span>, <span class="symbol">guest:</span> <span class="number">22</span>, <span class="symbol">host:</span> <span class="string">"222<span class="subst">#&#123;i&#125;</span>"</span></span><br><span class="line">        node.vm.provider <span class="string">"virtualbox"</span> <span class="keyword">do</span> <span class="params">|vb|</span></span><br><span class="line">          vb.memory = <span class="string">"512"</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#manage hosts file </span></span><br><span class="line">  config.hostmanager.enabled = <span class="literal">true</span></span><br><span class="line">  config.hostmanager.manage_host = <span class="literal">true</span></span><br><span class="line">  config.hostmanager.manage_guest = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">#provision</span></span><br><span class="line">   config.vm.provision <span class="string">"shell"</span>, <span class="symbol">path:</span> <span class="string">"init.sh"</span>, <span class="symbol">privileged:</span> <span class="literal">false</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>从代码可以看到， 我们一共创建了3个虚拟机环境 ，分别是master1, slave1, slave2。并分配好IP地址和内存空间。</p>
+<p>注意：在解决多个SSH端口时，需要先禁用默认的ssh转发，再添加自定义转发，才能生效。</p></li>
+<li><p>在当前目录启动vagrant，会自动依照<code>Vagrantfile</code>配置文件创建虚拟机并配置。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant up</span><br></pre></td></tr></table></figure>
+<p><img src="https://y3vlew.bn.files.1drv.com/y4mGDLQKk2BJhTmsPjHo_-b_LVM8db80KcsV0eOXI7mQiQa4U7s9MVhK1bUQjgM7UG713_W2I6lSZcLF9IkNCv0EO5PShz-s4-1AMQ9OoJIAz60-yjM4xApUZMo4sIFXD0SBk6Xk7y1nAvTmHTe6I5HGDq7pVC5-9x7h8zDi1Dpk6XV3bLpPdxqHOgmGMcEEj07PqZbnaS4-4sBTrZv4mxg5w?width=608&amp;height=80&amp;cropmode=none" /></p>
+<p>启动过程中如果有打印如下信息， 一般稍等即可，出错可在VirtulaBox中删除虚拟机及文件重试。</p>
+<p><img src="https://y3vkew.bn.files.1drv.com/y4m6WECn1J_Yq00FnhHU0XWVk4tnEiFML5rDEvoM49_mmw-EvOrMpsfOxQrip9L028JzWzUiWCyQT4AgOqgXfII1WuZCrG_OlGJzh2WFkdizcITKizrd9s9-_9cSYVwmDWNFFTLIh27gfdgSKajeJM4RpP-YjF2cENWsxILDajNcpPQmCWn2onoi3P4sC6mIRz8jrzfK52S2ZKyf4IvpluPGw?width=637&amp;height=40&amp;cropmode=none" /></p>
+<p>正常启动后，我们就可以在virtualBox中看到创建的虚拟机。</p>
+<p><img src="https://y3vjew.bn.files.1drv.com/y4mNrCsnuHsbUPwIJf3M0cBGiEFvPHn1QeK9DQ1qnc5NfuSgcm_XSUhFOMeIwvhAd9Gs4Tor23deyug58k4u51rzjBVCDcGRyZ1cAabTMnOrdRmKty4rWmVAjz9qobWtIl3squvFkWFOXIfMe_BK83xFnZQZGelvtTI91vj_FcwC7DO8MgxB7JqpzPFCLynvzrf9c5hFfyfiYbKfwG4sRHeQw?width=962&amp;height=553&amp;cropmode=none" /></p>
+<p>正常启动后，我们就可以使用以下命令登录到虚拟机：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant ssh master1</span><br></pre></td></tr></table></figure>
+<p>可以直接按照host名字Ping操作：</p>
+<p><img src="https://y3view.bn.files.1drv.com/y4mMPI9Nv4hqsFMh7FLGs_ZKGxGfwYpVMYKPGrWZ1uT8QS2BlEh8_Ec5Ljx-kXQoPGTsFx2rlwpy5DtTN7GWI-f6eVlJ-xV1yfChNYxhmShPpKxsOVli-WjHIhlT_glpgSeSr7Ksfn06QAkNsTInteDvi07-aBFSgjldnUv9x3wTzlj_rsxkr1OzgbJVQui_lG2jMx906pl0V5p_0zg4vokUw?width=925&amp;height=141&amp;cropmode=none" /></p>
+<p><strong>注意：此时默认用户名和密码都是<code>vagrant</code></strong></p>
+<p>此时，主机仅允许公钥私钥配对SSH链接，建议打开密码认证访问，编辑文件<code>/etc/ssh/sshd_config</code>，修改如下配置为yes：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PasswordAuthentication yes</span><br></pre></td></tr></table></figure>
+<p>重启ssh服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service ssh restart</span><br></pre></td></tr></table></figure>
+<ol start="6" type="1">
+<li>编写provision文件 前面安装vagrant的时候说到，provision的作用是帮助我们进行主机环境的初始化工作，现在我们来编写<code>init.sh</code>，具体内容根据实际情况进行删减。在provision里，我只是安装了linux环境必需的一些组件。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update         # 更新apt</span><br><span class="line">sudo apt install openssh-server		# 安装SSH</span><br><span class="line">sudo apt install openjdk-8-jdk     # 安装JAVA</span><br></pre></td></tr></table></figure>
+<ul>
+<li>即使因为网络问题导致安装不成功，也可以手动逐个安装。</li>
+</ul>
+<p>编写完后，运行命令进行生效</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant provision</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="配置hadoop">3. 配置Hadoop</h2>
+<p>现在我们有三台机器:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hadoop-master1		192.168.10.10</span><br><span class="line">hadoop-slave1		192.168.10.11</span><br><span class="line">hadoop-slave2		192.168.10.12</span><br></pre></td></tr></table></figure>
+<p>Hadoop 集群配置过程:</p>
+<ol type="1">
+<li><strong>选定一台机器作为 Master，在所有主机上配置网络映射；</strong></li>
+<li><strong>在 Master 主机上配置hadoop用户、安装SSH server、安装Java环境；</strong></li>
+<li><strong>在 Master 主机上安装Hadoop，并完成配置；</strong></li>
+<li><strong>在其他主机上配置hadoop用户、安装SSH server、安装Java环境；</strong></li>
+<li><strong>将 Master 主机上的Hadoop目录复制到其他主机上；</strong></li>
+<li><strong>开启、使用 Hadoop。</strong></li>
+</ol>
+<hr />
+<h3 id="配置基础环境和ssh互信">配置基础环境和SSH互信</h3>
+<p>所有主机配置hadoop用户、安装SSH server、安装Java环境（前步已执行成功的可以跳过）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo useradd -m hadoop -s /bin/bash     # 创建hadoop用户</span><br><span class="line">sudo passwd hadoop          # 修改hadoop用户密码</span><br><span class="line">sudo adduser hadoop sudo    # 增加hadoop管理员权限</span><br></pre></td></tr></table></figure>
+<p>注销并使用 Hadoop 用户登录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update         # 更新apt</span><br><span class="line">sudo apt install openssh-server		# 安装SSH</span><br><span class="line">sudo apt install openjdk-8-jdk     # 安装JAVA</span><br></pre></td></tr></table></figure>
+<p>设置JAVA_HOME环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo nano ~/.bashrc</span><br><span class="line"><span class="meta">#</span><span class="bash"> 最后面加上</span></span><br><span class="line">export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64</span><br></pre></td></tr></table></figure>
+<p>使 JAVA_HOME 变量生效：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bashrc    # 使变量设置生效</span><br></pre></td></tr></table></figure>
+<p>在 Master 主机上执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd ~/</span><br><span class="line">mkdir .ssh</span><br><span class="line">cd ~/.ssh</span><br><span class="line">ssh-keygen -t rsa              # 一直按回车就可以</span><br><span class="line">cat id_rsa.pub &gt;&gt; authorized_keys</span><br><span class="line">scp ~/.ssh/id_rsa.pub hadoop@hadoop-slave1:/home/hadoop/ # 传输公钥到slave1</span><br><span class="line">scp ~/.ssh/id_rsa.pub hadoop@hadoop-slave2:/home/hadoop/ # 传输公钥到slave2</span><br></pre></td></tr></table></figure>
+<p>接着在 slave1 节点和slave2节点上保存公钥</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~/</span><br><span class="line">mkdir .ssh</span><br><span class="line">cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+<p>如果master主机和slave01、slave02主机的用户名一样，那么在master主机上直接执行如下测试命令，即可让master主机免密码登录slave01、slave02主机。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh hadoop-slave1</span><br></pre></td></tr></table></figure>
+<h3 id="安装hadoop">安装Hadoop</h3>
+<p>先在master主机上做安装Hadoop，暂时不需要在slave1，slave2主机上安装Hadoop。稍后会把master配置好的Hadoop发送给slave1，slave2。 在master主机执行如下操作：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -zxf ~/hadoop-2.7.7.tar.gz -C /usr/local    # 解压到/usr/local中</span><br><span class="line">cd /usr/local/</span><br><span class="line">sudo mv ./hadoop-2.7.7/ ./hadoop            # 将文件夹名改为hadoop</span><br><span class="line">sudo chown -R hadoop ./hadoop       # 修改文件权限</span><br></pre></td></tr></table></figure>
+<p>编辑~/.bashrc文件，末尾添加如下内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export HADOOP_HOME=/usr/local/hadoop</span><br><span class="line">export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin</span><br></pre></td></tr></table></figure>
+<p>接着让环境变量生效，执行如下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+<h3 id="hadoop集群配置">Hadoop集群配置</h3>
+<p>修改master主机修改Hadoop如下配置文件，这些配置文件都位于<code>/usr/local/hadoop/etc/hadoop</code>目录下。 修改<code>slaves</code>文件，把DataNode的主机名写入该文件，每行一个。</p>
+<p>这里让hadoop-master1节点主机仅作为NameNode使用（不包含在slaves文件中）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop-slave1</span><br><span class="line">hadoop-slave2</span><br></pre></td></tr></table></figure>
+<p>修改core-site.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>/usr/local/hadoop/tmp<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">description</span>&gt;</span>Abase for other temporary directories.<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://hadoop-master1:9000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>修改hdfs-site.xml：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>3<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>修改mapred-site.xml（复制并修改文件名mapred-site.xml.template）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp mapred-site.xml.template  mapred-site.xml</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>修改yarn-site.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- Site specific YARN configuration properties --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>hadoop-master1<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>配置好后，将 master 上的 /usr/local/Hadoop 文件夹复制到各个节点上。之前有跑过伪分布式模式，建议在切换到集群模式前先删除之前的临时文件。在 master 节点主机上执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/</span><br><span class="line">rm -rf /usr/local/hadoop/tmp   # 删除临时文件</span><br><span class="line">rm -rf /usr/local/hadoop/logs/*   # 删除日志文件</span><br><span class="line">tar -zcf ~/hadoop.master.tar.gz ./hadoop			# 打包hadoop</span><br><span class="line">cd ~</span><br><span class="line">scp ./hadoop.master.tar.gz hadoop-slave1:/home/hadoop</span><br><span class="line">scp ./hadoop.master.tar.gz hadoop-slave2:/home/hadoop</span><br></pre></td></tr></table></figure>
+<p>在hadoop-slave1，hadoop-slave2节点上执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -rf /usr/local/hadoop/</span><br><span class="line">sudo tar -zxf ~/hadoop.master.tar.gz -C /usr/local</span><br><span class="line">sudo chown -R hadoop /usr/local/hadoop</span><br></pre></td></tr></table></figure>
+<h3 id="启动hadoop集群">启动hadoop集群</h3>
+<p>在hadoop-master1主机上执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/hadoop/bin/hdfs namenode -format</span><br><span class="line">/usr/local/hadoop/sbin/start-all.sh</span><br></pre></td></tr></table></figure>
+<p>运行后，在hadoop-master1，hadoop-slave1，hadoop-slave2运行<code>jps</code>命令，查看：</p>
+<p>hadoop-master1运行<code>jps</code>后，如下图（必须有四个进程）：</p>
+<p><img src="https://y3vxew.bn.files.1drv.com/y4m2ny5qCw4ZQbnEXPGlqBWjLv3ZHGaYKxjE42DsTE-bP-KOaluZxjQj2EwBPGOkOewhQFZ1VH61uopOGCCxzR9XgaTnelh-DpQ8f2DICvktK0kccVf89qK8ofhGNjSTaCoo9hwbubPdzx7jrzOGcpt0lkqLHuQAgdr6Tg7lF-T0w4361STn2xgcOD7NC_CLHupeOFg-SGa1dBzXxAqTayq6A?width=415&amp;height=96&amp;cropmode=none" /></p>
+<p>hadoop-slave1、hadoop-slave2运行<code>jps</code>后，如下图（必须有三个进程）：</p>
+<p><img src="https://y3vhew.bn.files.1drv.com/y4m5hBwuRWdj2NaQhHzrPnyHnZtvEEOWYQV36PlfO219syPU4goSNEUBHDINtiY1nLTLTwfnOUlTG_0nz01YCOEBn5cr4fDibPsXWRNYL-2067AlEozIewav5gcqxoXBNzJeD49oSR7uO-6NYtcwJ0lhsvwfgFfFHESV8rQkO8yA23pY0kjIHpqV-YeQQ5kP99qB1n07sgbRNxDTcfXQqwa9Q?width=402&amp;height=77&amp;cropmode=none" /></p>
+<h2 id="在hadoop上配置spark">4. 在Hadoop上配置Spark</h2>
+<h3 id="下载spark">下载Spark</h3>
+<p>访问<a href="http://spark.apache.org/downloads.html" target="_blank" rel="noopener">Spark官方下载地址</a>，按照如下图下载（不带Hadoop版本）。</p>
+<p><img src="https://y3vfew.bn.files.1drv.com/y4mmTyTOXkJKkx-CifBMtzOe4lUNLHipgrKofr7KKvf-DoKb8TSu6AE_E4Jekm05-VdnzMTjXZ7YikPolLvlkeFJRTA3KE5oUypFcrlXNOO71yz53AMxaRO_9O8I74YudkXgXdPGjDdgUn20maD568ABInyyHQo-xBq_NZFghZ67GHjOKvuUGvADyAMvxIAEsS_3SztSqvVP62zAgMYr1H0Yw?width=795&height=235&cropmode=none" alt="image-20200223202025035" style="zoom:80%;" /></p>
+<p>下载后，文件移到master虚拟机中，执行解压</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">sudo tar -zxf spark-2.4.5-bin-without-hadoop.tgz -C /usr/local/</span><br><span class="line">cd /usr/local/</span><br><span class="line">sudo mv ./spark-2.4.5-bin-without-hadoop/ ./spark</span><br><span class="line">sudo chown -R hadoop ./spark</span><br></pre></td></tr></table></figure>
+<h3 id="配置环境变量">配置环境变量</h3>
+<p>在hadoop-master1节点主机的终端中执行如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>在~/.bashrc添加如下配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> SPARK_HOME=/usr/<span class="built_in">local</span>/spark</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$SPARK_HOME</span>/bin:<span class="variable">$SPARK_HOME</span>/sbin</span><br></pre></td></tr></table></figure>
+<p>执行如下命令使得配置立即生效：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+<h3 id="spark配置">Spark配置</h3>
+<p>在Master节点主机上进行如下操作：</p>
+<ul>
+<li>配置slaves文件</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/spark/</span><br><span class="line">cp ./conf/slaves.template  ./conf/slaves</span><br></pre></td></tr></table></figure>
+<p>slaves文件设置Worker节点。编辑slaves内容，把默认内容localhost替换成slave节点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop-slave1</span><br><span class="line">hadoop-slave2</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置spark-env.sh文件</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp ./conf/spark-env.sh.template ./conf/spark-env.sh</span><br></pre></td></tr></table></figure>
+<p>添加如下内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export SPARK_DIST_CLASSPATH=$(/usr/local/hadoop/bin/hadoop classpath)</span><br><span class="line">export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop</span><br><span class="line">export SPARK_MASTER_IP=hadoop-master1</span><br></pre></td></tr></table></figure>
+<p>SPARK_MASTER_IP 指定 Spark 集群 Master 节点的 IP 地址或主机名。</p>
+<p>配置好后，将Master主机上的/usr/local/spark文件夹复制到各个节点上。在Master主机上执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/</span><br><span class="line">tar -zcf ~/spark.master.tar.gz ./spark     # 打包spark</span><br><span class="line">cd ~</span><br><span class="line">scp ./spark.master.tar.gz hadoop-slave1:/home/hadoop</span><br><span class="line">scp ./spark.master.tar.gz hadoop-slave2:/home/hadoop</span><br></pre></td></tr></table></figure>
+<p>在hadoop-slave1，hadoop-slave2节点上执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -rf /usr/local/spark/</span><br><span class="line">sudo tar -zxf ~/spark.master.tar.gz -C /usr/local</span><br><span class="line">sudo chown -R hadoop /usr/local/spark</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>由于我们使用<code>vagrant-hostmanager</code>插件，其会对本地hosts文件修改，导致主机名（host）直接与<code>127.0.1.1</code>绑定，若直接启动Spark master节点，会导致只在<code>127.0.1.1</code>提供服务，其他局域网内slave节点无法访问，因此需要编辑<code>/etc/hosts</code>文件，注释掉：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">127.0.1.1      hadoop-master1  hadoop-master1</span></span><br></pre></td></tr></table></figure>
+<h3 id="启动spark集群">启动Spark集群</h3>
+<ol type="1">
+<li>启动Spark集群前，要先<strong>启动Hadoop集群</strong>。在Master节点主机上运行如下命令：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/hadoop/sbin/start-all.sh</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li><strong>启动Master节点</strong>， 在Master节点主机上运行如下命令：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/spark/sbin/start-master.sh</span><br></pre></td></tr></table></figure>
+<p>在hadoop-master1节点上运行jps命令，可以看到多了<code>Master</code>进程：</p>
+<p><img src="https://ynvxew.bn.files.1drv.com/y4mMbVgZXwIAGHWVwPGhHwqxB-tT1Lhf39lukqwiq9ugeyjUFUx5nSbux9PS12hnVNyEId_yYgOUFFFl96GyVOzV738S2kegpZfR06eYOQZyWlgY9EBnrjO0nkn8qIn4upAXOGndafOWsWRZFsPGUnq7CvRNIcPoa7pdKSFcGe353cOo58R5wgdnSFGa8vm7LxTgHH3WpczkUEuhB_TvmDYow?width=407&amp;height=115&amp;cropmode=none" /></p>
+<ol start="3" type="1">
+<li><strong>启动所有Slave节点</strong>，在Master节点主机上运行如下命令：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/spark/sbin/start-slaves.sh</span><br></pre></td></tr></table></figure>
+<p>分别在hadoop-slave1、hadoop-slave2节点上运行jps命令，可以看到多了<code>Worker</code>进程：</p>
+<p><img src="https://y3veew.bn.files.1drv.com/y4mdsqxlBOt-BP0x54fWN_YsZnYddzV0G9a1FrN1w2mIr8kU1j9TNToRpC9w31sDxE1yntqWFpGdC94nMoi_51Zh-3Evphve-_vUOOC7uaRQN2pqaY5arxLErRu6ld312wmYX-TCsdIaM6P5cEEzvHjyV3W_-kPcU5pJuNW4eD1ZIPM1d0_D6tnMJC0eFaVE1ZAzLx5cuIKm2c9Sy-L9Diu-Q?width=354&amp;height=94&amp;cropmode=none" /></p>
+<p><strong>在浏览器上查看Spark独立集群管理器的集群信息</strong></p>
+<p>spark集群端口：8080</p>
+<p>spark-job监控端口：4040</p>
+<p>namenode管理端口：50070</p>
+<p>yarn端口：8088</p>
+<p>在master主机上打开浏览器，访问http://hadoop-master1:8080/，如下图：</p>
+<p><img src="https://ynvwew.bn.files.1drv.com/y4mIx3NC_PbQjUKJe7y3L2gheJGCytvyaqsMQYMHsK2Eh0d8PrGAJ9vWuXAhdGFChVmy33agEaQ0Y8KB76z_77y72C5lhUtbaTJvGwmDQ5jWSADss4zxB6aE_ZLvquriSaeTHzCzKZ5igC-HnFr90y5f36AQgwklm7iWVG5i6Abrt898lcrhQRK0pDbT8XpVPeVa7BGHVqEzLU8KPBtb5S9Hw?width=959&amp;height=700&amp;cropmode=none" /></p>
+<h3 id="关闭spark集群">关闭Spark集群</h3>
+<ol type="1">
+<li><p>关闭Master节点</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/spark/sbin/stop-master.sh</span><br></pre></td></tr></table></figure></li>
+<li><p>关闭Worker节点</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/spark/sbin/stop-slaves.sh</span><br></pre></td></tr></table></figure></li>
+<li><p>关闭Hadoop集群</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/hadoop/sbin/stop-all.sh</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/01/python%E4%B8%AD%E5%B8%B8%E9%87%8F%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -513,990 +777,6 @@
 <li>到后缀表达式末尾，从堆栈中弹出结果。若后缀表达式格式正确，那么堆栈应该为空。</li>
 </ol>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;exception&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iomanip&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义栈数据结构体</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stack_data</span>&#123;</span></span><br><span class="line">    <span class="keyword">char</span> Operator;</span><br><span class="line">    <span class="keyword">double</span> Number;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isOperator</span><span class="params">(<span class="keyword">char</span> ch)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span>(ch)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span><span class="number">'</span>+<span class="string">':</span></span><br><span class="line">        case'-':</span><br><span class="line">        <span class="keyword">case</span><span class="number">'</span>*<span class="string">':</span></span><br><span class="line">        case'/':</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isNumber</span><span class="params">(<span class="keyword">char</span> ch)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">string</span> number = <span class="string">"0123456789."</span>;</span><br><span class="line">    <span class="keyword">return</span> number.<span class="built_in">find</span>(ch) != <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//优先级判定</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">priority</span><span class="params">(<span class="keyword">char</span> a)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> temp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (a == <span class="string">'*'</span> || a == <span class="string">'/'</span>)</span><br><span class="line">        temp = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (a == <span class="string">'+'</span> || a == <span class="string">'-'</span>)</span><br><span class="line">        temp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取数字栈顶双数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">getTwoNums</span><span class="params">(<span class="built_in">stack</span>&lt;<span class="keyword">double</span>&gt;&amp; num_stack, <span class="keyword">double</span>&amp; first, <span class="keyword">double</span>&amp; second)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    second = num_stack.top();</span><br><span class="line">    num_stack.pop();</span><br><span class="line"></span><br><span class="line">    first = num_stack.top();</span><br><span class="line">    num_stack.pop();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//计算后缀表达式</span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">postfixCalculate</span><span class="params">(<span class="built_in">vector</span>&lt;stack_data&gt;&amp; postfix)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> first, second;</span><br><span class="line">    <span class="built_in">stack</span>&lt;<span class="keyword">double</span>&gt; num_stack;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> p : postfix)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">switch</span> (p.Operator)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'*'</span>:</span><br><span class="line">                getTwoNums(num_stack, first, second);</span><br><span class="line">                num_stack.push(first * second);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'/'</span>:</span><br><span class="line">                getTwoNums(num_stack, first, second);</span><br><span class="line">                num_stack.push(first / second);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'+'</span>:</span><br><span class="line">                getTwoNums(num_stack, first, second);</span><br><span class="line">                num_stack.push(first + second);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'-'</span>:</span><br><span class="line">                getTwoNums(num_stack, first, second);</span><br><span class="line">                num_stack.push(first - second);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                num_stack.push(p.Number);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">double</span> result = num_stack.top();</span><br><span class="line">    num_stack.pop();</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//做分割</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;stack_data&gt; <span class="title">getSeparate</span><span class="params">(<span class="built_in">string</span>&amp; infix)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;stack_data&gt; postfix;</span><br><span class="line">    <span class="built_in">string</span> str_num;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> p : infix)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(isOperator(p))</span><br><span class="line">            &#123;</span><br><span class="line">            <span class="keyword">if</span>(!str_num.empty()) postfix.emplace_back(stack_data&#123;<span class="string">' '</span>, stod(str_num)&#125;);</span><br><span class="line">            str_num = <span class="string">""</span>;</span><br><span class="line">            postfix.emplace_back(stack_data&#123;p, <span class="number">0</span>&#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(isNumber(p))</span><br><span class="line">        &#123;</span><br><span class="line">            str_num += p;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(p ==<span class="string">'('</span> <span class="keyword">or</span> p==<span class="string">')'</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(!str_num.empty()) postfix.emplace_back(stack_data&#123;<span class="string">' '</span>, stod(str_num)&#125;);</span><br><span class="line">            str_num = <span class="string">""</span>;</span><br><span class="line">            postfix.emplace_back(stack_data&#123;p, <span class="number">0</span>&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!str_num.empty())  postfix.emplace_back(stack_data&#123;<span class="string">' '</span>, stod(str_num)&#125;);</span><br><span class="line">    str_num = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//前导缺损+-符号补0</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;stack_data&gt; new_postfix;</span><br><span class="line">    <span class="keyword">char</span> pre_char = <span class="string">'('</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> p : postfix)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(p.Operator != <span class="string">' '</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(pre_char==<span class="string">'('</span> <span class="keyword">and</span> (p.Operator == <span class="string">'-'</span> <span class="keyword">or</span> p.Operator == <span class="string">'+'</span>)) new_postfix.emplace_back(stack_data&#123;<span class="string">' '</span>, <span class="number">0</span>&#125;);</span><br><span class="line">            pre_char = p.Operator;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> pre_char = <span class="string">' '</span>;</span><br><span class="line">        new_postfix.emplace_back(p);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> new_postfix;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//表达式输出</span></span><br><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">printSeparate</span><span class="params">(<span class="built_in">vector</span>&lt;stack_data&gt;&amp; temp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">string</span> out;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> t: temp)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(t.Operator!=<span class="string">' '</span>)</span><br><span class="line">            out += t.Operator;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            out += to_string(t.Number);</span><br><span class="line">        out += <span class="string">' '</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//后缀表达式转换</span></span><br><span class="line"><span class="function"><span class="built_in">vector</span>&lt;stack_data&gt; <span class="title">getPostfixExp</span><span class="params">(<span class="built_in">vector</span>&lt;stack_data&gt;&amp; infix)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">stack</span>&lt;<span class="keyword">char</span>&gt; operator_stack;</span><br><span class="line">    <span class="built_in">vector</span>&lt;stack_data&gt; postfix;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> p: infix)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(isOperator(p.Operator))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">while</span>(</span><br><span class="line">                    !operator_stack.empty() <span class="keyword">and</span></span><br><span class="line">                    isOperator(operator_stack.top()) <span class="keyword">and</span></span><br><span class="line">                    priority(operator_stack.top()) &gt;= priority(p.Operator))</span><br><span class="line">            &#123;</span><br><span class="line">                postfix.emplace_back(stack_data&#123;operator_stack.top(), <span class="number">0</span>&#125;);</span><br><span class="line">                operator_stack.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            operator_stack.push(p.Operator);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (p.Operator == <span class="string">'('</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            operator_stack.push(p.Operator);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (p.Operator == <span class="string">')'</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">while</span> (operator_stack.top() != <span class="string">'('</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                postfix.push_back(stack_data&#123;operator_stack.top()&#125;);</span><br><span class="line">                operator_stack.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            operator_stack.pop();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            postfix.push_back(p);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (!operator_stack.empty())</span><br><span class="line">    &#123;</span><br><span class="line">        postfix.push_back(stack_data&#123;operator_stack.top(), <span class="number">0</span>&#125;);</span><br><span class="line">        operator_stack.pop();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> postfix;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">string</span> infix = <span class="string">"16-(8 + (0.7 - 0.2)*5.41 + 6.8)+1"</span>;</span><br><span class="line">    <span class="comment">//string infix = "((8.6 - 10.2)*44 + 55 + 2.7) /3";</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">vector</span>&lt;stack_data&gt; postfix = getSeparate(infix);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; printSeparate(postfix)&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">vector</span>&lt;stack_data&gt; postfixExp = getPostfixExp(postfix);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; printSeparate(postfixExp)&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">double</span> result = postfixCalculate(postfixExp);</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; setprecision(<span class="number">10</span>) &lt;&lt;result;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/09/%E6%9D%A1%E5%BD%A2%E7%A0%81code128%E7%BC%96%E7%A0%81%E8%A7%84%E5%88%99/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/04/09/%E6%9D%A1%E5%BD%A2%E7%A0%81code128%E7%BC%96%E7%A0%81%E8%A7%84%E5%88%99/" class="post-title-link" itemprop="url">条形码code128编码规则</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-04-09 00:00:00" itemprop="dateCreated datePublished" datetime="2019-04-09T00:00:00+08:00">2019-04-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-04-10 10:18:36" itemprop="dateModified" datetime="2019-04-10T10:18:36+08:00">2019-04-10</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>3.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p><strong>条形码</strong>或称<strong>条码</strong>（<strong>barcode</strong>）是将宽度不等的多个黑条和空白，按照一定的<a href="https://zh.wikipedia.org/wiki/%E7%BC%96%E7%A0%81" target="_blank" rel="noopener">编码</a>规则排列，用以表达一组<a href="https://zh.wikipedia.org/wiki/%E4%BF%A1%E6%81%AF" target="_blank" rel="noopener">信息</a>的图形标识符。常见的条形码是由<a href="https://zh.wikipedia.org/wiki/%E5%8F%8D%E5%B0%84%E7%8E%87" target="_blank" rel="noopener">反射率</a>相差很大的黑条（简称条）和白条（简称空）排成的<a href="https://zh.wikipedia.org/wiki/%E5%B9%B3%E8%A1%8C%E7%BA%BF" target="_blank" rel="noopener">平行线</a>图案。条形码可以标出物品的生产国、制造厂家、商品名称、生产日期、图书分类号、邮件起止地点、类别、日期等信息，因而在<a href="https://zh.wikipedia.org/wiki/%E5%95%86%E5%93%81" target="_blank" rel="noopener">商品</a>流通、<a href="https://zh.wikipedia.org/wiki/%E5%9B%BE%E4%B9%A6" target="_blank" rel="noopener">图书</a>管理、<a href="https://zh.wikipedia.org/wiki/%E9%82%AE%E6%94%BF" target="_blank" rel="noopener">邮政</a>管理、<a href="https://zh.wikipedia.org/wiki/%E9%93%B6%E8%A1%8C" target="_blank" rel="noopener">银行</a>系统等许多领域都得到了广泛的应用。</p>
-</blockquote>
-<h1 id="条形码分类">条形码分类</h1>
-<p>条形码按类型可分为：<strong><code>线性条形码</code></strong>和<strong><code>矩阵（二维）条形码</code></strong></p>
-<h1 id="code128编码">code128编码</h1>
-<p><code>Code 128</code>是ISO/IEC 15417:2007[<a href="https://zh.wikipedia.org/wiki/Code128#cite_note-1" target="_blank" rel="noopener">1]</a>定义的条形码规范。</p>
-<p>Code 128条码可以对全部128个ASCII字符（包括数字、大小写字母、符号和控制符）进行编码。</p>
-<p>code128码是广泛应用在企业内部管理、生产流程、物流控制系统方面的条码码制，由于其优良的特性在管理信息系统的设计中被广泛使用，CODE128码是应用最广泛的线性条形码制之一。</p>
-<h2 id="code128编码分类">code128编码分类</h2>
-<ul>
-<li><p>code128 A字符集：包括<strong>大写字母</strong>、数字、常用标点符号和一些控制符。</p></li>
-<li><p>code128B 字符集：包括<strong>大小写字母</strong>、数字、常用标点符号。</p></li>
-<li><p>code128C 字符集： 为<strong>纯数字</strong>序列。</p></li>
-<li><p>code128Auto：是将上述三种字符集最佳优化组合。</p></li>
-</ul>
-<h2 id="code128编码构成">code128编码构成</h2>
-<p>一个Code 128条形码由六部分组成。</p>
-<ol type="1">
-<li>空白区域</li>
-<li>起始标记</li>
-<li>数据区</li>
-<li>校验符</li>
-<li>终止符</li>
-<li>空白区域</li>
-</ol>
-<h2 id="code128编码表">code128编码表</h2>
-<table>
-<thead>
-<tr class="header">
-<th>ID</th>
-<th>Code128A</th>
-<th>Code128B</th>
-<th>Code128C</th>
-<th>BandCode</th>
-<th style="text-align: center;">图案</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>0</td>
-<td>SP</td>
-<td>SP</td>
-<td>0</td>
-<td>212222</td>
-<td style="text-align: center;">11011001100</td>
-</tr>
-<tr class="even">
-<td>1</td>
-<td>!</td>
-<td>!</td>
-<td>1</td>
-<td>222122</td>
-<td style="text-align: center;">11001101100</td>
-</tr>
-<tr class="odd">
-<td>2</td>
-<td>“</td>
-<td>“</td>
-<td>2</td>
-<td>222221</td>
-<td style="text-align: center;">11001100110</td>
-</tr>
-<tr class="even">
-<td>3</td>
-<td>#</td>
-<td>#</td>
-<td>3</td>
-<td>121223</td>
-<td style="text-align: center;">10010011000</td>
-</tr>
-<tr class="odd">
-<td>4</td>
-<td>$</td>
-<td>$</td>
-<td>4</td>
-<td>121322</td>
-<td style="text-align: center;">10010001100</td>
-</tr>
-<tr class="even">
-<td>5</td>
-<td>%</td>
-<td>%</td>
-<td>5</td>
-<td>131222</td>
-<td style="text-align: center;">10001001100</td>
-</tr>
-<tr class="odd">
-<td>6</td>
-<td>&amp;</td>
-<td>&amp;</td>
-<td>6</td>
-<td>122213</td>
-<td style="text-align: center;">10011001000</td>
-</tr>
-<tr class="even">
-<td>7</td>
-<td>‘</td>
-<td>‘</td>
-<td>7</td>
-<td>122312</td>
-<td style="text-align: center;">10011000100</td>
-</tr>
-<tr class="odd">
-<td>8</td>
-<td>(</td>
-<td>(</td>
-<td>8</td>
-<td>132212</td>
-<td style="text-align: center;">10001100100</td>
-</tr>
-<tr class="even">
-<td>9</td>
-<td>)</td>
-<td>)</td>
-<td>9</td>
-<td>221213</td>
-<td style="text-align: center;">11001001000</td>
-</tr>
-<tr class="odd">
-<td>10</td>
-<td>*</td>
-<td>*</td>
-<td>10</td>
-<td>221312</td>
-<td style="text-align: center;">11001000100</td>
-</tr>
-<tr class="even">
-<td>11</td>
-<td>+</td>
-<td>+</td>
-<td>11</td>
-<td>231212</td>
-<td style="text-align: center;">11000100100</td>
-</tr>
-<tr class="odd">
-<td>12</td>
-<td>,</td>
-<td>,</td>
-<td>12</td>
-<td>112232</td>
-<td style="text-align: center;">10110011100</td>
-</tr>
-<tr class="even">
-<td>13</td>
-<td>-</td>
-<td>-</td>
-<td>13</td>
-<td>122132</td>
-<td style="text-align: center;">10011011100</td>
-</tr>
-<tr class="odd">
-<td>14</td>
-<td>.</td>
-<td>.</td>
-<td>14</td>
-<td>122231</td>
-<td style="text-align: center;">10011001110</td>
-</tr>
-<tr class="even">
-<td>15</td>
-<td>/</td>
-<td>/</td>
-<td>15</td>
-<td>113222</td>
-<td style="text-align: center;">10111001100</td>
-</tr>
-<tr class="odd">
-<td>16</td>
-<td>0</td>
-<td>0</td>
-<td>16</td>
-<td>123122</td>
-<td style="text-align: center;">10011101100</td>
-</tr>
-<tr class="even">
-<td>17</td>
-<td>1</td>
-<td>1</td>
-<td>17</td>
-<td>123221</td>
-<td style="text-align: center;">10011100110</td>
-</tr>
-<tr class="odd">
-<td>18</td>
-<td>2</td>
-<td>2</td>
-<td>18</td>
-<td>223211</td>
-<td style="text-align: center;">11001110010</td>
-</tr>
-<tr class="even">
-<td>19</td>
-<td>3</td>
-<td>3</td>
-<td>19</td>
-<td>221132</td>
-<td style="text-align: center;">11001011100</td>
-</tr>
-<tr class="odd">
-<td>20</td>
-<td>4</td>
-<td>4</td>
-<td>20</td>
-<td>221231</td>
-<td style="text-align: center;">11001001110</td>
-</tr>
-<tr class="even">
-<td>21</td>
-<td>5</td>
-<td>5</td>
-<td>21</td>
-<td>213212</td>
-<td style="text-align: center;">11011100100</td>
-</tr>
-<tr class="odd">
-<td>22</td>
-<td>6</td>
-<td>6</td>
-<td>22</td>
-<td>223112</td>
-<td style="text-align: center;">11001110100</td>
-</tr>
-<tr class="even">
-<td>23</td>
-<td>7</td>
-<td>7</td>
-<td>23</td>
-<td>312131</td>
-<td style="text-align: center;">11101101110</td>
-</tr>
-<tr class="odd">
-<td>24</td>
-<td>8</td>
-<td>8</td>
-<td>24</td>
-<td>311222</td>
-<td style="text-align: center;">11101001100</td>
-</tr>
-<tr class="even">
-<td>25</td>
-<td>9</td>
-<td>9</td>
-<td>25</td>
-<td>321122</td>
-<td style="text-align: center;">11100101100</td>
-</tr>
-<tr class="odd">
-<td>26</td>
-<td>:</td>
-<td>:</td>
-<td>26</td>
-<td>321221</td>
-<td style="text-align: center;">11100100110</td>
-</tr>
-<tr class="even">
-<td>27</td>
-<td>;</td>
-<td>;</td>
-<td>27</td>
-<td>312212</td>
-<td style="text-align: center;">11101100100</td>
-</tr>
-<tr class="odd">
-<td>28</td>
-<td>&lt;</td>
-<td>&lt;</td>
-<td>28</td>
-<td>322112</td>
-<td style="text-align: center;">11100110100</td>
-</tr>
-<tr class="even">
-<td>29</td>
-<td>=</td>
-<td>=</td>
-<td>29</td>
-<td>322211</td>
-<td style="text-align: center;">11100110010</td>
-</tr>
-<tr class="odd">
-<td>30</td>
-<td>&gt;</td>
-<td>&gt;</td>
-<td>30</td>
-<td>212123</td>
-<td style="text-align: center;">11011011000</td>
-</tr>
-<tr class="even">
-<td>31</td>
-<td>?</td>
-<td>?</td>
-<td>31</td>
-<td>212321</td>
-<td style="text-align: center;">11011000110</td>
-</tr>
-<tr class="odd">
-<td>32</td>
-<td>@</td>
-<td>@</td>
-<td>32</td>
-<td>232121</td>
-<td style="text-align: center;">11000110110</td>
-</tr>
-<tr class="even">
-<td>33</td>
-<td>A</td>
-<td>A</td>
-<td>33</td>
-<td>111323</td>
-<td style="text-align: center;">10100011000</td>
-</tr>
-<tr class="odd">
-<td>34</td>
-<td>B</td>
-<td>B</td>
-<td>34</td>
-<td>131123</td>
-<td style="text-align: center;">10001011000</td>
-</tr>
-<tr class="even">
-<td>35</td>
-<td>C</td>
-<td>C</td>
-<td>35</td>
-<td>131321</td>
-<td style="text-align: center;">10001000110</td>
-</tr>
-<tr class="odd">
-<td>36</td>
-<td>D</td>
-<td>D</td>
-<td>36</td>
-<td>112313</td>
-<td style="text-align: center;">10110001000</td>
-</tr>
-<tr class="even">
-<td>37</td>
-<td>E</td>
-<td>E</td>
-<td>37</td>
-<td>132113</td>
-<td style="text-align: center;">10001101000</td>
-</tr>
-<tr class="odd">
-<td>38</td>
-<td>F</td>
-<td>F</td>
-<td>38</td>
-<td>132311</td>
-<td style="text-align: center;">10001100010</td>
-</tr>
-<tr class="even">
-<td>39</td>
-<td>G</td>
-<td>G</td>
-<td>39</td>
-<td>211313</td>
-<td style="text-align: center;">11010001000</td>
-</tr>
-<tr class="odd">
-<td>40</td>
-<td>H</td>
-<td>H</td>
-<td>40</td>
-<td>231113</td>
-<td style="text-align: center;">11000101000</td>
-</tr>
-<tr class="even">
-<td>41</td>
-<td>I</td>
-<td>I</td>
-<td>41</td>
-<td>231311</td>
-<td style="text-align: center;">11000100010</td>
-</tr>
-<tr class="odd">
-<td>42</td>
-<td>J</td>
-<td>J</td>
-<td>42</td>
-<td>112133</td>
-<td style="text-align: center;">10110111000</td>
-</tr>
-<tr class="even">
-<td>43</td>
-<td>K</td>
-<td>K</td>
-<td>43</td>
-<td>112331</td>
-<td style="text-align: center;">10110001110</td>
-</tr>
-<tr class="odd">
-<td>44</td>
-<td>L</td>
-<td>L</td>
-<td>44</td>
-<td>132131</td>
-<td style="text-align: center;">10001101110</td>
-</tr>
-<tr class="even">
-<td>45</td>
-<td>M</td>
-<td>M</td>
-<td>45</td>
-<td>113123</td>
-<td style="text-align: center;">10111011000</td>
-</tr>
-<tr class="odd">
-<td>46</td>
-<td>N</td>
-<td>N</td>
-<td>46</td>
-<td>113321</td>
-<td style="text-align: center;">10111000110</td>
-</tr>
-<tr class="even">
-<td>47</td>
-<td>O</td>
-<td>O</td>
-<td>47</td>
-<td>133121</td>
-<td style="text-align: center;">10001110110</td>
-</tr>
-<tr class="odd">
-<td>48</td>
-<td>P</td>
-<td>P</td>
-<td>48</td>
-<td>313121</td>
-<td style="text-align: center;">11101110110</td>
-</tr>
-<tr class="even">
-<td>49</td>
-<td>Q</td>
-<td>Q</td>
-<td>49</td>
-<td>211331</td>
-<td style="text-align: center;">11010001110</td>
-</tr>
-<tr class="odd">
-<td>50</td>
-<td>R</td>
-<td>R</td>
-<td>50</td>
-<td>231131</td>
-<td style="text-align: center;">11000101110</td>
-</tr>
-<tr class="even">
-<td>51</td>
-<td>S</td>
-<td>S</td>
-<td>51</td>
-<td>213113</td>
-<td style="text-align: center;">11011101000</td>
-</tr>
-<tr class="odd">
-<td>52</td>
-<td>T</td>
-<td>T</td>
-<td>52</td>
-<td>213311</td>
-<td style="text-align: center;">11011100010</td>
-</tr>
-<tr class="even">
-<td>53</td>
-<td>U</td>
-<td>U</td>
-<td>53</td>
-<td>213131</td>
-<td style="text-align: center;">11011101110</td>
-</tr>
-<tr class="odd">
-<td>54</td>
-<td>V</td>
-<td>V</td>
-<td>54</td>
-<td>311123</td>
-<td style="text-align: center;">11101011000</td>
-</tr>
-<tr class="even">
-<td>55</td>
-<td>W</td>
-<td>W</td>
-<td>55</td>
-<td>311321</td>
-<td style="text-align: center;">11101000110</td>
-</tr>
-<tr class="odd">
-<td>56</td>
-<td>X</td>
-<td>X</td>
-<td>56</td>
-<td>331121</td>
-<td style="text-align: center;">11100010110</td>
-</tr>
-<tr class="even">
-<td>57</td>
-<td>Y</td>
-<td>Y</td>
-<td>57</td>
-<td>312113</td>
-<td style="text-align: center;">11101101000</td>
-</tr>
-<tr class="odd">
-<td>58</td>
-<td>Z</td>
-<td>Z</td>
-<td>58</td>
-<td>312311</td>
-<td style="text-align: center;">11101100010</td>
-</tr>
-<tr class="even">
-<td>59</td>
-<td>[</td>
-<td>[</td>
-<td>59</td>
-<td>332111</td>
-<td style="text-align: center;">11100011010</td>
-</tr>
-<tr class="odd">
-<td>60</td>
-<td>\</td>
-<td>\</td>
-<td>60</td>
-<td>314111</td>
-<td style="text-align: center;">11101111010</td>
-</tr>
-<tr class="even">
-<td>61</td>
-<td>]</td>
-<td>]</td>
-<td>61</td>
-<td>221411</td>
-<td style="text-align: center;">11001000010</td>
-</tr>
-<tr class="odd">
-<td>62</td>
-<td>^</td>
-<td>^</td>
-<td>62</td>
-<td>431111</td>
-<td style="text-align: center;">11110001010</td>
-</tr>
-<tr class="even">
-<td>63</td>
-<td>_</td>
-<td>_</td>
-<td>63</td>
-<td>111224</td>
-<td style="text-align: center;">10100110000</td>
-</tr>
-<tr class="odd">
-<td>64</td>
-<td>NUL</td>
-<td>`</td>
-<td>64</td>
-<td>111422</td>
-<td style="text-align: center;">10100001100</td>
-</tr>
-<tr class="even">
-<td>65</td>
-<td>SOH</td>
-<td>a</td>
-<td>65</td>
-<td>121124</td>
-<td style="text-align: center;">10010110000</td>
-</tr>
-<tr class="odd">
-<td>66</td>
-<td>STX</td>
-<td>b</td>
-<td>66</td>
-<td>121421</td>
-<td style="text-align: center;">10010000110</td>
-</tr>
-<tr class="even">
-<td>67</td>
-<td>ETX</td>
-<td>c</td>
-<td>67</td>
-<td>141122</td>
-<td style="text-align: center;">10000101100</td>
-</tr>
-<tr class="odd">
-<td>68</td>
-<td>EOT</td>
-<td>d</td>
-<td>68</td>
-<td>141221</td>
-<td style="text-align: center;">10000100110</td>
-</tr>
-<tr class="even">
-<td>69</td>
-<td>ENQ</td>
-<td>e</td>
-<td>69</td>
-<td>112214</td>
-<td style="text-align: center;">10110010000</td>
-</tr>
-<tr class="odd">
-<td>70</td>
-<td>ACK</td>
-<td>f</td>
-<td>70</td>
-<td>112412</td>
-<td style="text-align: center;">10110000100</td>
-</tr>
-<tr class="even">
-<td>71</td>
-<td>BEL</td>
-<td>g</td>
-<td>71</td>
-<td>122114</td>
-<td style="text-align: center;">10011010000</td>
-</tr>
-<tr class="odd">
-<td>72</td>
-<td>BS</td>
-<td>h</td>
-<td>72</td>
-<td>122411</td>
-<td style="text-align: center;">10011000010</td>
-</tr>
-<tr class="even">
-<td>73</td>
-<td>HT</td>
-<td>i</td>
-<td>73</td>
-<td>142112</td>
-<td style="text-align: center;">10000110100</td>
-</tr>
-<tr class="odd">
-<td>74</td>
-<td>LF</td>
-<td>j</td>
-<td>74</td>
-<td>142211</td>
-<td style="text-align: center;">10000110010</td>
-</tr>
-<tr class="even">
-<td>75</td>
-<td>VT</td>
-<td>k</td>
-<td>75</td>
-<td>241211</td>
-<td style="text-align: center;">11000010010</td>
-</tr>
-<tr class="odd">
-<td>76</td>
-<td>FF</td>
-<td>I</td>
-<td>76</td>
-<td>221114</td>
-<td style="text-align: center;">11001010000</td>
-</tr>
-<tr class="even">
-<td>77</td>
-<td>CR</td>
-<td>m</td>
-<td>77</td>
-<td>413111</td>
-<td style="text-align: center;">11110111010</td>
-</tr>
-<tr class="odd">
-<td>78</td>
-<td>SO</td>
-<td>n</td>
-<td>78</td>
-<td>241112</td>
-<td style="text-align: center;">11000010100</td>
-</tr>
-<tr class="even">
-<td>79</td>
-<td>SI</td>
-<td>o</td>
-<td>79</td>
-<td>134111</td>
-<td style="text-align: center;">10001111010</td>
-</tr>
-<tr class="odd">
-<td>80</td>
-<td>DLE</td>
-<td>p</td>
-<td>80</td>
-<td>111242</td>
-<td style="text-align: center;">10100111100</td>
-</tr>
-<tr class="even">
-<td>81</td>
-<td>DC1</td>
-<td>q</td>
-<td>81</td>
-<td>121142</td>
-<td style="text-align: center;">10010111100</td>
-</tr>
-<tr class="odd">
-<td>82</td>
-<td>DC2</td>
-<td>r</td>
-<td>82</td>
-<td>121241</td>
-<td style="text-align: center;">10010011110</td>
-</tr>
-<tr class="even">
-<td>83</td>
-<td>DC3</td>
-<td>s</td>
-<td>83</td>
-<td>114212</td>
-<td style="text-align: center;">10111100100</td>
-</tr>
-<tr class="odd">
-<td>84</td>
-<td>DC4</td>
-<td>t</td>
-<td>84</td>
-<td>124112</td>
-<td style="text-align: center;">10011110100</td>
-</tr>
-<tr class="even">
-<td>85</td>
-<td>NAK</td>
-<td>u</td>
-<td>85</td>
-<td>124211</td>
-<td style="text-align: center;">10011110010</td>
-</tr>
-<tr class="odd">
-<td>86</td>
-<td>SYN</td>
-<td>v</td>
-<td>86</td>
-<td>411212</td>
-<td style="text-align: center;">11110100100</td>
-</tr>
-<tr class="even">
-<td>87</td>
-<td>ETB</td>
-<td>w</td>
-<td>87</td>
-<td>421112</td>
-<td style="text-align: center;">11110010100</td>
-</tr>
-<tr class="odd">
-<td>88</td>
-<td>CAN</td>
-<td>x</td>
-<td>88</td>
-<td>421211</td>
-<td style="text-align: center;">11110010010</td>
-</tr>
-<tr class="even">
-<td>89</td>
-<td>EM</td>
-<td>y</td>
-<td>89</td>
-<td>212141</td>
-<td style="text-align: center;">11011011110</td>
-</tr>
-<tr class="odd">
-<td>90</td>
-<td>SUB</td>
-<td>z</td>
-<td>90</td>
-<td>214121</td>
-<td style="text-align: center;">11011110110</td>
-</tr>
-<tr class="even">
-<td>91</td>
-<td>ESC</td>
-<td>{</td>
-<td>91</td>
-<td>412121</td>
-<td style="text-align: center;">11110110110</td>
-</tr>
-<tr class="odd">
-<td>92</td>
-<td>FS</td>
-<td>|</td>
-<td>92</td>
-<td>111143</td>
-<td style="text-align: center;">10101111000</td>
-</tr>
-<tr class="even">
-<td>93</td>
-<td>GS</td>
-<td>}</td>
-<td>93</td>
-<td>111341</td>
-<td style="text-align: center;">10100011110</td>
-</tr>
-<tr class="odd">
-<td>94</td>
-<td>RS</td>
-<td>~</td>
-<td>94</td>
-<td>131141</td>
-<td style="text-align: center;">10001011110</td>
-</tr>
-<tr class="even">
-<td>95</td>
-<td>US</td>
-<td>DEL</td>
-<td>95</td>
-<td>114113</td>
-<td style="text-align: center;">10111101000</td>
-</tr>
-<tr class="odd">
-<td>96</td>
-<td>FNC3</td>
-<td>FNC3</td>
-<td>96</td>
-<td>114311</td>
-<td style="text-align: center;">10111100010</td>
-</tr>
-<tr class="even">
-<td>97</td>
-<td>FNC2</td>
-<td>FNC2</td>
-<td>97</td>
-<td>411113</td>
-<td style="text-align: center;">11110101000</td>
-</tr>
-<tr class="odd">
-<td>98</td>
-<td>SHIFT</td>
-<td>SHIFT</td>
-<td>98</td>
-<td>411311</td>
-<td style="text-align: center;">11110100010</td>
-</tr>
-<tr class="even">
-<td>99</td>
-<td>CODEC</td>
-<td>CODEC</td>
-<td>99</td>
-<td>113141</td>
-<td style="text-align: center;">10111011110</td>
-</tr>
-<tr class="odd">
-<td>100</td>
-<td>CODEB</td>
-<td>FNC4</td>
-<td>CODEB</td>
-<td>114131</td>
-<td style="text-align: center;">10111101110</td>
-</tr>
-<tr class="even">
-<td>101</td>
-<td>FNC4</td>
-<td>CODEA</td>
-<td>CODEA</td>
-<td>311141</td>
-<td style="text-align: center;">11101011110</td>
-</tr>
-<tr class="odd">
-<td>102</td>
-<td>FNC1</td>
-<td>FNC1</td>
-<td>FNC1</td>
-<td>411131</td>
-<td style="text-align: center;">11110101110</td>
-</tr>
-<tr class="even">
-<td>103</td>
-<td>StartA</td>
-<td>StartA</td>
-<td>StartA</td>
-<td>211412</td>
-<td style="text-align: center;">11010000100</td>
-</tr>
-<tr class="odd">
-<td>104</td>
-<td>StartB</td>
-<td>StartB</td>
-<td>StartB</td>
-<td>211214</td>
-<td style="text-align: center;">11010010000</td>
-</tr>
-<tr class="even">
-<td>105</td>
-<td>StartC</td>
-<td>StartC</td>
-<td>StartC</td>
-<td>211232</td>
-<td style="text-align: center;">11010011100</td>
-</tr>
-<tr class="odd">
-<td>106</td>
-<td>Stop</td>
-<td>Stop</td>
-<td>Stop</td>
-<td>2331112</td>
-<td style="text-align: center;">1100011101011</td>
-</tr>
-</tbody>
-</table>
-<h3 id="code128检验位计算">code128检验位计算</h3>
-<p>（开始位对应的ID值 ＋ 每位数据在整个数据中的位置×每位数据对应的ID值）% 103</p>
-<h3 id="code128编码示例">Code128编码示例</h3>
-<p><img src="https://7dzqca.bn.files.1drv.com/y4mtrJaWxMge51DuH5Tjd6nhbrvAQVrlAGOp4RfbYHo3Mr2Dc9NYjTWWK60_AsUNFY9p3EqdWNNsfraGHkrp7mEh3le4412DFlx_wtDUsZD8F7muRTDBcGREeXsjWw-EdLcpBOJT-5tAsZtZy6K4NLnVYIceS1HoFkvBxs2oOjFClxJUsupXASMNB1mcIZ0Nm4jaP38a6EHihx9gH-I74dSYQ?width=1593&amp;height=755&amp;cropmode=none" /></p>
-<p>以 <code>PZ1704946715</code> 为例，开始为code128A，开始位对应的ID为103，第1位数据P对应的ID为48，第2位数据Z对应的ID为58，依此类推，可以计算。</p>
-<p>检验位 =(103 + 1*48 + 2*58 + 3*17 + 4*23 + 5*16 + 6*20 +7*25 + 8*20 + 9*22 + 10*23 + 11*17 + 12*21)%103 = 61​</p>
-<p>即检验位的ID为61。</p>
-<p>对照编码表，<code>PZ1704946715</code> 编码表示为：开始位Start Code A（11010000100）＋ 数据位［P（11101110110）＋ Z（11101100010）＋1（10011100110）＋ 7（11101101110）＋ 0（10011101100）＋ 4（11001001110）＋ 9（11100101100）＋ 4（11001001110）＋ 6（11001110100）＋ 7（11101101110）＋ 1（10011100110）＋ 5（11011100100）］＋ 检验位61（11001000010）＋ 结束位Stop（1100011101011）</p>
-<p>若要打印，只需将1用黑色线标出，0用白色线标出，就完成一个简单的条形码生成。</p>
 
       
     </div>
