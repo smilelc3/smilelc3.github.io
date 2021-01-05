@@ -2529,7 +2529,7 @@ R(\phi^{ij})\begin{bmatrix} u_i \\ v_i\end{bmatrix} - \begin{bmatrix} u_j \\ v_j
 <p>当<span class="math inline">\(R\)</span>到达最右边界以后，就剩下<span class="math inline">\(i\)</span>一步一步追上来。</p>
 <p>因此，<strong>每个字符最多被访问两次</strong>，一次被<span class="math inline">\(R\)</span>经过，一次被追赶的<span class="math inline">\(i\)</span>经过。所以时间复杂度是<span class="math inline">\(O(2*(2n+1)) = O(n)\)</span>。</p>
 <h2 id="代码">代码</h2>
-<p>代码引用自我的github仓库地址：<a href="longest-palindromic-substring/longest-palindromic-substring.go">longest-palindromic-substring/longest-palindromic-substring.go</a></p>
+<p>代码引用自我的github仓库地址：<a href="https://github.com/smilelc3/leetcode_go/blob/master/longest-palindromic-substring/longest-palindromic-substring.go" target="_blank" rel="noopener">longest-palindromic-substring/longest-palindromic-substring.go</a></p>
 <p>有关题目可参考Leetcode题目：<code>Longest Palindromic Substring</code> <a href="https://leetcode.com/problems/longest-palindromic-substring/" target="_blank" rel="noopener">链接</a></p>
 ]]></content>
   </entry>
