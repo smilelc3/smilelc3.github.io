@@ -175,6 +175,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/26/%E4%B8%BALinux%E5%A2%9E%E5%8A%A0swap%E5%88%86%E5%8C%BA%E7%9A%84%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/07/26/%E4%B8%BALinux%E5%A2%9E%E5%8A%A0swap%E5%88%86%E5%8C%BA%E7%9A%84%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">为Linux增加swap分区的方法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-26 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-26T00:00:00+08:00">2018-07-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-19 00:29:41" itemprop="dateModified" datetime="2020-04-19T00:29:41+08:00">2020-04-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>285</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://nk7bha.bn.files.1drv.com/y4mGtUaXNe7JWcr_zY4IaHehqIfwFZVy-siVcS5c6kht6DV1Vell0yv3eC9kCiTkcycGj38GHlXQLMZRnlPHmeooDAfuIGngt_0HZeDcZYbRjHFeM_Cd8OSm2O87cK0uizo25mNAPgVnMckwpBGyGaOA8m5mdSzeVyKcF4DxmeRSAGaMxuzwHrrRM5f0J79-IxkPXMMxCKc8X8QhbEQ2dYsHQ?width=700&amp;height=394&amp;cropmode=none" /></p>
+<h2 id="用文件作为swap分区">用文件作为Swap分区</h2>
+<ol type="1">
+<li><strong>创建要作为swap分区的文件:增加1GB大小的交换分区，则命令写法如下</strong></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dd if=/dev/zero of=/root/swapfile bs=1M count=1024</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>文件大小<em>(count)</em> = <em>bs * count</em> 指定文件为of所指定文件</p>
+</blockquote>
+<ol start="2" type="1">
+<li><strong>格式化为交换分区文件</strong></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkswap /root/swapfile 			# 建立swap的文件系统</span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li><strong>启用交换分区文件</strong></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapon /root/swapfile 			# 启用swap文件</span><br></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li><strong>系统开机时自启用</strong></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/fstab 			# 在文件/etc/fstab中添加一行</span><br><span class="line">/root/swapfile swap swap defaults 0 0</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/13/%E4%BD%BF%E7%94%A8shadowsocks-libev%E4%BB%A3%E6%9B%BFshadowsocks-python%EF%BC%8C%E5%B9%B6%E5%BC%80%E5%90%AFipv6%E6%94%AF%E6%8C%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -512,105 +611,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/26/python%E7%88%AC%E8%99%AB%E4%B9%8BBeatifulSoup%20Select%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/03/26/python%E7%88%AC%E8%99%AB%E4%B9%8BBeatifulSoup%20Select%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">python爬虫之BeatifulSoup Select方法总结</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-26 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-26T00:00:00+08:00">2018-03-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-20 15:34:39" itemprop="dateModified" datetime="2019-03-20T15:34:39+08:00">2019-03-20</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>703</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://p06teg.bn.files.1drv.com/y4mclDYNDigc0gHDmZ5XDouTmCEeu-ylGC1dHlLnmr4vqMuQMRtLZ6vvFnXbpry000EzeJBZxpRb81XhimQTct8sw--c2dHHj9tbb61CcAWkxolDY1uigSC9AdohZDCtlctUTz3MHyTBDGLXLAFGrapspubNqSWH26E5gKxEqb0gWFXG_LmfjGksCLw47RYsMudBxVR-nWgMSLipvPbQTKjPQ?width=434&amp;height=299&amp;cropmode=none" /></p>
-<h1 id="简介">简介</h1>
-<blockquote>
-<p><code>BeautifulSoup</code>提供一些简单的、<code>python</code>式的函数用来处理导航、搜索、修改分析树等功能。它是一个工具箱，通过解析文档为用户提供需要抓取的数据，因为简单，所以不需要多少代码就可以写出一个完整的应用程序。 <code>BeautifulSoup</code>自动将输入文档转换为<code>Unicode</code>编码，输出文档转换为utf-8编码。你不需要考虑编码方式，除非文档没有指定一个编码方式，这时，<code>Beautiful Soup</code>就不能自动识别编码方式了。然后，你仅仅需要说明一下原始编码方式就可以了。 <code>BeautifulSoup</code>已成为和<code>lxml</code>、<code>html6lib</code>一样出色的python解释器，为用户灵活地提供不同的解析策略或强劲的速度。</p>
-</blockquote>
-<h1 id="css-选择器">CSS 选择器</h1>
-<h4 id="通过标签名查找">通过标签名查找</h4>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(soup.select(<span class="string">'title'</span>))</span><br><span class="line">print(soup.select(<span class="string">'a'</span>))</span><br></pre></td></tr></table></figure>
-<hr />
-<h4 id="通过类名查找">通过类名查找</h4>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(soup.select(<span class="string">'.sister'</span>))</span><br></pre></td></tr></table></figure>
-<hr />
-<h4 id="通过id查找">通过id查找</h4>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(soup.select(<span class="string">'#link1'</span>))</span><br></pre></td></tr></table></figure>
-<hr />
-<h4 id="组合查找">组合查找</h4>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(soup.select(<span class="string">'p #link1'</span>))    		<span class="comment">#查找p标签中内容为id属性为link1的标签</span></span><br><span class="line">print(soup.select(<span class="string">"head &gt; title"</span>))   	<span class="comment">#直接查找子标签(绝对路径)</span></span><br></pre></td></tr></table></figure>
-<hr />
-<h4 id="属性查找">属性查找</h4>
-<p>查找时还可以加入属性元素，属性需要用中括号括起来，注意属性和标签属于同一节点，所以中间不能加空格，否则会无法匹配到。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(soup.select(<span class="string">'a[class="sister"]'</span>))</span><br><span class="line">print(soup.select(<span class="string">'a[href="http://example.com/elsie"]'</span>))</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -680,7 +680,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -708,7 +708,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -717,12 +717,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">150k</span>
+    <span title="站点总字数">152k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:16</span>
+    <span title="站点阅读时长">2:18</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>

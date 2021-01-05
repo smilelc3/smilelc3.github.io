@@ -175,6 +175,217 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/27/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%86%85%E5%AE%B9%E8%80%83%E7%82%B9%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/01/27/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%86%85%E5%AE%B9%E8%80%83%E7%82%B9%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">面向对象编程内容考点总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-27 00:00:00" itemprop="dateCreated datePublished" datetime="2018-01-27T00:00:00+08:00">2018-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-01 22:11:26" itemprop="dateModified" datetime="2020-12-01T22:11:26+08:00">2020-12-01</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://pk6beg.bn.files.1drv.com/y4mrnuUEYnsWABPRGNtiuV_fhprkdSZJ4C98i0D5go5DI6Q6jz4j7F9iVPQRtgTskVGHyJ3hANSFtKgSiNnTIKvPojJY8tHiE7ad4P0uXE57gHkiI1RQCHxn2HEHuNzGBezrV30ctIaTJf9kGphah1uBpFcKPof5pJOaMP3CSR_K-54gEESFw-ayW4KIbSYzZRZiAzuQR2Dos9tRazp1rbRag?width=391&amp;height=247&amp;cropmode=none" /></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">author: smile</span><br><span class="line">date: 2018&#x2F;1&#x2F;11</span><br></pre></td></tr></table></figure>
+<h3 id="引用调用方式">引用调用方式</h3>
+<blockquote>
+<p>类型名 &amp;引用名 (变量名) 或 类型名 &amp;引用名 = 变量名</p>
+</blockquote>
+<ul>
+<li>引用是别名，建立引用时必须初始化</li>
+<li>形参是引用，实参是变量</li>
+</ul>
+<h3 id="内联函数">内联函数</h3>
+<blockquote>
+<p>inline 类型说明符 被调用函数名(形参表)</p>
+</blockquote>
+<ol type="1">
+<li>必须提前声明和定义</li>
+<li>内联函数不交换控制权</li>
+<li>不支持递归、循环、switch选择等复杂语句</li>
+</ol>
+<h3 id="面向对象三大特性">面向对象三大特性</h3>
+<ul>
+<li>继承性</li>
+<li>封装性</li>
+<li>多态性</li>
+</ul>
+<h3 id="类特性">类特性</h3>
+<p><em>抽象性 隐藏性 封装性 多态性</em></p>
+<p>类是对象的抽象， 对象是类的实例</p>
+<ul>
+<li>public 权限开放</li>
+<li>private 仅成员和友元</li>
+<li>protected 成员、友元、派生</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">继承方式</th>
+<th style="text-align: center;">public</th>
+<th style="text-align: center;">protected</th>
+<th style="text-align: center;">private</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">public</td>
+<td style="text-align: center;">public</td>
+<td style="text-align: center;">protected</td>
+<td style="text-align: center;">private</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">protected</td>
+<td style="text-align: center;">protected</td>
+<td style="text-align: center;">protected</td>
+<td style="text-align: center;">private</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">private</td>
+<td style="text-align: center;">private</td>
+<td style="text-align: center;">private</td>
+<td style="text-align: center;">private</td>
+</tr>
+</tbody>
+</table>
+<h3 id="复制构造函数">复制构造函数</h3>
+<blockquote>
+<p>类名 (const 类名 &amp;对象名)；</p>
+</blockquote>
+<p>const 为保护实参对象可读，可省略 对象名是本类对象的引用，根据需求确定</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    A(<span class="keyword">int</span> a);</span><br><span class="line">    A(<span class="keyword">const</span> A &amp;a);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line"><span class="function">A <span class="title">b</span><span class="params">(a)</span></span>; <span class="comment">//方式1</span></span><br><span class="line">A c = b;    <span class="comment">//方式2</span></span><br></pre></td></tr></table></figure>
+<p>C</p>
+<h3 id="静态成员static">静态成员(static)</h3>
+<p>静态数据成员</p>
+<ul>
+<li>静态数据成员必须初始化，且必须单独初始化</li>
+<li>定义时候不加 private/public/protected</li>
+<li>静态数据成员也可以定义为私有的静态数据成员</li>
+</ul>
+<blockquote>
+<p>数据类型 类名:: 静态数据成员 = 值；</p>
+</blockquote>
+<p>静态成员函数</p>
+<ul>
+<li>静态成员函数可以引用静态成员，不能直接引用非静态</li>
+</ul>
+<blockquote>
+<p>类名::静态成员函数(参数表)</p>
+</blockquote>
+<h3 id="友元">友元</h3>
+<p>友元函数 可放在类中任意位置，效果相同</p>
+<blockquote>
+<p>friend 返回类型 函数名(参数表)</p>
+</blockquote>
+<p>友元类</p>
+<h3 id="派生类构造函数">派生类构造函数</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">派生类名(派生类构造函数总参数表):&lt;基类构造函数&gt;(&lt;参数表1&gt;),&lt;子对象名&gt;(&lt;参表2&gt;)  </span><br><span class="line">&#123;  </span><br><span class="line">  &lt;派生类中数据成员初始化&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="派生类的析构函数">派生类的析构函数</h3>
+<ul>
+<li>先执行派生类的析构函数，再执行基类的析构函数</li>
+<li>各个基类构造函数的执行顺序取决于定义派生类时所指定的各个基类的顺序，而与派生类构造函数的成员初始化列表中给定的基类顺序无关。</li>
+</ul>
+<h3 id="动态联编">动态联编</h3>
+<p>三条件</p>
+<ol type="1">
+<li>虚函数</li>
+<li>满足复制兼容规则</li>
+<li>成员函数/指针/引用调用虚函数</li>
+</ol>
+<h3 id="抽象类">抽象类</h3>
+<ul>
+<li>至少含一个纯虚函数</li>
+</ul>
+<blockquote>
+<p>virtual <返回值类型> <函数名> (<参数表>)=0;</p>
+</blockquote>
+<ul>
+<li>不能建立对象</li>
+</ul>
+<h3 id="运算符重载">运算符重载</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//成员函数</span></span><br><span class="line">&lt;返回值类型&gt; <span class="keyword">operator</span>&lt;运算符&gt;(&lt;参数表&gt;)</span><br><span class="line">&#123;</span><br><span class="line">  ……</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//友元函数</span></span><br><span class="line"><span class="keyword">friend</span> &lt;返回值类型&gt; <span class="keyword">operator</span>&lt;运算符&gt;(&lt;参数表&gt;)</span><br><span class="line">&#123;</span><br><span class="line">  ……</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>C</p>
+<p><strong>= [ ] () -&gt;</strong> 这四个运算符只能被重载为类的非静态成员函数</p>
+<h3 id="赋值兼容规则">赋值兼容规则</h3>
+<ul>
+<li>派生类对象可以赋值给基类对象</li>
+<li>派生类对象可以初始化基类引用</li>
+<li>基类对象可以指向派生类对象</li>
+</ul>
+<h3 id="其他">其他</h3>
+<ul>
+<li><em>代码复用的三种方式：继承、模板、组合</em></li>
+<li><em>提取运算符&gt;&gt; ,插入运算符&lt;&lt;</em></li>
+<li><em>运算符重载要求保持其原来的操作数个数、优先级、结合性和语法结构</em></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/08/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -532,201 +743,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/02/wav%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E7%BC%96%E7%A0%81%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/10/02/wav%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E7%BC%96%E7%A0%81%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">wav文件格式编码分析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-10-02 00:00:00" itemprop="dateCreated datePublished" datetime="2017-10-02T00:00:00+08:00">2017-10-02</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-20 14:46:59" itemprop="dateModified" datetime="2019-03-20T14:46:59+08:00">2019-03-20</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://mu6beg.bn.files.1drv.com/y4mhF-uffQ_RICGMtE8NXN00XPOwkkbf-l7xur5JUQXLsYsoCaHmkumnMgInU4Wa8_MJn_2albnFNZHjkk7x5XYPUL8BWUG3OCb5mBhdSSTwJQRZg4Wd231oPnROa0V8CNP7CZ6QxME7nLJTpE5CxIv7mCaTKIAWBaiESMdwFjGC4KITFc-hFxxmvqkTelrPZLkfiJotVvIyp8-791samPbNg?width=199&amp;height=241&amp;cropmode=none" /></p>
-<p>WAV作为音频文件，其格式规则由微软和IBM共同制定。常用作无压缩的文件格式。</p>
-<p>作为音频文件，文件特征包括：声道数，量化位数<span class="math inline">\((8bit, 16bit, 24bit)\)</span>，取样频率<span class="math inline">\((16khz, 22khz……)\)</span></p>
-<p>wav格式文件所占容量<span class="math inline">\((B) = (取样频率 * 量化位数 * 声道数) * 时间 / 8\)</span>，除以8 的原因是因为 1字节 = 8bit</p>
-<p>为了方便查看具体的编码的细节，我们首先先介绍下Ubuntu下一款16进制的文本查看器<strong>hexdump</strong>，其相应参数说明如下：</p>
-<ul>
-<li><strong>hexdump -C</strong> &lt;== 规范的十六进制和ASCII码显示（Canonical hex+ASCII display ）</li>
-<li><strong>hexdump -b</strong> &lt;== 单字节八进制显示（One-byte octal display）</li>
-<li><strong>hexdump -c</strong> &lt;== 单字节字符显示（One-byte character display）</li>
-<li><strong>hexdump -d</strong> &lt;== 双字节十进制显示（Two-byte decimal display）</li>
-<li><strong>hexdump -o</strong> &lt;== 双字节八进制显示（Two-byte octal display）</li>
-<li><strong>hexdump -x</strong> &lt;== 双字节十六进制显示（Two-byte hexadecimal display）</li>
-</ul>
-<p>比较来比较去，还是<strong><em>hexdump -C</em></strong>的显示效果更好些。</p>
-<p>具体的编码方式定义如下：</p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">起始地址</th>
-<th style="text-align: center;">大小(byte)</th>
-<th style="text-align: center;">数据块类型</th>
-<th style="text-align: center;">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">00H</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">字符</td>
-<td style="text-align: center;">资源交换文件标志（RIFF）</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">04H</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">长整数</td>
-<td style="text-align: center;">从下个地址开始到文件尾的总字节数</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">08H</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">字符</td>
-<td style="text-align: center;">WAV文件标志（WAVE）</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">0CH</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">字符</td>
-<td style="text-align: center;">波形格式标志（fmt ），最后一位空格。</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">10H</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">整数</td>
-<td style="text-align: center;">过滤字节（一般为00000010H），若为00000012H则说明数据头携带附加信息（见“附加信息”）。</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">14H</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">整数</td>
-<td style="text-align: center;">为1时表示线性PCM编码，大于1时表示有压缩的编码。这里是0001H</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">16H</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">整数</td>
-<td style="text-align: center;">通道数，1为单声道，2为双声道。这里是0001H。</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">18H</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">长整数</td>
-<td style="text-align: center;">采样频率，这里00001f40H = 8000 Hz</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">1CH</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">长整数</td>
-<td style="text-align: center;">byte率（每秒平均字节数） = 采样频率×通道数×位数/8 003e80H = 16000 = 8000<em>1</em>16/8</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">20H</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">整数</td>
-<td style="text-align: center;">DATA数据块长度（字节）</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">22H</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">整数</td>
-<td style="text-align: center;">PCM 位宽，0010H即16，一个量化样本占2byte。</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">随后2字节</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">整数</td>
-<td style="text-align: center;">附加信息（可选，由上方过滤字节确定）</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">随后4字节</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">字符</td>
-<td style="text-align: center;">数据标示符（data）</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">随后4字节</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">长整数</td>
-<td style="text-align: center;">DATA总数据长度字节</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">随后</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">DATA数据块 00a640H = 42560</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -796,7 +812,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -824,7 +840,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -833,12 +849,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">150k</span>
+    <span title="站点总字数">152k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:16</span>
+    <span title="站点阅读时长">2:18</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
