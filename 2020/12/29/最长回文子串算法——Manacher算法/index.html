@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://bn1302files.storage.live.com/y4m_fwOLyuOSYzLvQHhxJSqSMrHKSFwfpK129gv-CIHZMuuDlkIMvkBDVHBmkS2se9c5tQebzU0ZL9Q5lM3iYL-hMEonI0RfqY8I_Un3TfsH2EJOYwbLKshbmbW5h-hsx7l91ZC7qDnkVKslU5ufdrWPUQqM2C9Zvxo4dqtXwnUun-II91rBwFVzvKRAmekGc9l?width=2908&amp;height=694&amp;cropmode=none">
 <meta property="og:image" content="https://bn1302files.storage.live.com/y4mOVHwa1T7XcdHXi2Kpnfqcet6IF-qUKxfxdZU2S0stIzlyC8GghsIIT31MwPVbr0vfQaWwEaBuxvHw3L0yjY9YEcuo-TXD299JjhSUmw3BrJEMwu9m7oCdVTYDsYVikpjhRJdpZ46RndHBoFARikH4neivtMLKKhpKSkmZ9oZChm6b3myUVIna4QJ3AQd0Pv1?width=2908&amp;height=694&amp;cropmode=none">
 <meta property="article:published_time" content="2020-12-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-01-05T14:14:32.400Z">
+<meta property="article:modified_time" content="2021-01-05T15:25:19.482Z">
 <meta property="article:author" content="smile">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://bn1302files.storage.live.com/y4m4lenB_vlduxvMUPWqla-dL_vKxzn7HEgh9CNBwG5ql630nWBNCtqVZKfe3zs8quS9c4gfMDa4-hjmQg4pHdmadd-GUrOO3TQhFYrfSRJQ6r3Q8O9qbz2amtfzTwNf33YwXzmIXeSg7_caW3Hi3aJ-lRZtL12PeYU-aHvOIIIbijQa2y2xyjy_Pj2_oTHSGod?width=882&amp;height=289&amp;cropmode=none">
@@ -214,7 +214,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-05 22:14:32" itemprop="dateModified" datetime="2021-01-05T22:14:32+08:00">2021-01-05</time>
+                <time title="修改时间：2021-01-05 23:25:19" itemprop="dateModified" datetime="2021-01-05T23:25:19+08:00">2021-01-05</time>
               </span>
 
           <br>
@@ -223,7 +223,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.3k</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -283,20 +283,16 @@
 </ul>
 <p><strong>步骤3</strong>：开始从下标<span class="math inline">\(i = 0\)</span>到<span class="math inline">\(len(S) - 1\)</span>，去遍历字符串S</p>
 <p>后续存在多个分支，总览如下：</p>
-<figure>
-<img src="https://bn1302files.storage.live.com/y4m4lenB_vlduxvMUPWqla-dL_vKxzn7HEgh9CNBwG5ql630nWBNCtqVZKfe3zs8quS9c4gfMDa4-hjmQg4pHdmadd-GUrOO3TQhFYrfSRJQ6r3Q8O9qbz2amtfzTwNf33YwXzmIXeSg7_caW3Hi3aJ-lRZtL12PeYU-aHvOIIIbijQa2y2xyjy_Pj2_oTHSGod?width=882&amp;height=289&amp;cropmode=none" alt="" /><figcaption>image-20210105211714361</figcaption>
-</figure>
+<p><img src="https://bn1302files.storage.live.com/y4m4lenB_vlduxvMUPWqla-dL_vKxzn7HEgh9CNBwG5ql630nWBNCtqVZKfe3zs8quS9c4gfMDa4-hjmQg4pHdmadd-GUrOO3TQhFYrfSRJQ6r3Q8O9qbz2amtfzTwNf33YwXzmIXeSg7_caW3Hi3aJ-lRZtL12PeYU-aHvOIIIbijQa2y2xyjy_Pj2_oTHSGod?width=882&amp;height=289&amp;cropmode=none" /></p>
 <p>​ <strong>分支1</strong>：当 <span class="math inline">\(i &gt; R\)</span> 时，暴力匹配当前i位置字符的最长回文长度，并判断更新R和C。例如<code>aabcd</code>： <span class="math inline">\(i=0\)</span>，<span class="math inline">\(R=-1\)</span> 时，初次更新<span class="math inline">\(R = 1\)</span>（<span class="math inline">\(i = 0\)</span>字符<code>a</code>的最长回文右边界下标0的右一位），<span class="math inline">\(C = 0\)</span></p>
 <p>​ <strong>分支2</strong>：<span class="math inline">\(i \leq R\)</span> ​时，也就是说当前<span class="math inline">\(i\)</span>下标的字符已经在某个字符的回文半径覆盖中，该分支存在三种情况，解释三种情况前，需要先理解以下模型：</p>
 <p><img src="https://bn1302files.storage.live.com/y4m0spStSoeBKZgQEN5EPmqO7BWGCUrnE9Jdgt_sjDbM0klNjWarGifs-eQNP_iSFUIFr5_KoF1FkNOsoIrDz9TzRBPDMNaoRRw1bORZ9rezm0VCHQwXyScmjXr6JBZyT4bwZRxdjENvoZrJIKxz-SXjpTCe6gt5Ub7UJQTaLYD8lOMJCT0fvOTI2Dd21XszPZR?width=2908&amp;height=694&amp;cropmode=none" /></p>
 <p><span class="math inline">\(L\)</span>是当前<span class="math inline">\(R\)</span>关于<span class="math inline">\(C\)</span>的对称点，<span class="math inline">\(i&#39;\)</span>是<span class="math inline">\(i\)</span>关于<span class="math inline">\(C\)</span>的对称点，因此<span class="math inline">\(i&#39; = 2*C - i\)</span>，并且因为从左至右遍历<span class="math inline">\(i\)</span>，所以<span class="math inline">\(i&#39;\)</span>的回文区域是前面已知的（信息保存在半径数组<span class="math inline">\(P[i&#39;]\)</span>中）。我们可以依赖该信息判断是否进行加速。</p>
 <p>​ <strong>情况1</strong>：<span class="math inline">\(i&#39;\)</span>的回文区域在<span class="math inline">\(LR\)</span>的内部，因为<strong>整个LR就是一个回文串</strong>，我们可以直接得出<span class="math inline">\(i\)</span>的回文直径与<span class="math inline">\(i&#39;\)</span>相同。</p>
-<figure>
-<img src="https://bn1302files.storage.live.com/y4m5z_cMuSfhvl5jURn9fR2x7P3DngAn9E_jbCoowLknyySREMk1z4Odyeu8W5Kcaq1rx_gvmJR7RaSjdMvbCy1G2RQxsTouEGZ3lmuTSyfx4EMZyLjG26eaCCUgB_61Ek3KCP9aHQ7LUwpocgp3IuCTbLpQMDKIsCfLpoF0zap-dJ0UPXy-FECwGe_7oi3fmiC?width=2908&amp;height=694&amp;cropmode=none" alt="" /><figcaption>img</figcaption>
-</figure>
+<p><img src="https://bn1302files.storage.live.com/y4m5z_cMuSfhvl5jURn9fR2x7P3DngAn9E_jbCoowLknyySREMk1z4Odyeu8W5Kcaq1rx_gvmJR7RaSjdMvbCy1G2RQxsTouEGZ3lmuTSyfx4EMZyLjG26eaCCUgB_61Ek3KCP9aHQ7LUwpocgp3IuCTbLpQMDKIsCfLpoF0zap-dJ0UPXy-FECwGe_7oi3fmiC?width=2908&amp;height=694&amp;cropmode=none" /></p>
 <p>​ <strong>情况2</strong>：<span class="math inline">\(i&#39;\)</span>的回文半径左边界超过<span class="math inline">\(L\)</span>，这种情况，仅能保证<span class="math inline">\(i\)</span>的回文半径是<span class="math inline">\(i\)</span>到<span class="math inline">\(R\)</span>。</p>
 <p><img src="https://bn1302files.storage.live.com/y4m_fwOLyuOSYzLvQHhxJSqSMrHKSFwfpK129gv-CIHZMuuDlkIMvkBDVHBmkS2se9c5tQebzU0ZL9Q5lM3iYL-hMEonI0RfqY8I_Un3TfsH2EJOYwbLKshbmbW5h-hsx7l91ZC7qDnkVKslU5ufdrWPUQqM2C9Zvxo4dqtXwnUun-II91rBwFVzvKRAmekGc9l?width=2908&amp;height=694&amp;cropmode=none" /></p>
-<p>​ <strong>情况3</strong>：$i' <span class="math inline">\(的回文区域左边界恰好和\)</span>L<span class="math inline">\(重合，此时\)</span>i<span class="math inline">\(的回文半径至少是\)</span>i<span class="math inline">\(到\)</span>R<span class="math inline">\(，并且回文区域从\)</span>R$继续向外部匹配。</p>
+<p>​ <strong>情况3</strong>：<span class="math inline">\(i&#39;\)</span>的回文区域左边界恰好和<span class="math inline">\(L\)</span>重合，此时<span class="math inline">\(i\)</span>的回文半径至少是<span class="math inline">\(i\)</span>到<span class="math inline">\(R\)</span>，并且回文区域从<span class="math inline">\(R\)</span>继续向外部匹配。</p>
 <p><img src="https://bn1302files.storage.live.com/y4mOVHwa1T7XcdHXi2Kpnfqcet6IF-qUKxfxdZU2S0stIzlyC8GghsIIT31MwPVbr0vfQaWwEaBuxvHw3L0yjY9YEcuo-TXD299JjhSUmw3BrJEMwu9m7oCdVTYDsYVikpjhRJdpZ46RndHBoFARikH4neivtMLKKhpKSkmZ9oZChm6b3myUVIna4QJ3AQd0Pv1?width=2908&amp;height=694&amp;cropmode=none" /></p>
 <h3 id="时间复杂度">时间复杂度</h3>
 <p>Manacher算法时间复杂度为<span class="math inline">\(O(n)\)</span>。我们可以想象下，这就是一个 <span class="math inline">\(i\)</span>在追逐<span class="math inline">\(R\)</span>的游戏，无非两种情况：</p>
