@@ -2466,74 +2466,6 @@ R(\phi^{ij})\begin{bmatrix} u_i \\ v_i\end{bmatrix} - \begin{bmatrix} u_j \\ v_j
 ]]></content>
   </entry>
   <entry>
-    <title>最长回文子串算法——Manacher算法</title>
-    <url>/2020/12/29/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="最长回文子串算法manacher算法">最长回文子串算法——Manacher算法</h1>
-<p><a href="https://zh.wikipedia.org/wiki/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2" target="_blank" rel="noopener">Manacher算法</a>是一个用来查找一个字符串中的<strong>最长回文子串</strong>(不是最长回文序列)的<strong>线性算法</strong>。其优点就是把时间复杂度从暴力算法的<span class="math inline">\(O(n^2)\)</span>优化到<span class="math inline">\(O(n)\)</span>。</p>
-<blockquote>
-<p>Manacher 算法，又被中国程序员戏称为“马拉车”算法</p>
-</blockquote>
-<h2 id="暴力匹配算法">暴力匹配算法</h2>
-<h3 id="暴力匹配算法的原理">暴力匹配算法的原理</h3>
-<p>暴力匹配算法的原理很简单，如下：</p>
-<ol type="1">
-<li>依次向尾部进行遍历，访问一个字符；</li>
-<li>以此字符为中心点向两边扩展，记录该点的最长回文长度；</li>
-<li>取各个字符的回文子串长度的<strong>max</strong>。</li>
-</ol>
-<h3 id="暴力匹配算法存在的问题">暴力匹配算法存在的问题</h3>
-<ol type="1">
-<li><p>偶数回文串需要额外修改</p>
-<p>在奇数字符串中，例如 <code>aba</code>，对应的回文长度是 <code>131</code>。而例如<code>abba</code>，以使用中心扩展的比较原则下计算出来的回文长度是 <code>1111</code>，我们对奇数回文串求出了正确答案，但是在偶数回文串上并没有得到我们想要的结果，需要针对偶数情况进行额外修改。</p></li>
-<li><p>时间复杂度<span class="math inline">\(O(n^2)\)</span></p>
-<p>外层需要遍历每一个字符，而每到一个新字符就需要向两边扩展比对，所以时间复杂度达到了O(<span class="math inline">\(n*n\)</span>)。</p></li>
-</ol>
-<p><strong>Manacher算法本质上也是基于暴力匹配的方法，只不过做了一点简单的预处理，且在扩展时提供了加速</strong></p>
-<h2 id="manacher算法的预处理">Manacher算法的预处理</h2>
-<p>Manacher算法对偶数字符串做了预处理，这个预处理可以巧妙的让所有（包括奇和偶）字符串都变为奇数回文串。操作实现也很简单，就是将原字符串的<strong>首部</strong>和<strong>尾部</strong>以及<strong>每两个字符间</strong>插入一个特殊字符（假设为<code>#</code>号），这个字符不会影响最终的结果，这一步预处理操作后的效果就是原字符串的长度从<span class="math inline">\(n\)</span>改变成了<span class="math inline">\(2n+1\)</span>。比如我们的原字符串是 <code>abba</code>，假设预处理后的字符串是 <code>#a#b#b#a#</code>，我们在任意一个点，比如字符 <code>#</code>，向两端匹配只会出现原始字符匹配原始字符，<code>#</code>匹配 <code>#</code> 的情况，不会出现<strong>原字符串字符</strong>与<strong>特殊字符</strong>匹配的情况，这样就能保证我们不会改变原字符串的匹配规则。该预处理得到进行下一步扩展的字符串，并且从预处理后的字符串得到的最长回文字符串的长度除以<span class="math inline">\(2\)</span>就是原字符串的最长回文子串长度，也就是我们想要得到的结果。</p>
-<h2 id="manacher算法核心">Manacher算法核心</h2>
-<h3 id="概念">概念</h3>
-<ul>
-<li><p><code>ManacherString</code>：经过Manacher预处理的字符串，以下的概念都是基于ManasherString产生的。</p></li>
-<li><p>回文半径：经过处理后的字符串的长度一定是奇数，回文半径就是以回文中心字符的回文子串长度的一半。</p></li>
-<li><p>回文直径：<span class="math inline">\(回文半径*2-1\)</span>。</p></li>
-<li><p>最右回文边界<span class="math inline">\(R\)</span>：遍历字符串时，每个字符的最长回文子串都会有个<strong>右</strong>边界，而<span class="math inline">\(R\)</span>则是所有已知右边界中最右的位置。R值保持单增。</p></li>
-<li><p>回文中心<span class="math inline">\(C\)</span>：取得当前<span class="math inline">\(R\)</span>的上一次更新时候的回文中心。</p></li>
-<li><p>半径数组<span class="math inline">\(P[]\)</span>：该数组记录原字符每一个字符对应的最长回文半径。</p></li>
-</ul>
-<h3 id="算法流程">算法流程</h3>
-<p><strong>步骤1</strong>：将原字符串转换为<code>ManacherString</code>，定义为<span class="math inline">\(S\)</span></p>
-<p><strong>步骤2</strong>：<span class="math inline">\(R\)</span>和<span class="math inline">\(C\)</span>的初始值为<span class="math inline">\(-1\)</span>，创建半径数组<span class="math inline">\(P[]\)</span></p>
-<ul>
-<li>存在与概念相差的小偏差，<span class="math inline">\(R\)</span>实际是最右边界位置的右一位。</li>
-</ul>
-<p><strong>步骤3</strong>：开始从下标<span class="math inline">\(i = 0\)</span>到<span class="math inline">\(len(S) - 1\)</span>，去遍历字符串<span class="math inline">\(S\)</span></p>
-<p>后续存在多个分支，总览如下：</p>
-<p><img src="https://bn1302files.storage.live.com/y4m4lenB_vlduxvMUPWqla-dL_vKxzn7HEgh9CNBwG5ql630nWBNCtqVZKfe3zs8quS9c4gfMDa4-hjmQg4pHdmadd-GUrOO3TQhFYrfSRJQ6r3Q8O9qbz2amtfzTwNf33YwXzmIXeSg7_caW3Hi3aJ-lRZtL12PeYU-aHvOIIIbijQa2y2xyjy_Pj2_oTHSGod?width=882&amp;height=289&amp;cropmode=none" /></p>
-<p>​ <strong>分支1</strong>：当 <span class="math inline">\(i &gt; R\)</span> 时，暴力匹配当前i位置字符的最长回文长度，并判断更新R和C。例如<code>aabcd</code>： <span class="math inline">\(i=0\)</span>，<span class="math inline">\(R=-1\)</span> 时，初次更新<span class="math inline">\(R = 1\)</span>（<span class="math inline">\(i = 0\)</span>字符<code>a</code>的最长回文右边界下标0的右一位），<span class="math inline">\(C = 0\)</span></p>
-<p>​ <strong>分支2</strong>：<span class="math inline">\(i \leq R\)</span> ​时，也就是说当前<span class="math inline">\(i\)</span>下标的字符已经在某个字符的回文半径覆盖中，该分支存在三种情况，解释三种情况前，需要先理解以下模型：</p>
-<p><img src="https://bn1302files.storage.live.com/y4m0spStSoeBKZgQEN5EPmqO7BWGCUrnE9Jdgt_sjDbM0klNjWarGifs-eQNP_iSFUIFr5_KoF1FkNOsoIrDz9TzRBPDMNaoRRw1bORZ9rezm0VCHQwXyScmjXr6JBZyT4bwZRxdjENvoZrJIKxz-SXjpTCe6gt5Ub7UJQTaLYD8lOMJCT0fvOTI2Dd21XszPZR?width=2908&amp;height=694&amp;cropmode=none" /></p>
-<p><span class="math inline">\(L\)</span>是当前<span class="math inline">\(R\)</span>关于<span class="math inline">\(C\)</span>的对称点，<span class="math inline">\(i&#39;\)</span>是<span class="math inline">\(i\)</span>关于<span class="math inline">\(C\)</span>的对称点，因此<span class="math inline">\(i&#39; = 2*C - i\)</span>，并且因为从左至右遍历<span class="math inline">\(i\)</span>，所以<span class="math inline">\(i&#39;\)</span>的回文区域是前面已知的（信息保存在半径数组<span class="math inline">\(P[i&#39;]\)</span>中）。我们可以依赖该信息判断是否进行加速。</p>
-<p>​ <strong>情况1</strong>：<span class="math inline">\(i&#39;\)</span>的回文区域在<span class="math inline">\(\overline{LR}\)</span>的内部，因为<strong>整个<span class="math inline">\(\overline{LR}\)</span>就是一个回文串</strong>，我们可以直接得出<span class="math inline">\(i\)</span>的回文直径与<span class="math inline">\(i&#39;\)</span>相同。</p>
-<p><img src="https://bn1302files.storage.live.com/y4m5z_cMuSfhvl5jURn9fR2x7P3DngAn9E_jbCoowLknyySREMk1z4Odyeu8W5Kcaq1rx_gvmJR7RaSjdMvbCy1G2RQxsTouEGZ3lmuTSyfx4EMZyLjG26eaCCUgB_61Ek3KCP9aHQ7LUwpocgp3IuCTbLpQMDKIsCfLpoF0zap-dJ0UPXy-FECwGe_7oi3fmiC?width=2908&amp;height=694&amp;cropmode=none" /></p>
-<p>​ <strong>情况2</strong>：<span class="math inline">\(i&#39;\)</span>的回文半径左边界超过<span class="math inline">\(L\)</span>，这种情况，仅能保证<span class="math inline">\(i\)</span>的回文半径是<span class="math inline">\(i\)</span>到<span class="math inline">\(R\)</span>。</p>
-<p><img src="https://bn1302files.storage.live.com/y4m_fwOLyuOSYzLvQHhxJSqSMrHKSFwfpK129gv-CIHZMuuDlkIMvkBDVHBmkS2se9c5tQebzU0ZL9Q5lM3iYL-hMEonI0RfqY8I_Un3TfsH2EJOYwbLKshbmbW5h-hsx7l91ZC7qDnkVKslU5ufdrWPUQqM2C9Zvxo4dqtXwnUun-II91rBwFVzvKRAmekGc9l?width=2908&amp;height=694&amp;cropmode=none" /></p>
-<p>​ <strong>情况3</strong>：<span class="math inline">\(i&#39;\)</span>的回文区域左边界恰好和<span class="math inline">\(L\)</span>重合，此时<span class="math inline">\(i\)</span>的回文半径至少是<span class="math inline">\(i\)</span>到<span class="math inline">\(R\)</span>，并且回文区域从<span class="math inline">\(R\)</span>继续向外部匹配。</p>
-<p><img src="https://bn1302files.storage.live.com/y4mOVHwa1T7XcdHXi2Kpnfqcet6IF-qUKxfxdZU2S0stIzlyC8GghsIIT31MwPVbr0vfQaWwEaBuxvHw3L0yjY9YEcuo-TXD299JjhSUmw3BrJEMwu9m7oCdVTYDsYVikpjhRJdpZ46RndHBoFARikH4neivtMLKKhpKSkmZ9oZChm6b3myUVIna4QJ3AQd0Pv1?width=2908&amp;height=694&amp;cropmode=none" /></p>
-<h3 id="时间复杂度">时间复杂度</h3>
-<p>Manacher算法时间复杂度为<span class="math inline">\(O(n)\)</span>。我们可以想象下，这就是一个 <span class="math inline">\(i\)</span>在追逐<span class="math inline">\(R\)</span>的游戏，无非两种情况：</p>
-<ol type="1">
-<li><span class="math inline">\(R\)</span>不动，同时<span class="math inline">\(i\)</span>向右追一步。（花<span class="math inline">\(O(1)\)</span>时间计算<span class="math inline">\(P[i]\)</span>）</li>
-<li><span class="math inline">\(R\)</span>继续往右走几步，同时<span class="math inline">\(i\)</span>追上一步。（所谓更新<span class="math inline">\(R\)</span>，更新<span class="math inline">\(C\)</span>）</li>
-</ol>
-<p>当<span class="math inline">\(R\)</span>到达最右边界以后，就剩下<span class="math inline">\(i\)</span>一步一步追上来。</p>
-<p>因此，<strong>每个字符最多被访问两次</strong>，一次被<span class="math inline">\(R\)</span>经过，一次被追赶的<span class="math inline">\(i\)</span>经过。所以时间复杂度是<span class="math inline">\(O(2*(2n+1)) = O(n)\)</span>。</p>
-<h2 id="代码">代码</h2>
-<p>代码引用自我的github仓库地址：<a href="https://github.com/smilelc3/leetcode_go/blob/master/longest-palindromic-substring/longest-palindromic-substring.go" target="_blank" rel="noopener">longest-palindromic-substring/longest-palindromic-substring.go</a></p>
-<p>有关题目可参考Leetcode题目：<code>Longest Palindromic Substring</code> <a href="https://leetcode.com/problems/longest-palindromic-substring/" target="_blank" rel="noopener">链接</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>条形码code128编码规则</title>
     <url>/2019/04/09/%E6%9D%A1%E5%BD%A2%E7%A0%81code128%E7%BC%96%E7%A0%81%E8%A7%84%E5%88%99/</url>
     <content><![CDATA[<blockquote>
@@ -4141,6 +4073,138 @@ R(\phi^{ij})\begin{bmatrix} u_i \\ v_i\end{bmatrix} - \begin{bmatrix} u_j \\ v_j
 <p>使用命令：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">hexo clean &amp; hexo d -g		# hexo g 生成webapp应用		# hexo d 部署</span><br></pre></td></tr></table></figure>
 <p>就可以发布到GitHub上啦！😉</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>数据库SQL JOINS笔记汇总</title>
+    <url>/2021/04/01/%E6%95%B0%E6%8D%AE%E5%BA%93SQL%20JOINS%E7%AC%94%E8%AE%B0%E6%B1%87%E6%80%BB/</url>
+    <content><![CDATA[<h1 id="数据库sql-joins笔记汇总">数据库SQL JOINS笔记汇总</h1>
+<p>可见下图，一共包括7种连接</p>
+<p><img src="https://bn1302files.storage.live.com/y4ml-a19aAjxsl_hpR7iahqm2CZfWTZnfCmVtTv_5RDlrOUb6_3SXp8Rqj26jCfrqWkl4pt0eOrlHKnpjk0M1cl2xwR_aedBCqqhBhO4z409YsMV009ml7JlWw74AO9DlWEHrLs1ctF_YqJFQerWYpuCcsn_KRJ_QTq-pA56bt2eFbDgdevnE6-HQEWrj7YX8UG?width=1447&height=1023&cropmode=none" style="zoom:50%;" /></p>
+<ol type="1">
+<li>内连接——inner join</li>
+<li>左连接（左外连接）——left join(left outer join)</li>
+<li>右连接（右外连接）——right join(right outer join)</li>
+<li>左连接不包含内连接——left join excluding inner join</li>
+<li>右连接不包含内连接——right join excluding inner join</li>
+<li>全连接（全外连接）——full join(full outer join)</li>
+<li>全连接不包含内连接——full outer join excluding inner join</li>
+</ol>
+<h3 id="创建测试数据">创建测试数据</h3>
+<p>以下SQL目的在于创建用于测试的<code>test</code>数据集，并创建<code>user_info</code>和<code>mail_info</code>两个信息表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">drop database if exists test;</span><br><span class="line"></span><br><span class="line">create database &#96;test&#96; default character set utf8mb4 collate utf8mb4_unicode_ci;</span><br><span class="line"></span><br><span class="line">use test;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">create table user_info</span><br><span class="line">(</span><br><span class="line">    user_id int auto_increment comment &#39;用户ID&#39;</span><br><span class="line">        primary key,</span><br><span class="line">    name    varchar(20)   not null comment &#39;用户名&#39;,</span><br><span class="line">    lv      int default 1 not null comment &#39;等级&#39;</span><br><span class="line">)</span><br><span class="line">    comment &#39;用户信息表&#39;;</span><br><span class="line"></span><br><span class="line">create table mail_info</span><br><span class="line">(</span><br><span class="line">    mail_id int auto_increment comment &#39;邮件ID&#39;</span><br><span class="line">        primary key,</span><br><span class="line">    title   varchar(50) not null comment &#39;邮件标题&#39;,</span><br><span class="line">    user_id int         not null comment &#39;user_info.user_id外键（不设约束）&#39;</span><br><span class="line">)</span><br><span class="line">    comment &#39;邮件信息表&#39;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">insert into user_info(user_id, name, lv)</span><br><span class="line">values (1001, &#39;Bill&#39;, 100),</span><br><span class="line">       (1002, &#39;William&#39;, 220),</span><br><span class="line">       (1003, &#39;Joseph&#39;, 80);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">insert into mail_info(mail_id, title, user_id)</span><br><span class="line">values (1, &#39;Happy Birthday&#39;, 1002),</span><br><span class="line">       (2, &#39;Congrats on obtaining&#39;, 1006),</span><br><span class="line">       (3, &#39;Enjoy Charm Beach&#39;, 1010);</span><br></pre></td></tr></table></figure>
+<p><strong>user_id表</strong>： <img src="https://bn1302files.storage.live.com/y4mFxENt8x8LzB0Ycu7d8HE3vddmI74XMrLISt666Imo4_lKCfVmXeOv0qvV55417xMBaTulH1k2r9Db_hgGoEGDitvuf3JKxchJCcXdke9tUfk1Q431RSll4FJqZagpYz2lgGqAQiEYPFeVge-q3ZlXRJR8hvbiwmcO7j9E_AL_-hbPWouc2Ch4qbMG5H8tFHP?width=440&amp;height=120&amp;cropmode=none" /></p>
+<p><strong>mail_id表</strong> ：<img src="https://bn1302files.storage.live.com/y4m71V-ifyjtqQOY_PbyoWbqUNuX6j5F6HXloPpa7wE9Ly7cxZKXGpiCGbYYkDGKhfv4jraT6FYpOKuoEQGNzS4VID0o9G30HpChoxLLFE26bqfOiORFy3Wvaskeam1KwB6XbqHkbd-817XT7BmNXcdy7L9cpNeXLDdtD-X5QojW-jZvOUyz6gqgDlXmRo-rN8m?width=647&amp;height=121&amp;cropmode=none" /></p>
+<h2 id="内连接inner-join">内连接——inner join</h2>
+<p>内连接是一种一一映射关系，就是两张表都有的才能显示出来 用韦恩图表示是两个集合的交集，如图：</p>
+<p><img src="https://bn1302files.storage.live.com/y4mcNEzK4KT1jV95J413vocVBiTTMROhdUHWPmf4FFk5aBG98ZftmmeYURS5ttg9tGbH64RK8p94t6Iw-Mt3QbzBgRn6JN6nQRN0Cdh3VNDOUaKOlbOQNqguM9weuhmvsenmedbH_BZG-WpOe6f2v-PuOrgGR9EP-n_L38ukaYreuvEySvUfmMCm19Le9t_5NW3?width=305&height=288&cropmode=none" style="zoom: 67%;" /></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 内连接</span><br><span class="line">select ui.user_id, ui.name, ui.lv, mi.mail_id, mi.title, mi.user_id</span><br><span class="line">from user_info as ui</span><br><span class="line">         inner join mail_info as mi on ui.user_id &#x3D; mi.user_id;</span><br></pre></td></tr></table></figure>
+<p>查询结果</p>
+<p><img src="https://bn1302files.storage.live.com/y4myOnEDiAHjfgBjnUevME0XnV8utE-WiZKxGWy-KCCsIjTYeSRcZo1jzKyqJWvahcX1q4GikchTjnELrrz87S0njh9G6PtGi5RNr64HlbshsMY024O1TvajVia0he116kiJCLWB9bi-G6wikMfEG5GE1GoXV5n_O1k8RboVsldMkACXCYEbjKtbX6R9KDVLeY5?width=1114&height=63&cropmode=none"  /></p>
+<h2 id="左连接左外连接left-joinleft-outer-join">左连接（左外连接）——left join(left outer join)</h2>
+<p>左连接是左边表的所有数据都有显示出来，右边的表数据只显示共同有的那部分，没有对应的部分只能补空显示，所谓的左边表其实就是指放在left join的左边的表 用韦恩图表示如下：</p>
+<p><img src="https://bn1302files.storage.live.com/y4mwErLWWdMAnohIcwvi0WY71TEQ5DH5hHqHaRR0_gy8kUM4jOJ0YR0QTwLUCV5PHDlyzTem0HEl4XtvU8xLr3PdCMYnWaL0DmV52uz3oprpJ6QzHWxSOOrldwb8Qplm2_CLq0pNbc0sS4obzriirsiCokBog7S1bPBiNEMCCgLSMjazEnotridhGp7t_cFNqzw?width=400&height=266&cropmode=none" style="zoom:67%;" /></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 左连接</span><br><span class="line">select ui.user_id, ui.name, ui.lv, mi.mail_id, mi.title, mi.user_id</span><br><span class="line">from user_info as ui</span><br><span class="line">         left join mail_info mi on ui.user_id &#x3D; mi.user_id;</span><br></pre></td></tr></table></figure>
+<p>查询结果</p>
+<p><img src="https://bn1302files.storage.live.com/y4m7HqYNDnOgJU-EL_KYbG4LNnRjeArMQxjiHDSzMcsLuhNTdezD25T4e46F7sxKKWyc7dCvVr8CZSw2eK6jE3PzDSxEaJrZTl3G510n0R96GugbaLf95Nw00VIrb8bNsLUQCi08sV22Mts7kMUbCPE9mGYO5CGst0VSRFT3fLWGMGzmffIRtHM4IL1p9xDBGYb?width=1116&height=118&cropmode=none"  /></p>
+<h2 id="右连接右外连接right-joinright-outer-join">右连接（右外连接）——right join(right outer join)</h2>
+<p>右连接正好是和左连接相反的，这里的右边也是相对right join来说的，在这个右边的表就是右表 用韦恩图表示如下：</p>
+<p><img src="https://bn1302files.storage.live.com/y4mp9w3Xf8nX_dmo3h3-_DRA5XT1xh3K2fyxvVOuPKE_QLdz2mLmZsox_Kq1tUranho0PZHb9VOM--k94ru0eynbKlP5YZ2C5un0xiKDH_MM7mc88nAtQTaA_EaXZXgUDItVbo3JhtZoySTcZOWd1lAXHHW1WHZkwG2qSznoH4BXVeIRdFOy8d1XH61sMmb7IV7?width=423&height=271&cropmode=none" style="zoom:67%;" /></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 右连接</span><br><span class="line">select ui.user_id, ui.name, ui.lv, mi.mail_id, mi.title, mi.user_id</span><br><span class="line">from user_info as ui</span><br><span class="line">         right join mail_info mi on ui.user_id &#x3D; mi.user_id;</span><br></pre></td></tr></table></figure>
+<p>查询结果：</p>
+<p><img src="https://bn1302files.storage.live.com/y4miIi57-xaj3G-xKiAeYZtzhxdsWV1g6NLzqlgJtwu81J1uYhYU1EnDwBat1r7BuUB7OPEEHPFRPtoCj2yKk7QRU4nkS44TsMKBUtT2epT11grmVZUhvYM63uqzHMXVg75Tsrr53u3FB2fV8Ivda2C0FFEBLp-hm9DNs6V_XwMcVjFPyINhQvGn5wRb8A7JRGG?width=1115&height=118&cropmode=none"  /></p>
+<h2 id="左连接不包含内连接left-join-excluding-inner-join">左连接不包含内连接——left join excluding inner join</h2>
+<p>这个查询是只查询左边表有的数据，共同有的也不查出来 韦恩图表示如下：</p>
+<p><img src="https://bn1302files.storage.live.com/y4mrZy5sN5MgtOYA-1TxBKBFMYZTw_T1xXRU38BD5NnsI_WpRuT-AtqGd1ixGabjwNku7wPauYmbHvj3qnxNLXBTrLfClms2RfmPkfL0llpXRgY76_FgRApESRsSAjh452cVEhhEbBi1mnHZDGclT9NYhBr6h7FqsWHbK2Nu3X7HJum82YCXBz6E_stc1lbznze?width=447&height=188&cropmode=none" style="zoom:67%;" /></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 左连接不包含内连接</span><br><span class="line">select ui.user_id, ui.name, ui.lv, mi.mail_id, mi.title, mi.user_id</span><br><span class="line">from user_info as ui</span><br><span class="line">         left join mail_info mi on ui.user_id &#x3D; mi.user_id</span><br><span class="line">where mi.user_id is null;</span><br></pre></td></tr></table></figure>
+<p>查询结果：</p>
+<p><img src="https://bn1302files.storage.live.com/y4mFaq47lY7Q93tEH3Og02UvNBcymuh1Hqnb7ibCxL8EGse2LKhJQ_K3Ceo1XPK3LnQQtOmrTyjHdApQBPpKTbSn5vrWdk7HGKfRJPQHhASSZp0_RNWE8n8QDljlkPgRvrZW030bUFmNzV3_opaKR0I3TuSzqo99r_gbmBQe2tJLolTtAOByS4kb9KBVZjdnc_N?width=985&height=90&cropmode=none"  /></p>
+<h2 id="右连接不包含内连接right-join-excluding-inner-join">右连接不包含内连接——right join excluding inner join</h2>
+<p>右连接正好是和左连接相反的，这里的右边也是相对right join来说的，在这个右边的表就是右表 用韦恩图表示如下：</p>
+<p><img src="https://bn1302files.storage.live.com/y4m50wuAU-1bGfnAx8Q_u7JHps_CtBT7a7uZWuM9nwrfTYk-ubsUuf4mrh1Zn2p1LfSN1mihr3PyRPDva89Y49Iqdy-x4RdaPKL0RdlreFoSa6zlJMOulXMxUmN7j8r-UfCm4FdF4D56QTIOhESOvlvWeCqMo55XjwKEjqep6y34qUVXM7QQqrdZraSNbxF5MxQ?width=463&height=196&cropmode=none" style="zoom:67%;" /></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 右连接不包含内连接</span><br><span class="line">select ui.user_id, ui.name, ui.lv, mi.mail_id, mi.title, mi.user_id</span><br><span class="line">from user_info as ui</span><br><span class="line">         right join mail_info mi on ui.user_id &#x3D; mi.user_id</span><br><span class="line">where ui.user_id is null;</span><br></pre></td></tr></table></figure>
+<p>查询结果：</p>
+<p><img src="https://bn1302files.storage.live.com/y4mrZaV-Em2z121z03lKaVxjjHEpSvTb614KCGqTBDTPOOseFNoDFvd4VtekVu6dUjIGZNzQlBbr7jReqvKELp-X6WMGSxkH5OXCL5xAWyWWbiLQrijVt_Fv4VsiMywcYGy31u31OjdfdOPb66AU-59NFiQLJ9zIP3dov7uMuegJSg4g3sM6XuJ-izRKNxNr4S0?width=1115&amp;height=90&amp;cropmode=none" /></p>
+<h2 id="全连接全外连接full-joinfull-outer-join">全连接（全外连接）——full join(full outer join)</h2>
+<p>查询出左表和右表所有数据，但是去除两表的重复数据 韦恩图表示如下：</p>
+<p><img src="https://bn1302files.storage.live.com/y4m0xBa9kwogp9sk-CQkSs0fto0Zx7FhZCItFyJBIP_khY7exGOW9hd9uo4ER3EnXrv_jBkr9d6F0FufPXv2xjoob1AQLQIvdtMuZXfdzchwmtnCdSRVYIiJhM-JzJvPZFuGQIiWbiQGqJbkbRo_Nh03sBKXpy4ND8_31mkFQlZRnmZf3CtHn7eoTsID13ayEF9?width=479&height=222&cropmode=none" style="zoom:67%;" /></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 全连接</span><br><span class="line"># mysql 不支持全连接</span><br><span class="line"># select ui.user_id, ui.name, ui.lv, mi.mail_id, mi.title, mi.user_id</span><br><span class="line"># from user_info as ui</span><br><span class="line">#          full join mail_info mi on ui.user_id &#x3D; mi.user_id;</span><br><span class="line"># 用以下方式实现，全链接 &#x3D; 左连接 union 右连接</span><br><span class="line">select ui.user_id, ui.name, ui.lv, mi.mail_id, mi.title, mi.user_id</span><br><span class="line">from user_info as ui</span><br><span class="line">         left join mail_info mi on ui.user_id &#x3D; mi.user_id</span><br><span class="line">union</span><br><span class="line">distinct</span><br><span class="line">select ui.user_id, ui.name, ui.lv, mi.mail_id, mi.title, mi.user_id</span><br><span class="line">from user_info as ui</span><br><span class="line">         right join mail_info mi on ui.user_id &#x3D; mi.user_id;</span><br></pre></td></tr></table></figure>
+<p>查询结果：</p>
+<p><img src="https://bn1302files.storage.live.com/y4miF5rc3Z_Vu8tM-TnJdHShsADNNiRi7QJzNvYsli6PaK59BUnzQHveC2mF-C3vnt9HsquPw6DNib1d1Cv4v8KoFtLamyGU6PrYB6EA2hXi1fYnASx26RnI7eYmt0FxYTSQK0VY67Be1lX1qcByco4nXUGQCY4_8KJWGX94PHNiY6ZI6LPnHvzlNMsBEsQCb5t?width=1115&amp;height=173&amp;cropmode=none" /></p>
+<h2 id="全连接不包含内连接full-outer-join-excluding-inner-join">全连接不包含内连接——full outer join excluding inner join</h2>
+<p>意思就是查询左右表各自拥有的那部分数据 韦恩图表示如下：</p>
+<p><img src="https://bn1302files.storage.live.com/y4mwmEkMFNsF8Igz9QkFgFh7fgsxQx6vAJPEZroX2urfh21tOVS3XYLrawS_nweu95Jw8Ouf-KGMqcxqmBxb2uXSFdKxRPdsvfRBtI43PTILOhTKClXnNePg9ORWKn_7IWHb0DwFlPPRCJ7Hg2Q-KFurCxoE_wZKskvRr4ocW93qUPppQ9CCmGrADdBCa0GAUtM?width=473&height=251&cropmode=none" style="zoom:67%;" /></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 全连接不包含内连接</span><br><span class="line"># select ui.user_id, ui.name, ui.lv, mi.mail_id, mi.title, mi.user_id</span><br><span class="line"># from user_info as ui</span><br><span class="line">#          full join mail_info mi on ui.user_id &#x3D; mi.user_id</span><br><span class="line"># where ui.user_id is null</span><br><span class="line">#    or mi.user_id is null;</span><br><span class="line"># 用以下方式实现，全连接不包含内连接 &#x3D; 左连接不包含内连接 union all 右连接不包含内连接</span><br><span class="line">select ui.user_id, ui.name, ui.lv, mi.mail_id, mi.title, mi.user_id</span><br><span class="line">from user_info as ui</span><br><span class="line">         left join mail_info mi on ui.user_id &#x3D; mi.user_id</span><br><span class="line">where mi.user_id is null</span><br><span class="line">union all</span><br><span class="line">select ui.user_id, ui.name, ui.lv, mi.mail_id, mi.title, mi.user_id</span><br><span class="line">from user_info as ui</span><br><span class="line">         right join mail_info mi on ui.user_id &#x3D; mi.user_id</span><br><span class="line">where ui.user_id is null;</span><br></pre></td></tr></table></figure>
+<p>查询结果：</p>
+<p><img src="https://bn1302files.storage.live.com/y4mAnIKFSpYh3AkaUITySz4QLtIVZzpOahUZs8qdSPfpKoDHk6W7zrA95Rl8XmbAB0P8LiNCaryP3XCght5tR2dOG3xsGKRJgd8GPQuJB4RPEd6061z0ywrM5vCEzi6W24CMSiEzrA2ZYmhNr4T6QHuTcN1FvyPpwD6IR_URsUkxzKdlX8ALGELoBlffBJpjmT8?width=1115&height=146&cropmode=none"  /></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>最长回文子串算法——Manacher算法</title>
+    <url>/2020/12/29/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95%20-%20%E5%89%AF%E6%9C%AC/</url>
+    <content><![CDATA[<h1 id="最长回文子串算法manacher算法">最长回文子串算法——Manacher算法</h1>
+<p><a href="https://zh.wikipedia.org/wiki/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2" target="_blank" rel="noopener">Manacher算法</a>是一个用来查找一个字符串中的<strong>最长回文子串</strong>(不是最长回文序列)的<strong>线性算法</strong>。其优点就是把时间复杂度从暴力算法的<span class="math inline">\(O(n^2)\)</span>优化到<span class="math inline">\(O(n)\)</span>。</p>
+<blockquote>
+<p>Manacher 算法，又被中国程序员戏称为“马拉车”算法</p>
+</blockquote>
+<h2 id="暴力匹配算法">暴力匹配算法</h2>
+<h3 id="暴力匹配算法的原理">暴力匹配算法的原理</h3>
+<p>暴力匹配算法的原理很简单，如下：</p>
+<ol type="1">
+<li>依次向尾部进行遍历，访问一个字符；</li>
+<li>以此字符为中心点向两边扩展，记录该点的最长回文长度；</li>
+<li>取各个字符的回文子串长度的<strong>max</strong>。</li>
+</ol>
+<h3 id="暴力匹配算法存在的问题">暴力匹配算法存在的问题</h3>
+<ol type="1">
+<li><p>偶数回文串需要额外修改</p>
+<p>在奇数字符串中，例如 <code>aba</code>，对应的回文长度是 <code>131</code>。而例如<code>abba</code>，以使用中心扩展的比较原则下计算出来的回文长度是 <code>1111</code>，我们对奇数回文串求出了正确答案，但是在偶数回文串上并没有得到我们想要的结果，需要针对偶数情况进行额外修改。</p></li>
+<li><p>时间复杂度<span class="math inline">\(O(n^2)\)</span></p>
+<p>外层需要遍历每一个字符，而每到一个新字符就需要向两边扩展比对，所以时间复杂度达到了O(<span class="math inline">\(n*n\)</span>)。</p></li>
+</ol>
+<p><strong>Manacher算法本质上也是基于暴力匹配的方法，只不过做了一点简单的预处理，且在扩展时提供了加速</strong></p>
+<h2 id="manacher算法的预处理">Manacher算法的预处理</h2>
+<p>Manacher算法对偶数字符串做了预处理，这个预处理可以巧妙的让所有（包括奇和偶）字符串都变为奇数回文串。操作实现也很简单，就是将原字符串的<strong>首部</strong>和<strong>尾部</strong>以及<strong>每两个字符间</strong>插入一个特殊字符（假设为<code>#</code>号），这个字符不会影响最终的结果，这一步预处理操作后的效果就是原字符串的长度从<span class="math inline">\(n\)</span>改变成了<span class="math inline">\(2n+1\)</span>。比如我们的原字符串是 <code>abba</code>，假设预处理后的字符串是 <code>#a#b#b#a#</code>，我们在任意一个点，比如字符 <code>#</code>，向两端匹配只会出现原始字符匹配原始字符，<code>#</code>匹配 <code>#</code> 的情况，不会出现<strong>原字符串字符</strong>与<strong>特殊字符</strong>匹配的情况，这样就能保证我们不会改变原字符串的匹配规则。该预处理得到进行下一步扩展的字符串，并且从预处理后的字符串得到的最长回文字符串的长度除以<span class="math inline">\(2\)</span>就是原字符串的最长回文子串长度，也就是我们想要得到的结果。</p>
+<h2 id="manacher算法核心">Manacher算法核心</h2>
+<h3 id="概念">概念</h3>
+<ul>
+<li><p><code>ManacherString</code>：经过Manacher预处理的字符串，以下的概念都是基于ManasherString产生的。</p></li>
+<li><p>回文半径：经过处理后的字符串的长度一定是奇数，回文半径就是以回文中心字符的回文子串长度的一半。</p></li>
+<li><p>回文直径：<span class="math inline">\(回文半径*2-1\)</span>。</p></li>
+<li><p>最右回文边界<span class="math inline">\(R\)</span>：遍历字符串时，每个字符的最长回文子串都会有个<strong>右</strong>边界，而<span class="math inline">\(R\)</span>则是所有已知右边界中最右的位置。R值保持单增。</p></li>
+<li><p>回文中心<span class="math inline">\(C\)</span>：取得当前<span class="math inline">\(R\)</span>的上一次更新时候的回文中心。</p></li>
+<li><p>半径数组<span class="math inline">\(P[]\)</span>：该数组记录原字符每一个字符对应的最长回文半径。</p></li>
+</ul>
+<h3 id="算法流程">算法流程</h3>
+<p><strong>步骤1</strong>：将原字符串转换为<code>ManacherString</code>，定义为<span class="math inline">\(S\)</span></p>
+<p><strong>步骤2</strong>：<span class="math inline">\(R\)</span>和<span class="math inline">\(C\)</span>的初始值为<span class="math inline">\(-1\)</span>，创建半径数组<span class="math inline">\(P[]\)</span></p>
+<ul>
+<li>存在与概念相差的小偏差，<span class="math inline">\(R\)</span>实际是最右边界位置的右一位。</li>
+</ul>
+<p><strong>步骤3</strong>：开始从下标<span class="math inline">\(i = 0\)</span>到<span class="math inline">\(len(S) - 1\)</span>，去遍历字符串<span class="math inline">\(S\)</span></p>
+<p>后续存在多个分支，总览如下：</p>
+<p><img src="https://bn1302files.storage.live.com/y4m4lenB_vlduxvMUPWqla-dL_vKxzn7HEgh9CNBwG5ql630nWBNCtqVZKfe3zs8quS9c4gfMDa4-hjmQg4pHdmadd-GUrOO3TQhFYrfSRJQ6r3Q8O9qbz2amtfzTwNf33YwXzmIXeSg7_caW3Hi3aJ-lRZtL12PeYU-aHvOIIIbijQa2y2xyjy_Pj2_oTHSGod?width=882&amp;height=289&amp;cropmode=none" /></p>
+<p>​ <strong>分支1</strong>：当 <span class="math inline">\(i &gt; R\)</span> 时，暴力匹配当前i位置字符的最长回文长度，并判断更新R和C。例如<code>aabcd</code>： <span class="math inline">\(i=0\)</span>，<span class="math inline">\(R=-1\)</span> 时，初次更新<span class="math inline">\(R = 1\)</span>（<span class="math inline">\(i = 0\)</span>字符<code>a</code>的最长回文右边界下标0的右一位），<span class="math inline">\(C = 0\)</span></p>
+<p>​ <strong>分支2</strong>：<span class="math inline">\(i \leq R\)</span> ​时，也就是说当前<span class="math inline">\(i\)</span>下标的字符已经在某个字符的回文半径覆盖中，该分支存在三种情况，解释三种情况前，需要先理解以下模型：</p>
+<p><img src="https://bn1302files.storage.live.com/y4m0spStSoeBKZgQEN5EPmqO7BWGCUrnE9Jdgt_sjDbM0klNjWarGifs-eQNP_iSFUIFr5_KoF1FkNOsoIrDz9TzRBPDMNaoRRw1bORZ9rezm0VCHQwXyScmjXr6JBZyT4bwZRxdjENvoZrJIKxz-SXjpTCe6gt5Ub7UJQTaLYD8lOMJCT0fvOTI2Dd21XszPZR?width=2908&amp;height=694&amp;cropmode=none" /></p>
+<p><span class="math inline">\(L\)</span>是当前<span class="math inline">\(R\)</span>关于<span class="math inline">\(C\)</span>的对称点，<span class="math inline">\(i&#39;\)</span>是<span class="math inline">\(i\)</span>关于<span class="math inline">\(C\)</span>的对称点，因此<span class="math inline">\(i&#39; = 2*C - i\)</span>，并且因为从左至右遍历<span class="math inline">\(i\)</span>，所以<span class="math inline">\(i&#39;\)</span>的回文区域是前面已知的（信息保存在半径数组<span class="math inline">\(P[i&#39;]\)</span>中）。我们可以依赖该信息判断是否进行加速。</p>
+<p>​ <strong>情况1</strong>：<span class="math inline">\(i&#39;\)</span>的回文区域在<span class="math inline">\(\overline{LR}\)</span>的内部，因为<strong>整个<span class="math inline">\(\overline{LR}\)</span>就是一个回文串</strong>，我们可以直接得出<span class="math inline">\(i\)</span>的回文直径与<span class="math inline">\(i&#39;\)</span>相同。</p>
+<p><img src="https://bn1302files.storage.live.com/y4m5z_cMuSfhvl5jURn9fR2x7P3DngAn9E_jbCoowLknyySREMk1z4Odyeu8W5Kcaq1rx_gvmJR7RaSjdMvbCy1G2RQxsTouEGZ3lmuTSyfx4EMZyLjG26eaCCUgB_61Ek3KCP9aHQ7LUwpocgp3IuCTbLpQMDKIsCfLpoF0zap-dJ0UPXy-FECwGe_7oi3fmiC?width=2908&amp;height=694&amp;cropmode=none" /></p>
+<p>​ <strong>情况2</strong>：<span class="math inline">\(i&#39;\)</span>的回文半径左边界超过<span class="math inline">\(L\)</span>，这种情况，仅能保证<span class="math inline">\(i\)</span>的回文半径是<span class="math inline">\(i\)</span>到<span class="math inline">\(R\)</span>。</p>
+<p><img src="https://bn1302files.storage.live.com/y4m_fwOLyuOSYzLvQHhxJSqSMrHKSFwfpK129gv-CIHZMuuDlkIMvkBDVHBmkS2se9c5tQebzU0ZL9Q5lM3iYL-hMEonI0RfqY8I_Un3TfsH2EJOYwbLKshbmbW5h-hsx7l91ZC7qDnkVKslU5ufdrWPUQqM2C9Zvxo4dqtXwnUun-II91rBwFVzvKRAmekGc9l?width=2908&amp;height=694&amp;cropmode=none" /></p>
+<p>​ <strong>情况3</strong>：<span class="math inline">\(i&#39;\)</span>的回文区域左边界恰好和<span class="math inline">\(L\)</span>重合，此时<span class="math inline">\(i\)</span>的回文半径至少是<span class="math inline">\(i\)</span>到<span class="math inline">\(R\)</span>，并且回文区域从<span class="math inline">\(R\)</span>继续向外部匹配。</p>
+<p><img src="https://bn1302files.storage.live.com/y4mOVHwa1T7XcdHXi2Kpnfqcet6IF-qUKxfxdZU2S0stIzlyC8GghsIIT31MwPVbr0vfQaWwEaBuxvHw3L0yjY9YEcuo-TXD299JjhSUmw3BrJEMwu9m7oCdVTYDsYVikpjhRJdpZ46RndHBoFARikH4neivtMLKKhpKSkmZ9oZChm6b3myUVIna4QJ3AQd0Pv1?width=2908&amp;height=694&amp;cropmode=none" /></p>
+<h3 id="时间复杂度">时间复杂度</h3>
+<p>Manacher算法时间复杂度为<span class="math inline">\(O(n)\)</span>。我们可以想象下，这就是一个 <span class="math inline">\(i\)</span>在追逐<span class="math inline">\(R\)</span>的游戏，无非两种情况：</p>
+<ol type="1">
+<li><span class="math inline">\(R\)</span>不动，同时<span class="math inline">\(i\)</span>向右追一步。（花<span class="math inline">\(O(1)\)</span>时间计算<span class="math inline">\(P[i]\)</span>）</li>
+<li><span class="math inline">\(R\)</span>继续往右走几步，同时<span class="math inline">\(i\)</span>追上一步。（所谓更新<span class="math inline">\(R\)</span>，更新<span class="math inline">\(C\)</span>）</li>
+</ol>
+<p>当<span class="math inline">\(R\)</span>到达最右边界以后，就剩下<span class="math inline">\(i\)</span>一步一步追上来。</p>
+<p>因此，<strong>每个字符最多被访问两次</strong>，一次被<span class="math inline">\(R\)</span>经过，一次被追赶的<span class="math inline">\(i\)</span>经过。所以时间复杂度是<span class="math inline">\(O(2*(2n+1)) = O(n)\)</span>。</p>
+<h2 id="代码">代码</h2>
+<p>代码引用自我的github仓库地址：<a href="https://github.com/smilelc3/leetcode_go/blob/master/longest-palindromic-substring/longest-palindromic-substring.go" target="_blank" rel="noopener">longest-palindromic-substring/longest-palindromic-substring.go</a></p>
+<p>有关题目可参考Leetcode题目：<code>Longest Palindromic Substring</code> <a href="https://leetcode.com/problems/longest-palindromic-substring/" target="_blank" rel="noopener">链接</a></p>
 ]]></content>
   </entry>
 </search>
