@@ -175,125 +175,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/09/24/%E8%BF%81%E7%A7%BBwordpress%E5%88%B0DigitalOcean%20%E4%B8%8Bvps%E6%9C%8D%E5%8A%A1%E5%99%A8+%E9%85%8D%E7%BD%AEshdowsocks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/09/24/%E8%BF%81%E7%A7%BBwordpress%E5%88%B0DigitalOcean%20%E4%B8%8Bvps%E6%9C%8D%E5%8A%A1%E5%99%A8+%E9%85%8D%E7%BD%AEshdowsocks/" class="post-title-link" itemprop="url">迁移wordpress到DigitalOcean 下vps服务器+配置shdowsocks</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-09-24 00:00:00" itemprop="dateCreated datePublished" datetime="2017-09-24T00:00:00+08:00">2017-09-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-20 14:40:07" itemprop="dateModified" datetime="2019-03-20T14:40:07+08:00">2019-03-20</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://mu6reg.bn.files.1drv.com/y4mf0iCCWHBi3QaEJSBTdJEV7EhIw-K6LG9F24PfNVHXT3268ojhB34Y_pGqZHbEE2QPPPj8FrmGI4TxnyNzveF1T5IXBDtQLsWWj8N1TBdpkzW8fmkfy6VY5b-bON2MrIrbp2jLyLoLzEjxplLzA5FpEvoQkH7X3eiCKMwJw3VNLXVmhQf1DED691OvOaJcsh2dEfX03hPSjUYkxyyeSjf_Q?width=1024&amp;height=737&amp;cropmode=none" /></p>
-<h1 id="迁移原因">迁移原因</h1>
-<p>原<strong>WordPress</strong>配置在腾讯云的centOS 6.8， 环境为镜像市场一键配置的。当初选择腾讯云的产品，是因为有学生优惠活动，2核/2G/1M带宽/20G硬盘+1年cn域名的使用权（12元每月）。但发现仅仅是做博客网站并不需要这样的配置，且cn域名也并非有我所想的域名。</p>
-<p>一次偶然机会，在知乎上看到介绍国外的一些vps服务器，其中<strong><em>digital ocean</em></strong>（下简称<strong><em>DO</em></strong>）家的服务器最低每月5$ ,折合人民币35元左右，且通过<strong><em>github student packages</em></strong>能获得50 + 他人推荐码10，共60，共60的优惠，相当于第一年完全免费，加上一个国外的独立ip，意味着以前每个月的购买vpn的钱也可以省下来。长远看，还是相当划算。</p>
-<p>因为WordPress的迁移，希望能更有自己的特色，就在阿里云购买的 <em>liuchang.men</em> 的新域名（10年/60元左右）。该域名和DO的服务器都不需要备案，这一点也很重要。（你永远也不知道在腾讯云cn域名备案，用了2个月才完全批下来的痛苦）</p>
-<h1 id="基于docker的wordpress迁移">基于docker的wordpress迁移</h1>
-<p>DO下5$每月配置为：1G单核/512M内存/20G硬盘,整体配置在内存上略有缩水，但确实够用。带宽并未在官网列出，经过测试，大概有4M（500k/s）的上下行速度（美国纽约），这一点也为搭建<em>shadowsocks</em>提供了一个硬件基础。</p>
-<p>以前服务器初次搭建WordPress时，本是Ubuntu下从零搭建，但发现极其繁琐，后通过镜像商场直接选择已有的镜像，但系统为centOS，自己不太熟悉。此次，在网上充分查阅后，发现基于docker的安装相当简单。</p>
-<h2 id="镜像选择">镜像选择</h2>
-<p>镜像选择Docker on 16.04 ，下列镜像本来有WordPress，但需要40G硬盘，不符合我们5$每月的需求</p>
-<h2 id="安装-wordpress-docker-镜像">安装 WordPress Docker 镜像</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker pull eugeneware/docker-wordpress-nginx</span><br></pre></td></tr></table></figure>
-<h2 id="启动-wordpress-容器">启动 WordPress 容器</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建容器</span></span><br><span class="line">sudo docker run -p 80:80 --name docker-wordpress-nginx -d eugeneware/docker-wordpress-nginx	</span><br><span class="line"><span class="comment"># 启动容器</span></span><br><span class="line">docker start docker-wordpress-nginx</span><br></pre></td></tr></table></figure>
-<h2 id="容器开机自启动">容器开机自启动</h2>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run --restart=always  xxxx     		# 创建时参数</span><br><span class="line">docker update --restart=always xxxx         # 若创建时未指定，可后期update</span><br></pre></td></tr></table></figure>
-<h2 id="访问网站-http-ip-配置-wordpress">访问网站 http:// + ip ，配置 WordPress</h2>
-<p>用wordpress自带的导入导出功能进行迁移</p>
-<p><strong>注意</strong>：关于WordPress后台地址被改导致无法登陆后台的简单解决方法</p>
-<p>打开网站根目录下的wp-config.php文件，输入这一行代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">define(&#39;RELOCATE&#39;,true);</span><br></pre></td></tr></table></figure>
-<p>当 <em>RELOCATE</em> 的值为 <em>true</em> 时，就会在你登录后台的时候把 <em>Wordpress</em>（去后台地址）URL改为你当前输入的，这样就可以不用修改数据来重置地址。记得解决后修改。</p>
-<h1 id="基于docker的shadowsocks-配置">基于docker的shadowsocks 配置</h1>
-<p>docker下用虚拟的方式配置一些环境确实方便，下面配置shadowsocks服务端也将基于docker</p>
-<h2 id="安装shadowsocks">安装shadowsocks</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker pull oddrationale/docker-shadowsocks</span><br></pre></td></tr></table></figure>
-<h2 id="配置shadowsocks">配置shadowsocks</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run -d -p 8888:8888 oddrationale/docker-shadowsocks -s 0.0.0.0 -p 8888 -k yourpassword -m aes-256-cfb</span><br></pre></td></tr></table></figure>
-<p><em>其中，-d为后台运行 ， -p为端口映射 ， -s为ip，0.0.0.0为采用默认本机ip， -k 为密码</em></p>
-<h2 id="shadowsocks客户端">shadowsocks客户端</h2>
-<p>附上github上shadowsocks的客户端链接：</p>
-<ul>
-<li><p>widows：<a href="https://github.com/shadowsocks/shadowsocks-windows" target="_blank" rel="noopener" class="uri">https://github.com/shadowsocks/shadowsocks-windows</a></p></li>
-<li><p>android： <a href="https://github.com/shadowsocks/shadowsocks-android" target="_blank" rel="noopener" class="uri">https://github.com/shadowsocks/shadowsocks-android</a></p></li>
-<li><p>ios(未测试)：<a href="https://github.com/herzmut/shadowsocks-iOS" target="_blank" rel="noopener" class="uri">https://github.com/herzmut/shadowsocks-iOS</a></p></li>
-</ul>
-<hr />
-<p><strong>2017-11-17更新:</strong></p>
-<p>原服务器因为未知原因，下行带宽被限制到0.1M，暂迁移到旧金山的DO，可以借助快照迁移完成。</p>
-<p>附一张网速测试图：</p>
-<p><img src="https://mu6seg.bn.files.1drv.com/y4mOyfRyNcgGyg4GXXch10abT0t3pbfhe9P0N0y87_enyTlTHXG2CCv0d6po9bwh4-wsEYNbMtmc1dKvi6Po9GDW6OCaFeEF1NW7LfQ7HfOtslhISNUSCAyr7jrzYFiEiBsvnJ9tDWzMZ83MOJbl6ORgWYXbSwxxbfFFmtBDaf_p7LPTApJqnInNbrtQkiJkci8L-YjK9wHtH_oU8knrNqcYg?width=1024&amp;height=986&amp;cropmode=none" /></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/09/20/%E8%A7%86%E5%90%AC%E8%AF%B4%E5%9C%A8%E7%BA%BF%E5%B9%B3%E5%8F%B0%EF%BC%88Unipus%EF%BC%89%E7%BD%91%E9%A1%B5%E6%BC%8F%E6%B4%9E%E7%9A%84%E6%8F%90%E4%BA%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -755,6 +636,101 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/07/09/python+opencv%20%E6%A3%80%E6%B5%8B%E5%92%8C%E8%B7%9F%E8%B8%AA%E8%BF%90%E5%8A%A8%E7%89%A9%E4%BD%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/07/09/python+opencv%20%E6%A3%80%E6%B5%8B%E5%92%8C%E8%B7%9F%E8%B8%AA%E8%BF%90%E5%8A%A8%E7%89%A9%E4%BD%93/" class="post-title-link" itemprop="url">python+opencv 检测和跟踪运动物体</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2017-07-09T00:00:00+08:00">2017-07-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-03-20 12:39:42" itemprop="dateModified" datetime="2019-03-20T12:39:42+08:00">2019-03-20</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="效果展示">效果展示</h1>
+<p><img src="https://me6veg.bn.files.1drv.com/y4mXNOvPBpWRhuLGF_qEHWSpNebSFjWgUBlK51ztBAu9xUtQTevnaXIQLgl8QzU22ZkZTKRI9Zh5zviMdFJBGgqniVWg1BoksWm9tGhkBLMxc1EH5VIPoF9QVa-kIFqrfK7iQ2-GfNXp547jATOrY6t6SVLBKtFZ4Sj6Z8qoFnsCpowqBBt40YX8HmrgkBBtxcXtONkIUfS8M0VBOPmfCHZgA?width=640&amp;height=480&amp;cropmode=none" /></p>
+<p><strong>最终效果视频</strong></p>
+<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124363&amp;authkey=AHrRqWgsnymLWnA" width="320" height="240" frameborder="0" scrolling="no" allowfullscreen>
+</iframe>
+<p><strong>监控+差值+黑白二值图像</strong></p>
+<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124364&amp;authkey=AE4oTGF__5N5jh8" width="320" height="240" frameborder="0" scrolling="no" allowfullscreen>
+</iframe>
+<h1 id="代码">代码</h1>
+<ul>
+<li>该程序<strong>计算量要求较低</strong>，可以部署在<strong>树莓派</strong>类的物联网设备上</li>
+</ul>
+<h2 id="python包配置">python包配置</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install argparse <span class="comment">#用于解析参数</span></span><br><span class="line">sudo pip install imutils <span class="comment">#用于修改图片格式大小</span></span><br><span class="line">sudo apt-get install libopencv-dev  </span><br><span class="line">sudo apt-get install python-opencv  <span class="comment">#安装opencv</span></span><br></pre></td></tr></table></figure>
+<h2 id="python代码">python代码</h2>
+<p>代码写的相当详细，注释的极其详细，不再赘述。（python版本2.7）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"><span class="comment">#必要的包</span></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> imutils</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建参数解释器并解析参数</span></span><br><span class="line">ap = argparse.ArgumentParser()</span><br><span class="line">ap.add_argument(<span class="string">"-v"</span>, <span class="string">"--video"</span>, help=<span class="string">"path to the video file"</span>)</span><br><span class="line">ap.add_argument(<span class="string">"-a"</span>, <span class="string">"--min-area"</span>, type=int, default=<span class="number">1000</span>, help=<span class="string">"minimum area size"</span>)</span><br><span class="line">args = vars(ap.parse_args())</span><br><span class="line"></span><br><span class="line"><span class="comment">#如果video参数为None, 那么我们从摄像头读取数据</span></span><br><span class="line"><span class="keyword">if</span> args.get(<span class="string">"video"</span>, <span class="literal">None</span>) <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    camera = cv2.VideoCapture(<span class="number">0</span>)</span><br><span class="line">    originaltime = time.time()<span class="comment">#记录时间</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    camera = cv2.VideoCapture(args[<span class="string">"video"</span>])</span><br><span class="line"><span class="comment">#初始化视频流的第一帧</span></span><br><span class="line">firstFrame = <span class="literal">None</span></span><br><span class="line">num=<span class="number">0</span></span><br><span class="line"><span class="comment">#遍历视频的每一帧</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">if</span> time.time()-originaltime &lt;= <span class="number">2</span>:  <span class="comment">#等待摄像机开启并稳定</span></span><br><span class="line">        (grabbed, frame) = camera.read()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        (grabbed, frame) = camera.read()</span><br><span class="line">        <span class="comment">#调用camera.read()返回一个２元组。元组第一个值是grabbed，表明是否成功从缓冲中读取frame。元组第二个值为frame本身</span></span><br><span class="line">        text = <span class="string">"not exist"</span></span><br><span class="line">        <span class="comment">#表明正在监控的房间“没有被占领”。如果确实有活动，就更新该字符串</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> grabbed:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="comment">#调整该帧的大小，转换为灰阶图像并且对其进行高斯模糊</span></span><br><span class="line">        frame = imutils.resize(frame, width = <span class="number">500</span>)</span><br><span class="line">        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)<span class="comment">#灰阶图片</span></span><br><span class="line">        gray = cv2.GaussianBlur(gray, (<span class="number">21</span>, <span class="number">21</span>), <span class="number">0</span>)<span class="comment">#高斯模糊</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#如果第一帧是None, 对其进行初始化</span></span><br><span class="line">        <span class="keyword">if</span> firstFrame <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            firstFrame = gray</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#计算当前帧和第一帧的不同</span></span><br><span class="line">        frameDelta = cv2.absdiff(firstFrame, gray)<span class="comment">#两幅图的差的绝对值输出到另一幅图上面来</span></span><br><span class="line"></span><br><span class="line">        thresh = cv2.threshold(frameDelta, <span class="number">25</span>, <span class="number">255</span>, cv2.THRESH_BINARY)[<span class="number">1</span>]<span class="comment">#黑白二值化</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#扩展阈值图像填充孔洞，然后找到阈值图像上的轮廓</span></span><br><span class="line">        thresh = cv2.dilate(thresh, <span class="literal">None</span>, iterations = <span class="number">2</span>)<span class="comment">#图像膨胀</span></span><br><span class="line">        (cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,</span><br><span class="line">                                     cv2.CHAIN_APPROX_SIMPLE</span><br><span class="line">                                     )<span class="comment">#findcontours函数会“原地”修改输入的图像,只检测的外轮廓，仅保存矩形４个顶点</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">#遍历轮廓</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">            <span class="comment">#如果轮廓太小，忽视轮廓</span></span><br><span class="line">            <span class="keyword">if</span> cv2.contourArea(c)&lt;args[<span class="string">"min_area"</span>]:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">#计算轮廓边界，在当前帧中画出该框，并更新text</span></span><br><span class="line">            (x, y, w, h) = cv2.boundingRect(c)</span><br><span class="line">            cv2.rectangle(frame, (x, y), (x + w,y + h), (<span class="number">0</span>, <span class="number">255</span>, <span class="number">255</span>), <span class="number">2</span>)</span><br><span class="line">            text = <span class="string">"exist"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#在当前帧上写文字以及时间戳</span></span><br><span class="line">        cv2.putText(frame, <span class="string">"room stats:&#123;&#125;"</span>.format(text), (<span class="number">10</span>, <span class="number">20</span>),</span><br><span class="line">                    cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.5</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">1</span>)</span><br><span class="line">        cv2.putText(frame, datetime.datetime.now().strftime(<span class="string">"%A %d %B %Y %I:%M:%S%p"</span>),</span><br><span class="line">                    (<span class="number">10</span>, frame.shape[<span class="number">0</span>] - <span class="number">10</span>), cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.4</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#显示当前帧</span></span><br><span class="line">        cv2.imshow(<span class="string">"二值化图像"</span>, thresh)</span><br><span class="line">        cv2.imshow(<span class="string">"差值图像"</span>, frameDelta)</span><br><span class="line">        cv2.imshow(<span class="string">"监控"</span>, frame)</span><br><span class="line">        cv2.waitKey(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#对环境渐变的适应</span></span><br><span class="line">        flag = <span class="literal">True</span><span class="comment">#标记是否值得更新（第一帧）背景帧</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">            <span class="keyword">if</span> cv2.contourArea(c)&gt;args[<span class="string">"min_area"</span>]//<span class="number">4</span>:</span><br><span class="line">                flag = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span>  flag <span class="keyword">is</span> <span class="literal">True</span>:<span class="comment">#新背景＝旧背景＊(1-0.618)＋当前无物体背景＊(0.618)</span></span><br><span class="line">            firstFrame = cv2.addWeighted(firstFrame, <span class="number">1</span><span class="number">-0.618</span>, gray, <span class="number">0.618</span>, <span class="number">0.0</span>)</span><br><span class="line">        <span class="comment">#cv2.imwrite("Security Feed.png", frame)</span></span><br><span class="line">        <span class="comment">#cv2.imwrite("Thresh.png", thresh)</span></span><br><span class="line">        <span class="comment">#cv2.imwrite("Frame delta.png", frameDelta)</span></span><br><span class="line">        <span class="comment">#cv2.waitKey(0)</span></span><br><span class="line"><span class="comment">#清理摄像机资源并关闭打开的窗口</span></span><br><span class="line">camera.release()</span><br><span class="line">cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
@@ -824,7 +800,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
