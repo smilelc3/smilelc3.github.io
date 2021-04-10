@@ -175,6 +175,220 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/07/13/%E4%BD%BF%E7%94%A8shadowsocks-libev%E4%BB%A3%E6%9B%BFshadowsocks-python%EF%BC%8C%E5%B9%B6%E5%BC%80%E5%90%AFipv6%E6%94%AF%E6%8C%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/07/13/%E4%BD%BF%E7%94%A8shadowsocks-libev%E4%BB%A3%E6%9B%BFshadowsocks-python%EF%BC%8C%E5%B9%B6%E5%BC%80%E5%90%AFipv6%E6%94%AF%E6%8C%81/" class="post-title-link" itemprop="url">使用shadowsocks-libev代替shadowsocks-python，并开启ipv6支持</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-13 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-13T00:00:00+08:00">2018-07-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-19 00:26:53" itemprop="dateModified" datetime="2020-04-19T00:26:53+08:00">2020-04-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://nk6qha.bn.files.1drv.com/y4m3_GRonSavOty5OmbA9AmiiLNpsmvxbl_EyfrB85VFM8XZ7x388aCoYa0Ezoyr8E0L7Yiro2RepZjwgD_2qCBh751eHW4HRVbZzNQkBxjO15hx-wpKNxrHcpdtHFm2BTfBCk-3dGAh6rye88SeAtU2acM6rCYI3i-uOeTnFinrw9M5zEvyasNrC2Ct4O0GwJDpENQi-COROkc2kta46MLXw?width=865&amp;height=307&amp;cropmode=none" /></p>
+<h1 id="ubuntu安装shadowsocks-libev">ubuntu安装shadowsocks-libev</h1>
+<p>本有一篇博文写的是使用<code>docker</code>快速部署shadowsocks，但是存在以下问题：</p>
+<ul>
+<li><code>docker</code>部署上是基于<code>python2.7</code>下的<code>shadowsocks</code>包，效率不高；</li>
+<li><code>python</code>（包括2/3）下的<code>shadowsocks</code>包上次更新已经是2015年8月，距今时间过久，存在版本迭代上的一些bug。</li>
+</ul>
+<p>这次的安装使用<code>shadowsocks-libev</code>，其使用C写的ss服务端，附上github项目地址：</p>
+<p><a href="https://github.com/shadowsocks/shadowsocks-libev" target="_blank" rel="noopener" class="uri">https://github.com/shadowsocks/shadowsocks-libev</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install shadowsocks-libev</span><br></pre></td></tr></table></figure>
+<p><strong>相关文件位置说明</strong></p>
+<p>启动文件：<em>/etc/init.d/shadowsocks-libev</em> 配置文件： <em>/etc/shadowsocks-libev/config.json</em> 一些默认启动配置： <em>/etc/default/shadowsocks-libev</em></p>
+<h1 id="编辑shadowsocks参数">编辑shadowsocks参数</h1>
+<p><strong>修改配置文件：</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/shadowsocks-libev/config.json</span><br></pre></td></tr></table></figure>
+<p><strong>修改样例：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"server"</span>:[<span class="string">"[::0]"</span>, <span class="string">"0.0.0.0"</span>],</span><br><span class="line">    <span class="attr">"server_port"</span>:<span class="number">8388</span>,</span><br><span class="line">    <span class="attr">"local_port"</span>:<span class="number">1080</span>,</span><br><span class="line">    <span class="attr">"password"</span>:<span class="string">"PASSWORD"</span>,</span><br><span class="line">    <span class="attr">"timeout"</span>:<span class="number">60</span>,</span><br><span class="line">    <span class="attr">"method"</span>:<span class="string">"aes-256-cfb"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>"server"</code>中：使用<code>["[::0]", "0.0.0.0"]</code>分别监听ipv6、ipv4所有请求 <code>"password"</code>中：修改为所想设置的密码</p>
+<ul>
+<li>注意：以前在<code>shadowsock-python</code>有使用<code>"server":"::"</code>会默认监听ipv4、ipv6，但是该设置在<code>shadowsocks-libev</code>不生效，仅仅监听ipv6</li>
+</ul>
+<h1 id="控制shadowsocks">控制shadowsocks</h1>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo service shadowsocks-libev start    # 重启shadowsocks</span><br><span class="line">sudo service shadowsocks-libev stop     # 关闭shadowsocks</span><br><span class="line">sudo service shadowsocks-libev restart  # 参数改变后重启生效</span><br></pre></td></tr></table></figure>
+<p>查看是否启动，返回结果样例</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ps aux |grep ss-server</span><br><span class="line"></span><br><span class="line">nobody   16623  0.0  0.9  32088  4672 ?        Ss   12:05   0:00 /usr/bin/ss-server -c /etc/shadowsocks-libev/config.json -u</span><br><span class="line">root     16825  0.0  0.2  14856  1068 pts/1    S+   13:12   0:00 grep --color=auto ss-server</span><br></pre></td></tr></table></figure>
+<p>注意：使用shadowsocks的ipv6必须保证双栈（服务器和客户端均启用ipv6）支持。<a href="http://test-ipv6.com/" target="_blank" rel="noopener">附一个ipv6检测网址</a></p>
+<p>本来听说校园网是支持ipv6的，还有可能不限流量，但是……</p>
+<p><img src="https://nk7aha.bn.files.1drv.com/y4mmnGMK5MasCOxys40WUr0_ZpT6X5tMaQL-l3_SVuzJ5Ry-VNFjBOHLGouF4H6ji7kX_QK8tWdFFNYqc2jCCL-pLaz8va_2W5U940tFac6p8OOP6KIlY3QFvVsAs8KkBcOxNwdqWD_vahDH8C-a_JA--XJ97duS76IJLc3zp-GRnXROyFMv3VE5VyN2XW-5FveLcXXL1UEMAr3pZwtpvi9Lw?width=1857&amp;height=655&amp;cropmode=none" /></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/05/12/linux%E4%B8%8B%E7%94%A8idea%E8%B0%83%E8%AF%95java%20web%EF%BC%9A%E7%82%B9%E5%87%BB%E5%9B%BE%E7%89%87%E6%96%87%E5%AD%97%E9%AA%8C%E8%AF%81%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/05/12/linux%E4%B8%8B%E7%94%A8idea%E8%B0%83%E8%AF%95java%20web%EF%BC%9A%E7%82%B9%E5%87%BB%E5%9B%BE%E7%89%87%E6%96%87%E5%AD%97%E9%AA%8C%E8%AF%81%E7%A0%81/" class="post-title-link" itemprop="url">linux下用idea调试java web：点击图片文字验证码</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-05-12 00:00:00" itemprop="dateCreated datePublished" datetime="2018-05-12T00:00:00+08:00">2018-05-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-19 00:21:59" itemprop="dateModified" datetime="2020-04-19T00:21:59+08:00">2020-04-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>11k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://nk7cha.bn.files.1drv.com/y4m_8WGNjeVCCFuK5bH8zdPP-e7aX1sILRkQZv6beiKVZB6lupn37R6s8gpEAz9yadbkxVNgLezuEr4cCQh_1l1uApDhdgSq-Ok9CXyoyePoqf5Mf9zAcdCaMGrdTItALS8U_e2f4fhYOM4izpglx-e1qbDzQrFZeOXXpy_ybErPqVBV5hnMxcsxl3oH8wAbivpl9blL-YH3na5n9PWamAQ6Q?width=382&amp;height=257&amp;cropmode=none" /></p>
+<h1 id="环境说明">环境说明</h1>
+<p><code>Linux</code>环境：<code>deepin 15.5</code> (<code>debian</code> / <code>x64</code>) <code>tomcat</code>：<code>tomcat8</code> <code>IDEA</code>：jetbrain IntelliJ IDEA Ultimate(支持java web环境)</p>
+<h1 id="tomcat-安装配置">tomcat 安装配置</h1>
+<h2 id="安装tomcat8">安装tomcat8</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install tomcat8</span><br></pre></td></tr></table></figure>
+<h2 id="设置tomcat文件权限">设置tomcat文件权限</h2>
+<ul>
+<li>Tomcat home directory : /usr/share/tomcat8</li>
+<li>Tomcat base directory : /var/lib/tomcat8</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/share/tomcat8 &amp;&amp; sudo chmod -R 755 *</span><br><span class="line"><span class="built_in">cd</span> /var/lib/tomcat8 &amp;&amp; sudo chmod -R 755 *</span><br></pre></td></tr></table></figure>
+<h2 id="启用与关闭tomcat">启用与关闭tomcat</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo service tomcat8 start  <span class="comment">#开启tomcat8服务，会占用8080端口</span></span><br><span class="line">sudo service tomcat8 stop   <span class="comment">#关闭tomcat8服务</span></span><br></pre></td></tr></table></figure>
+<h1 id="文件环境">文件环境</h1>
+<p><strong>run/debug 参数</strong></p>
+<p><img src="https://nk7dha.bn.files.1drv.com/y4m97YNN5fRAlnuW3E5CyAS3wAopTBcQyb_Q5RX8HcMZ7w-GYIN-DzeTsOt8kt2iyufjTCcPRYa_ALvhuKn-EO-4mtW-Z7DkcPGvaFA141FbaDhO5EDAZsvgWnmcyHP2ocDN5zFkcrhSGn-2PCcIivY3vkIE5S6ufa8icD_asvvP9pKe4KOhIsS6p07DJbFB4vj_thPqwSCk_5aYZNWsQzkvg?width=1649&amp;height=355&amp;cropmode=none" /></p>
+<p><strong>项目结构</strong></p>
+<p><img src="https://nk7eha.bn.files.1drv.com/y4mnX6FCAfWNHOK8jVoCbYq1pEwCgpHL-Tc-0Tg7KpYa-80lO8HsRRfcwUkJ2nKclLT_zvMTCj7k0sMLOyWgArpAZ_ZN7tjJ-imexRrmMsK42pQI74ddXPHEz-uvhmwfYzQFw0Kt4-tykYtyMGbseGoPHCK-NJmWD4tLdx9N2g3WGex_dAVNTKYpSEgKxEfso-bbXVbOAdSJSkDiDf6THrs7A?width=704&amp;height=259&amp;cropmode=none" /></p>
+<p><img src="https://nk6pha.bn.files.1drv.com/y4msUripqa9FPF9Sb6mVKTjtqiLqzNt9QCq2QX_DOqE4rR5FV6eKsX7P9cN4zB58McaM7MZr_roygivdz_koc6YEOO5bPDHFs2UTFqPJQnbK8uxqR4T15EFv5CNBZwe-DqDf_dF8JsE_UcjVMg0RG_FC1mPG1kGH28d3QLo499atXAI0c3vc5N2dHbA9xRmORJMriLfCYTz8USid2v0sggSfA?width=701&amp;height=192&amp;cropmode=none" /></p>
+<h4 id="文件结构">文件结构</h4>
+<p><img src="https://nk7fha.bn.files.1drv.com/y4m9JJ3La9vART35nSBsBYo4d1tLSKUldGJZ55cjbi-GcB9gNJe3hEw0v0G-s1wrJDeCZWRrcdkNi7ynEbVP-1QuBqp0WarQOCFVt4yBC0AiIYzjcESTxUMh7-jyDTri_Ur-QP7UxKsV6Fj4NkZNuqWMOBzfZ-aJkhA1IIh0auL8jOK5MO-2Itr0j2YKMqV__KXKZUFp3QIxXpqYMIRafHK9w?width=283&amp;height=505&amp;cropmode=none" /></p>
+<p><strong>JcaptchaServlet源码：后端生成验证图片</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.imageio.ImageIO;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> java.awt.*;</span><br><span class="line"><span class="keyword">import</span> java.awt.image.BufferedImage;</span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.UnsupportedEncodingException;</span><br><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JcaptchaServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Random random = <span class="keyword">new</span> Random();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> height = <span class="number">220</span>;  <span class="comment">//图片高</span></span><br><span class="line">        <span class="keyword">int</span> width = <span class="number">220</span>;  <span class="comment">//图片宽</span></span><br><span class="line">        BufferedImage image = <span class="keyword">new</span> BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);</span><br><span class="line">        Graphics2D g =  (Graphics2D) image.getGraphics();</span><br><span class="line">        String picPath= JcaptchaServlet.class.getClassLoader().getResource("../image/"+(random.nextInt(4)+1)+".jpg").getPath();  //读取本地图片，做背景图片</span><br><span class="line">        g.drawImage(ImageIO.read(<span class="keyword">new</span> File(picPath)), <span class="number">0</span>, <span class="number">20</span>, width, height, <span class="keyword">null</span>); <span class="comment">//将背景图片从高度20开始</span></span><br><span class="line">        g.setColor(Color.white);  <span class="comment">//设置颜色</span></span><br><span class="line">        g.drawRect(<span class="number">0</span>, <span class="number">0</span>, width-<span class="number">1</span>, height-<span class="number">1</span>); <span class="comment">//画边框</span></span><br><span class="line"></span><br><span class="line">        g.setFont(<span class="keyword">new</span> Font(<span class="string">"宋体"</span>,Font.BOLD,<span class="number">20</span>)); <span class="comment">//设置字体</span></span><br><span class="line">        Integer x=<span class="keyword">null</span>,y=<span class="keyword">null</span>;  <span class="comment">//用于记录坐标</span></span><br><span class="line">        String target=<span class="keyword">null</span>; <span class="comment">// 用于记录文字</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;  <span class="comment">//随机产生4个文字，坐标，颜色都不同</span></span><br><span class="line">            g.setColor(<span class="keyword">new</span> Color(random.nextInt(<span class="number">50</span>)+<span class="number">200</span>, random.nextInt(<span class="number">150</span>)+<span class="number">100</span>, random.nextInt(<span class="number">50</span>)+<span class="number">200</span>));</span><br><span class="line">            String str=getRandomChineseChar();</span><br><span class="line">            <span class="keyword">int</span> a=random.nextInt(width-<span class="number">100</span>) + <span class="number">50</span>;</span><br><span class="line">            <span class="keyword">int</span> b=random.nextInt(height-<span class="number">70</span>) + <span class="number">55</span>;</span><br><span class="line">            <span class="keyword">if</span>(x==<span class="keyword">null</span>)&#123;</span><br><span class="line">                x=a; <span class="comment">//记录第一个x坐标</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(y==<span class="keyword">null</span>)&#123;</span><br><span class="line">                y=b;<span class="comment">//记录第一个y坐标</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(target==<span class="keyword">null</span>)&#123;</span><br><span class="line">                target=str; <span class="comment">//记录第一个文字</span></span><br><span class="line">            &#125;</span><br><span class="line">            g.drawString(str, a, b);</span><br><span class="line">        &#125;</span><br><span class="line">        g.setColor(Color.white);</span><br><span class="line">        g.drawString(<span class="string">"点击"</span>+target, <span class="number">0</span>,<span class="number">20</span>);<span class="comment">//写入验证码第一行文字  “点击..”</span></span><br><span class="line">        request.getSession().setAttribute(<span class="string">"gap"</span>,x+<span class="string">":"</span>+y);<span class="comment">//将坐标放入session</span></span><br><span class="line">        <span class="comment">//5.释放资源</span></span><br><span class="line">        g.dispose();</span><br><span class="line">        <span class="comment">//6.利用ImageIO进行输出</span></span><br><span class="line">        ImageIO.write(image, <span class="string">"jpg"</span>, response.getOutputStream()); <span class="comment">//将图片输出</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//网上找的，随机产生汉字的方法</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">getRandomChineseChar</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        String str = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">int</span> hs, ls;</span><br><span class="line">        Random random = <span class="keyword">new</span> Random();</span><br><span class="line">        hs = (<span class="number">176</span> + Math.abs(random.nextInt(<span class="number">39</span>)));</span><br><span class="line">        ls = (<span class="number">161</span> + Math.abs(random.nextInt(<span class="number">93</span>)));</span><br><span class="line">        <span class="keyword">byte</span>[] b = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span>];</span><br><span class="line">        b[<span class="number">0</span>] = (<span class="keyword">new</span> Integer(hs).byteValue());</span><br><span class="line">        b[<span class="number">1</span>] = (<span class="keyword">new</span> Integer(ls).byteValue());</span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            str = <span class="keyword">new</span> String(b, <span class="string">"GBk"</span>); <span class="comment">//转成中文</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (UnsupportedEncodingException ex)</span><br><span class="line">        &#123;</span><br><span class="line">            ex.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        doGet(request, response);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Login源码：用于登陆正确与否确认</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpSession;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Servlet implementation class Login</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@WebServlet</span>(<span class="string">"/Login"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Login</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">        response.setContentType(<span class="string">"text/html;charset=utf-8"</span>); <span class="comment">//设置编码</span></span><br><span class="line">        <span class="comment">//获取前端传来的坐标</span></span><br><span class="line"></span><br><span class="line">        String xs=request.getParameter(<span class="string">"x"</span>);</span><br><span class="line">        String ys=request.getParameter(<span class="string">"y"</span>);</span><br><span class="line">        HttpSession session = request.getSession();</span><br><span class="line"></span><br><span class="line">        String str = (String) session.getAttribute(<span class="string">"gap"</span>);<span class="comment">//获取session中的gap</span></span><br><span class="line">        <span class="keyword">if</span>(str==<span class="keyword">null</span>)&#123;</span><br><span class="line">            response.getWriter().write(<span class="string">"验证码超时"</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        String[] split2 = str.split(<span class="string">":"</span>);</span><br><span class="line">        <span class="keyword">int</span> x=    Integer.parseInt(xs);</span><br><span class="line">        <span class="keyword">int</span> y=Integer.parseInt(ys);</span><br><span class="line">        <span class="keyword">int</span> x1=    Integer.parseInt(split2[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">int</span> y1=Integer.parseInt(split2[<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">if</span>(x1-<span class="number">2</span>&lt;x &amp;&amp; x&lt;x1+<span class="number">22</span> &amp;&amp; y1-<span class="number">22</span>&lt;y &amp;&amp; y&lt;y1+<span class="number">2</span>)&#123;  <span class="comment">//若前端上传的坐标在session中记录的坐标的一定范围内则验证成功</span></span><br><span class="line">            response.getWriter().write(<span class="string">"验证成功"</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            response.getWriter().write(<span class="string">"验证失败"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">        doGet(request, response);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>web.xml：servlet配置参数</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attr">xmlns</span>=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee"</span> <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"</span> <span class="attr">id</span>=<span class="string">"WebApp_ID"</span> <span class="attr">version</span>=<span class="string">"3.1"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">display-name</span>&gt;</span>CheckCode<span class="tag">&lt;/<span class="name">display-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">welcome-file-list</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">welcome-file</span>&gt;</span>index.html<span class="tag">&lt;/<span class="name">welcome-file</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">welcome-file</span>&gt;</span>index.htm<span class="tag">&lt;/<span class="name">welcome-file</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">welcome-file</span>&gt;</span>index.jsp<span class="tag">&lt;/<span class="name">welcome-file</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">welcome-file</span>&gt;</span>default.html<span class="tag">&lt;/<span class="name">welcome-file</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">welcome-file</span>&gt;</span>default.htm<span class="tag">&lt;/<span class="name">welcome-file</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">welcome-file</span>&gt;</span>default.jsp<span class="tag">&lt;/<span class="name">welcome-file</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">welcome-file-list</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>captcha<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>JcaptchaServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>Login<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>Login<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>Login<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>*.shtml<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>captcha<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/captcha.svl<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>index.jsp：前端界面</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span> = <span class="string">"zh-CN"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"&#123;pageContext.request.contextPath&#125;/js/jquery.min.js"</span>&gt;</span><span class="actionscript">                  &lt;/span&gt;(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span></span><br><span class="line"><span class="javascript">            &lt;span <span class="class"><span class="keyword">class</span></span>=<span class="string">"katex math inline"</span>&gt;(<span class="string">"#image"</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;                 <span class="keyword">var</span> obj=<span class="keyword">this</span>;                 <span class="keyword">var</span> x=event.offsetX;<span class="comment">//获取点击时鼠标相对图片坐标                 var y=event.offsetY;                 &lt;/span&gt;.ajax(&#123;</span></span></span><br><span class="line"><span class="actionscript">                    url:<span class="string">"login.shtml"</span>, <span class="comment">//ajax提交</span></span></span><br><span class="line"><span class="actionscript">                    type:<span class="string">"post"</span>,</span></span><br><span class="line"><span class="actionscript">                    data:&#123;<span class="string">'x'</span>:x,<span class="string">"y"</span>:y&#125;,</span></span><br><span class="line"><span class="actionscript">                    success:<span class="function"><span class="keyword">function</span><span class="params">(data)</span></span>&#123;</span></span><br><span class="line"></span><br><span class="line">                        alert(data)</span><br><span class="line"><span class="javascript">                        obj.src=obj.src+<span class="string">"?date="</span>+<span class="keyword">new</span> <span class="built_in">Date</span>();</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;)</span><br><span class="line"><span class="handlebars"><span class="xml">        <span class="symbol">&amp;lt;</span>/script<span class="symbol">&amp;gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">    <span class="symbol">&amp;lt;</span>/head<span class="symbol">&amp;gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">    <span class="symbol">&amp;lt;</span>body<span class="symbol">&amp;gt;</span></span></span></span><br><span class="line"><span class="actionscript">        &amp;lt;img id=<span class="string">"image"</span> src=<span class="string">"$&#123;pageContext.request.contextPath&#125;/captcha.svl"</span> style=<span class="string">"cursor: pointer;"</span> &amp;gt;</span></span><br><span class="line"><span class="handlebars"><span class="xml">    <span class="symbol">&amp;lt;</span>/body<span class="symbol">&amp;gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml"><span class="symbol">&amp;lt;</span>/html<span class="symbol">&amp;gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml"><span class="tag">&lt;/<span class="name">code</span>&gt;</span><span class="tag">&lt;/<span class="name">pre</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml"><span class="tag">&lt;<span class="name">li</span>&gt;</span>注意：需要另行配置依赖（位置见结构图）<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">jar包：<span class="tag">&lt;<span class="name">code</span>&gt;</span>javax.servlet-api-4.0.0.jar<span class="tag">&lt;/<span class="name">code</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">jQuery包：<span class="tag">&lt;<span class="name">code</span>&gt;</span>jquery.min.js<span class="tag">&lt;/<span class="name">code</span>&gt;</span>：<span class="tag">&lt;<span class="name">code</span>&gt;</span>v1.11.3<span class="tag">&lt;/<span class="name">code</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">								<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span></span><br><span class="line">			</span><br><span class="line"><span class="javascript">		&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"section section-blog-info"</span>&gt;</span></span><br><span class="line"><span class="javascript">			&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"row"</span>&gt;</span></span><br><span class="line"><span class="javascript">				&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"col-md-6"</span>&gt;</span></span><br><span class="line"><span class="javascript">					&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"entry-categories"</span>&gt;分类：						&lt;span <span class="class"><span class="keyword">class</span></span>=<span class="string">"label label-primary"</span>&gt;<span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://liuchang.men/category/uncategorized/"</span>&gt;</span>未分类<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span>&lt;<span class="regexp">/span&gt;					&lt;/</span>div&gt;</span></span><br><span class="line"><span class="handlebars"><span class="xml">									<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span></span><br><span class="line">				</span><br><span class="line"><span class="javascript">        &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"col-md-6"</span>&gt;</span></span><br><span class="line"><span class="javascript">            &lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"entry-social"</span>&gt;</span></span><br><span class="line"><span class="actionscript">                &lt;a target=<span class="string">"_blank"</span> rel=<span class="string">"tooltip"</span></span></span><br><span class="line"><span class="actionscript">                   data-original-title=<span class="string">"分享到 Facebook"</span></span></span><br><span class="line"><span class="javascript">                   <span class="class"><span class="keyword">class</span></span>=<span class="string">"btn btn-just-icon btn-round btn-facebook"</span></span></span><br><span class="line"><span class="actionscript">                   href=<span class="string">"https://www.facebook.com/sharer.php?u=http://liuchang.men/2018/05/12/linux%e4%b8%8b%e7%94%a8idea%e8%b0%83%e8%af%95java-web%ef%bc%9a%e7%82%b9%e5%87%bb%e5%9b%be%e7%89%87%e6%96%87%e5%ad%97%e9%aa%8c%e8%af%81%e7%a0%81/"</span>&gt;</span></span><br><span class="line"><span class="javascript">                   &lt;i <span class="class"><span class="keyword">class</span></span>=<span class="string">"fa fa-facebook"</span>&gt;&lt;<span class="regexp">/i&gt;</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">                <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span></span><br><span class="line">                </span><br><span class="line"><span class="actionscript">                &lt;a target=<span class="string">"_blank"</span> rel=<span class="string">"tooltip"</span></span></span><br><span class="line"><span class="actionscript">                   data-original-title=<span class="string">"分享至微博"</span></span></span><br><span class="line"><span class="javascript">                   <span class="class"><span class="keyword">class</span></span>=<span class="string">"btn btn-just-icon btn-round btn-twitter"</span></span></span><br><span class="line"><span class="actionscript">                   href=<span class="string">"http://twitter.com/share?url=http://liuchang.men/2018/05/12/linux%e4%b8%8b%e7%94%a8idea%e8%b0%83%e8%af%95java-web%ef%bc%9a%e7%82%b9%e5%87%bb%e5%9b%be%e7%89%87%e6%96%87%e5%ad%97%e9%aa%8c%e8%af%81%e7%a0%81/&amp;#038;text=linux%E4%B8%8B%E7%94%A8idea%E8%B0%83%E8%AF%95java%20web%EF%BC%9A%E7%82%B9%E5%87%BB%E5%9B%BE%E7%89%87%E6%96%87%E5%AD%97%E9%AA%8C%E8%AF%81%E7%A0%81"</span>&gt;</span></span><br><span class="line"><span class="javascript">                   &lt;i <span class="class"><span class="keyword">class</span></span>=<span class="string">"fa fa-twitter"</span>&gt;&lt;<span class="regexp">/i&gt;</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">                <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span></span><br><span class="line">                </span><br><span class="line"><span class="actionscript">                &lt;a rel=<span class="string">"tooltip"</span></span></span><br><span class="line"><span class="actionscript">                   data-original-title=<span class="string">" Share on Email"</span></span></span><br><span class="line"><span class="javascript">                   <span class="class"><span class="keyword">class</span></span>=<span class="string">"btn btn-just-icon btn-round"</span></span></span><br><span class="line"><span class="actionscript">                   href=<span class="string">"mailto:?subject=linux下用idea调试java%20web：点击图片文字验证码&amp;#038;body=http://liuchang.men/2018/05/12/linux%e4%b8%8b%e7%94%a8idea%e8%b0%83%e8%af%95java-web%ef%bc%9a%e7%82%b9%e5%87%bb%e5%9b%be%e7%89%87%e6%96%87%e5%ad%97%e9%aa%8c%e8%af%81%e7%a0%81/"</span>&gt;</span></span><br><span class="line"><span class="javascript">                   &lt;i <span class="class"><span class="keyword">class</span></span>=<span class="string">"fa fa-envelope"</span>&gt;&lt;<span class="regexp">/i&gt;</span></span></span><br><span class="line"><span class="handlebars"><span class="xml">               <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span>			<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">			<span class="tag">&lt;<span class="name">hr</span>&gt;</span></span></span></span><br><span class="line">			</span><br><span class="line"><span class="javascript">&lt;div id=<span class="string">"comments"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"section section-comments"</span>&gt;</span></span><br><span class="line"><span class="javascript">	&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"row"</span>&gt;</span></span><br><span class="line"><span class="javascript">		&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"col-md-12"</span>&gt;</span></span><br><span class="line"><span class="javascript">			&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"media-area"</span>&gt;</span></span><br><span class="line"><span class="javascript">				&lt;h3 <span class="class"><span class="keyword">class</span></span>=<span class="string">"hestia-title text-center"</span>&gt;</span></span><br><span class="line"><span class="handlebars"><span class="xml">									<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">							<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span></span><br><span class="line"><span class="javascript">			&lt;div <span class="class"><span class="keyword">class</span></span>=<span class="string">"media-body"</span>&gt;</span></span><br><span class="line"><span class="javascript">					&lt;div id=<span class="string">"respond"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"comment-respond"</span>&gt;</span></span><br><span class="line"><span class="handlebars"><span class="xml">		<span class="tag">&lt;<span class="name">h3</span> <span class="attr">class</span>=<span class="string">"hestia-title text-center"</span>&gt;</span>发表评论 <span class="tag">&lt;<span class="name">small</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">rel</span>=<span class="string">"nofollow"</span> <span class="attr">id</span>=<span class="string">"cancel-comment-reply-link"</span> <span class="attr">href</span>=<span class="string">"/2018/05/12/linux%e4%b8%8b%e7%94%a8idea%e8%b0%83%e8%af%95java-web%ef%bc%9a%e7%82%b9%e5%87%bb%e5%9b%be%e7%89%87%e6%96%87%e5%ad%97%e9%aa%8c%e8%af%81%e7%a0%81/#respond"</span> <span class="attr">style</span>=<span class="string">"display:none;"</span>&gt;</span>取消回复<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">small</span>&gt;</span><span class="tag">&lt;/<span class="name">h3</span>&gt;</span> <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"pull-left author"</span>&gt;</span> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"avatar"</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">alt</span>=<span class="string">''</span> <span class="attr">src</span>=<span class="string">'http://1.gravatar.com/avatar/783dfac778f4f63a2889a4d32384232c?s=64<span class="symbol">&amp;#038;</span>d=mm<span class="symbol">&amp;#038;</span>r=g'</span> <span class="attr">srcset</span>=<span class="string">'http://1.gravatar.com/avatar/783dfac778f4f63a2889a4d32384232c?s=128<span class="symbol">&amp;#038;</span>d=mm<span class="symbol">&amp;#038;</span>r=g 2x'</span> <span class="attr">class</span>=<span class="string">'avatar avatar-64 photo'</span> <span class="attr">height</span>=<span class="string">'64'</span> <span class="attr">width</span>=<span class="string">'64'</span> /&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span> <span class="tag">&lt;/<span class="name">span</span>&gt;</span>			<span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"http://liuchang.men/wp-comments-post.php"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">id</span>=<span class="string">"commentform"</span> <span class="attr">class</span>=<span class="string">"form media-body"</span>&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml">				<span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"logged-in-as"</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://liuchang.men/wp-admin/profile.php"</span> <span class="attr">aria-label</span>=<span class="string">"已登入为admin。编辑您的个人资料。"</span>&gt;</span>已登入为admin<span class="tag">&lt;/<span class="name">a</span>&gt;</span>。<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://liuchang.men/wp-login.php?action=logout<span class="symbol">&amp;amp;</span>redirect_to=http%3A%2F%2Fliuchang.men%2F2018%2F05%2F12%2Flinux%25e4%25b8%258b%25e7%2594%25a8idea%25e8%25b0%2583%25e8%25af%2595java-web%25ef%25bc%259a%25e7%2582%25b9%25e5%2587%25bb%25e5%259b%25be%25e7%2589%2587%25e6%2596%2587%25e5%25ad%2597%25e9%25aa%258c%25e8%25af%2581%25e7%25a0%2581%2F<span class="symbol">&amp;amp;</span>_wpnonce=92457eb6ae"</span>&gt;</span>登出？<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group label-floating is-empty"</span>&gt;</span> <span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"control-label"</span>&gt;</span>在想些什么？<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">textarea</span> <span class="attr">id</span>=<span class="string">"comment"</span> <span class="attr">name</span>=<span class="string">"comment"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">rows</span>=<span class="string">"6"</span> <span class="attr">aria-required</span>=<span class="string">"true"</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"hestia-input"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span> <span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"form-submit"</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"submit"</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">id</span>=<span class="string">"submit"</span> <span class="attr">class</span>=<span class="string">"btn btn-primary pull-right"</span> <span class="attr">value</span>=<span class="string">"发表评论"</span> /&gt;</span> <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">'hidden'</span> <span class="attr">name</span>=<span class="string">'comment_post_ID'</span> <span class="attr">value</span>=<span class="string">'625'</span> <span class="attr">id</span>=<span class="string">'comment_post_ID'</span> /&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">'hidden'</span> <span class="attr">name</span>=<span class="string">'comment_parent'</span> <span class="attr">id</span>=<span class="string">'comment_parent'</span> <span class="attr">value</span>=<span class="string">'0'</span> /&gt;</span></span></span></span><br><span class="line"><span class="handlebars"><span class="xml"><span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">id</span>=<span class="string">"_wp_unfiltered_html_comment_disabled"</span> <span class="attr">name</span>=<span class="string">"_wp_unfiltered_html_comment_disabled"</span> <span class="attr">value</span>=<span class="string">"7d727c2e29"</span> /&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="keyword">if</span>(<span class="built_in">window</span>===<span class="built_in">window</span>.parent)&#123;<span class="built_in">document</span>.getElementById(<span class="string">'_wp_unfiltered_html_comment_disabled'</span>).name=<span class="string">'_wp_unfiltered_html_comment'</span>;&#125;&#125;)();</span></span></span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/04/17/Ubuntu%EF%BC%9A%E5%9F%BA%E4%BA%8ENginx%E5%92%8Cvsftpd%E6%90%AD%E5%BB%BA%E5%9B%BE%E7%89%87%E6%9C%8D%E5%8A%A1%E5%99%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -397,214 +611,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/03/26/%E4%B9%8C%E7%8F%AD%E5%9B%BEMySQL%E5%AE%89%E8%A3%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/03/26/%E4%B9%8C%E7%8F%AD%E5%9B%BEMySQL%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">乌班图MySQL安装</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-26 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-26T00:00:00+08:00">2018-03-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-19 00:29:55" itemprop="dateModified" datetime="2020-04-19T00:29:55+08:00">2020-04-19</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://p06peg.bn.files.1drv.com/y4mm5APcOIb1-chauC6p3Mq4ebFgsR0DaV-nPTxXskfoEcuyKfS3HSeMuH8es2BFnLRuAPdZPE3X5VrG-ZLF7i5uDOH4s0mAHOTCmnm-h_3wA_SIdoiSy_rU6e5N1tgxLZllxncREn1w9MSqaSTfcLw6lUDw8azqaAnvRmN4Rl6CSZxqYOOdNz47r0wk1mFdL680OQ97vnGXbkzTt3IPdf0fQ?width=1024&amp;height=530&amp;cropmode=none" /></p>
-<h1 id="mysql安装">MySQL安装</h1>
-<p><strong>首先在命令行中输入三个命令：</strong></p>
-<ol type="1">
-<li><p>```bash sudo apt-get install mysql-server <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2. &#96;&#96;&#96;bash</span><br><span class="line">   sudo apt install mysql-client</span><br></pre></td></tr></table></figure></p></li>
-<li><p>```bash sudo apt install libmysqlclient-dev <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">**接下来确认系统是否已经安装上Mysql:**</span><br><span class="line">输入命令：&#96;mysql --help&#96;</span><br><span class="line">出现如下一大串help，即为成功：</span><br><span class="line">![](https:&#x2F;&#x2F;p06ueg.bn.files.1drv.com&#x2F;y4mNAe06cdjT6CqEklVdezSTWyalrQwVgPqFxaTs5cJ2q2QdEnvJsCMsJs7Ge0SvUFrBCYJtPgJyeQf5Jqe_LP4zspTpKdNmUj64e6xAmLUShjA4BbBCeZ7NXBNsv2Cc39u2ya-tk53ynjv4kU-3jbTr4bOJnpgdOSRzn1A9nuNal2tACfRIajJaef0bMGdiiAOmsD5R1VvhL93lKh3Cxc4qA?width&#x3D;735&amp;height&#x3D;382&amp;cropmode&#x3D;none)</span><br><span class="line">可以通过如下命令进入MySQL服务：</span><br><span class="line">&#96;mysql -uroot -p&#96;</span><br><span class="line">会让你输入密码，在安装的时候有时候会出现让你设置密码，有些是默认登录。</span><br><span class="line">![](https:&#x2F;&#x2F;p06veg.bn.files.1drv.com&#x2F;y4mIW7MdhJAY-igcVXDXwcqeX4_UXQ3OvFvYsvO4UTyYXax3r47Tfd2vOvWrjdHnX2-EdTPWq0YxOczucbzJbMyjeTSxgawUOWAvMksXchd0QOX2KJL-YWdcJhkJMGkrLN9md7NaGPe7YR1qe1f3sbbkx3tRaX2x-vYJy-yW05GmWkxMeYM4Br-wy6mIK34RWllkxK6DUucEsqUqwFZ-hawYg?width&#x3D;732&amp;height&#x3D;243&amp;cropmode&#x3D;none)</span><br><span class="line"></span><br><span class="line">现在设置mysql允许远程访问，首先编辑文件 &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;mysqld.cnf：</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;bash</span><br><span class="line">sudo nano &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;mysqld.cnf</span><br></pre></td></tr></table></figure></p></li>
-</ol>
-<p>注释掉<strong><em>bind-address = 127.0.0.1</em></strong>： <code>sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf</code> <img src="https://ne7cha.bn.files.1drv.com/y4mQb9DVkANMfETZF6_0-xkxRkcXScb72aYdGeeq7j7iNSKNTv_dfReFsRpBRwPr8w3EDbQ-nsKlY0eBhMRBxVEzBLpYpXGectH9Cz2-8kAKLszCH1jvBoGt5EMH7pcx3g1YDEZNfMnyLMEkR6jAPO2HaYZXsL4WUg7rHGyMFUtnnKtPq271X3bxpMTvv2jhYjV7nGPXBW3q6vWPBDeEwpVNQ?width=664&amp;height=40&amp;cropmode=none" /></p>
-<p>保存退出，然后进入mysql服务，执行授权命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Grant all on *.* to &#39;root&#39;@&#39;%&#39; identified by &#39;root用户的密码&#39; with grant option;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
-<p>然后执行quit命令退出mysql服务，执行如下命令重启mysql：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysql restart</span><br></pre></td></tr></table></figure>
-<p>补充：在进入MySQL时，输入<code>mysql -uroot -p</code>命令时，会出现 &gt; ERROR 1045 (28000): Access denied for user ‘root’@’localhost’这种情况。于是在网上查了许多技术网站，发现一篇不错的，据此解决。链接： https://blog.csdn.net/learner_lps/article/details/62887343</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/03/19/Google%20BBR%20%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%EF%BC%8C%E5%AE%9E%E7%8E%B0TCP%E5%8A%A0%E9%80%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/03/19/Google%20BBR%20%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%EF%BC%8C%E5%AE%9E%E7%8E%B0TCP%E5%8A%A0%E9%80%9F/" class="post-title-link" itemprop="url">Google BBR 优化算法，实现TCP加速</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-19 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-19T00:00:00+08:00">2018-03-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-20 15:32:08" itemprop="dateModified" datetime="2019-03-20T15:32:08+08:00">2019-03-20</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>997</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://pk6ceg.bn.files.1drv.com/y4mnLfkbjzcBX8gXFbniP9PeL1ZvEPpZHrnlwnkxX4O78ih7XLEKnKttGTHlGU2oggl5Z1F5iHodmH7uXFBNkogDvcG_HDhZdctL7NAycjrK5rXi-hHff__5cKe0S9jQfRVV3TkARfmHY0sXp3iGZ62ECWZGaWqJE35MKgADNgpGFCaMn9QhJ1mmSuEZYl9TGhh-LO3Li24Y3Lb9Mc122oaCQ?width=600&amp;height=450&amp;cropmode=none" /></p>
-<blockquote>
-<p>最近，Google 开源了其 TCP BBR 拥塞控制算法，并提交到了 Linux 内核，从 4.9 开始，Linux 内核已经用上了该算法。根据以往的传统，Google 总是先在自家的生产环境上线运用后，才会将代码开源，此次也不例外。 根据实地测试，在部署了最新版内核并开启了 TCP BBR 的机器上，网速甚至可以提升好几个数量级。 于是我根据目前三大发行版的最新内核，开发了一键安装最新内核并开启 TCP BBR 脚本。</p>
-</blockquote>
-<h1 id="本脚本适用环境">本脚本适用环境</h1>
-<ul>
-<li>系统支持：Ubuntu 12+</li>
-<li>虚拟技术：OpenVZ 以外的，比如 KVM、Xen、VMware 等</li>
-<li>内存要求：≥128M</li>
-<li>日期：2018 年 03 月 20 日</li>
-</ul>
-<h1 id="关于本脚本">关于本脚本</h1>
-<ol type="1">
-<li>本脚本已在 digitalocean 上的 VPS 全部测试通过。</li>
-<li>当脚本检测到 VPS 的虚拟方式为 OpenVZ 时，会提示错误，并自动退出安装。</li>
-<li>脚本运行完重启发现开不了机的，打开 VPS 后台控制面板的 VNC, 开机卡在 grub 引导, 手动选择内核即可。</li>
-<li>由于是使用最新版系统内核，最好请勿在生产环境安装，以免产生不可预测之后果。</li>
-</ol>
-<h1 id="使用方法">使用方法</h1>
-<ol type="1">
-<li><p>使用root用户登录，运行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh</span><br></pre></td></tr></table></figure>
-<p>安装完成后，脚本会提示需要重启 VPS，输入 y 并回车后重启。</p></li>
-<li><p>重启完成后，进入 VPS，验证一下是否成功安装最新内核并开启 TCP BBR，输入以下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname -r</span><br></pre></td></tr></table></figure>
-<p>查看内核版本，显示为最新版就表示 OK 了</p></li>
-<li><p>检查</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl net.ipv4.tcp_available_congestion_control</span><br></pre></td></tr></table></figure>
-<p>返回值一般为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.ipv4.tcp_available_congestion_control &#x3D; bbr cubic reno</span><br></pre></td></tr></table></figure></li>
-<li><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl net.ipv4.tcp_congestion_control</span><br></pre></td></tr></table></figure>
-<p>返回值一般为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.ipv4.tcp_congestion_control = bbr</span><br></pre></td></tr></table></figure></li>
-<li><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl net.core.default_qdisc</span><br></pre></td></tr></table></figure>
-<p>返回值一般为：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.core.default_qdisc = fq</span><br></pre></td></tr></table></figure></li>
-<li><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsmod | grep bbr</span><br></pre></td></tr></table></figure>
-<p>返回值有 tcp_bbr 模块即说明 bbr 已启动。注意：并不是所有的 VPS 都会有此返回值，若没有也属正常。</p></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -674,7 +680,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -719,12 +725,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">156k</span>
+    <span title="站点总字数">160k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:21</span>
+    <span title="站点阅读时长">2:25</span>
 </div>
 
         

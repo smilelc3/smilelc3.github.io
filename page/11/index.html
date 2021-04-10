@@ -175,6 +175,232 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/05/30/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(5)%E5%AF%B9%E5%B1%80%E5%8C%B9%E9%85%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/05/30/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(5)%E5%AF%B9%E5%B1%80%E5%8C%B9%E9%85%8D/" class="post-title-link" itemprop="url">2017第八届蓝桥杯决赛题目解析(5)：对局匹配</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-05-30 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-30T00:00:00+08:00">2017-05-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-03-19 22:06:55" itemprop="dateModified" datetime="2019-03-19T22:06:55+08:00">2019-03-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>题目描述：</strong></p>
+<blockquote>
+<p>小明喜欢在一个围棋网站上找别人在线对弈。这个网站上所有注册用户都有一个积分，代表他的围棋水平。</p>
+<p>小明发现网站的自动对局系统在匹配对手时，只会将积分差恰好是K的两名用户匹配在一起。如果两人分差小于或大于K，系统都不会将他们匹配。</p>
+<p>现在小明知道这个网站总共有N名用户，以及他们的积分分别是A1, A2, … AN。</p>
+<p>小明想了解最多可能有多少名用户同时在线寻找对手，但是系统却一场对局都匹配不起来(任意两名用户积分差不等于K)？</p>
+</blockquote>
+<blockquote>
+<p><strong>输入</strong>：</p>
+<p>第一行包含两个个整数N和K。</p>
+<p>第二行包含N个整数A1, A2, … AN。</p>
+<p>对于30%的数据，<span class="math inline">\(1 \le N \le 10​\)</span></p>
+<p>对于100%的数据，$1 N , 0 Ai , 0 K  $</p>
+</blockquote>
+<blockquote>
+<p><strong>输出：</strong></p>
+<p>一个整数，代表答案。</p>
+</blockquote>
+<blockquote>
+<p><strong>样例输入：</strong> 5 1 2 3 1 2 4 2 5 5 3</p>
+</blockquote>
+<blockquote>
+<p><strong>样例输出：</strong> 6</p>
+</blockquote>
+<blockquote>
+<p>再比如，</p>
+<p><strong>样例输入：</strong></p>
+<p>10 1</p>
+<p>2 1 1 1 1 4 4 3 4 4</p>
+</blockquote>
+<blockquote>
+<p><strong>样例输出：</strong> 8</p>
+</blockquote>
+<blockquote>
+<p><strong>资源约定：</strong></p>
+<p>峰值内存消耗 &lt; 256M</p>
+<p>CPU消耗 &lt; 1000ms</p>
+<p>请严格按要求输出，不要画蛇添足地打印类似：“请您输入…” 的多余内容。</p>
+<p>所有代码放在同一个源文件中，调试通过后，拷贝提交该源码。</p>
+<p><strong>注意:</strong> main函数需要返回0</p>
+<p><strong>注意:</strong> 只使用ANSI C/ANSI C++ 标准，不要调用依赖于编译环境或操作系统的特殊函数。</p>
+<p><strong>注意:</strong> 所有依赖的函数必须明确地在源文件中 #include <xxx>， 不能通过工程设置而省略常用头文件。提交时，注意选择所期望的编译器类型。</p>
+</blockquote>
+<p><strong>问题分析：</strong></p>
+<p>​ 这题就相较于前几题就有难度提升，不在依靠于单一基础算法就能较好的解决问题。</p>
+<p>​ 比赛时，我一开始就认为搜索能解决问题，纸上推演的半个小时才发现有问题，始终是一个NP问题。后来经过分析：这样的策略可能达到解决问题的目的：</p>
+<ol type="1">
+<li><p>因为当K&gt;0时，若选值为m的点，则应该选上值为m的所有点，依照桶排序的思想，进行优化</p></li>
+<li><p>当K=0时，最大选择数=不同值的点的类别数</p></li>
+<li><p>依照K值，形成关系链（可以为多条关系链）</p></li>
+<li><p>单一关系链中，选择类数和并且不关联的最大一个或几个点，该算法应为动态规划</p></li>
+</ol>
+<p><strong>如图所示：</strong></p>
+<p>22 2</p>
+<p>2 1 1 1 1 4 4 3 4 4 6 7 7 8 8 8 8 9 11 11 12 13</p>
+<p><img src="https://p071bq.bn.files.1drv.com/y4m67x1ddyuU_F7SZB4mL2Qm8ClAyaq7TLDZKe85r3KXiHmtsmsD0AbDS1t601bUn0nVWP8-_jxBLfDno2d7WlVoSH8eFop0-Qorr8-BMyA0aMVC0Tahn1BjjxvGGSCgLAmc3LDqO4kC7oeZ1hmPU0LlfoDYwt1s3NomgiCZ4bJL-eioW2_ArJK1kD0CUi0YF0RQmU8BRkUKBRMHs-Rs1rUVQ?width=1024&amp;height=511&amp;cropmode=none" /></p>
+<p>第一条链最大个数和：4</p>
+<p>第二条链最大个数和：8</p>
+<p>第三条链最大个数和：4</p>
+<p>第四条链最大个数和：1</p>
+<p>最大个数和：4+8+4+1=17</p>
+<p><strong>代码：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N=<span class="number">100000</span>;</span><br><span class="line"><span class="keyword">int</span> n,k;</span><br><span class="line"><span class="keyword">int</span> num[N];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; link[N];</span><br><span class="line"><span class="keyword">int</span> node[N];</span><br><span class="line"><span class="keyword">int</span> num_node=<span class="number">0</span>; </span><br><span class="line"><span class="keyword">int</span> num_link=<span class="number">0</span>;<span class="comment">//关系链数 </span></span><br><span class="line">short vis[N];<span class="comment">//1代表已访问，0代表未访问，-1代表点不存在 </span></span><br><span class="line"><span class="keyword">int</span> F[N];<span class="comment">//dp F[i]=max(F[i-1],F[F-2]+num[i]) </span></span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> tot=<span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(num,<span class="number">0</span>,<span class="keyword">sizeof</span>(num));</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n&gt;&gt;k;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> t;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;t;</span><br><span class="line">        num[t]++;</span><br><span class="line">        vis[i]=<span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">work</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=N;i++)</span><br><span class="line">        <span class="keyword">if</span>(num[i]!=<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            node[num_node++]=i;</span><br><span class="line">            vis[i]=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;num_node;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(vis[node[i]]==<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            vis[node[i]]=<span class="number">1</span>;</span><br><span class="line">            link[num_link].push_back(node[i]);</span><br><span class="line">            <span class="keyword">int</span> next=node[i]+k;</span><br><span class="line">            <span class="keyword">while</span>(vis[next]==<span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                link[num_link].push_back(next);</span><br><span class="line">                vis[next]=<span class="number">1</span>;</span><br><span class="line">                next=next+k;</span><br><span class="line">            &#125;</span><br><span class="line">            num_link++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dp</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;num_link;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">memset</span>(F,<span class="number">0</span>,<span class="keyword">sizeof</span>(F));</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;link[i].<span class="built_in">size</span>();j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(j&gt;=<span class="number">2</span>)</span><br><span class="line">                F[j]=<span class="built_in">max</span>(F[j<span class="number">-1</span>],F[j<span class="number">-2</span>]+num[link[i][j]]);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(j==<span class="number">0</span>)</span><br><span class="line">                F[j]=num[link[i][j]];</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(j==<span class="number">1</span>)</span><br><span class="line">                F[j]=<span class="built_in">max</span>(F[j<span class="number">-1</span>],num[link[i][j]]); </span><br><span class="line">        &#125; </span><br><span class="line">        <span class="comment">//cout&lt;&lt;F[link[i].size()-1]&lt;&lt;endl;</span></span><br><span class="line">        tot+=F[link[i].<span class="built_in">size</span>()<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    init();</span><br><span class="line">    work();</span><br><span class="line">    dp();</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;tot;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    for(int i=0;i&lt;num_node;i++)</span></span><br><span class="line"><span class="comment">        cout&lt;&lt;node[i]&lt;&lt;"-&gt;"&lt;&lt;num[node[i]]&lt;&lt;" ";</span></span><br><span class="line"><span class="comment">    cout&lt;&lt;endl;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    for(int i=0;i&lt;num_link;i++)</span></span><br><span class="line"><span class="comment">    &#123;</span></span><br><span class="line"><span class="comment">        for(int j=0;j&lt;link[i].size();j++)</span></span><br><span class="line"><span class="comment">        &#123;</span></span><br><span class="line"><span class="comment">            cout&lt;&lt;link[i][j]&lt;&lt;" ";</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">        cout&lt;&lt;endl;</span></span><br><span class="line"><span class="comment">    &#125;*/</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/05/30/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%9B%BD%E8%B5%9B(CC++%20B%E7%BB%84)%E8%A7%A3%E9%A2%98%E6%8A%A5%E5%91%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/05/30/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%9B%BD%E8%B5%9B(CC++%20B%E7%BB%84)%E8%A7%A3%E9%A2%98%E6%8A%A5%E5%91%8A/" class="post-title-link" itemprop="url">2017第八届蓝桥杯国赛(CC++ B组)解题报告</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-05-30 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-30T00:00:00+08:00">2017-05-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-03-19 22:35:22" itemprop="dateModified" datetime="2019-03-19T22:35:22+08:00">2019-03-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>145</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://p04abg.bn.files.1drv.com/y4mddivCoXrDXHwE74q5sjmyBmiaOmP_RMfOW3bSCt7WCLTl-xdsGeJ5vE4mrU1ey3sj1FSWR-Rx6pspA1w2aqT2oqjYx7kqKeCJfd_QhKi5vPrZIP64RPKu04s0FmlBVPRXqwpnXk2bqs0hO8ngQtSPLW8DKg5Zm3HUXUEl_vqvBMa2Qtdm-52-wgxEPShpiEWcKvOE6398YCmYjPSFNG5Kg?width=580&amp;height=330&amp;cropmode=none" /></p>
+<p><a href="https://smilelc3.github.io/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(1)36%E8%BF%9B%E5%88%B6/" target="_blank" rel="noopener">2017第八届蓝桥杯决赛题目解析(1)：36进制</a></p>
+<p><a href="https://smilelc3.github.io/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(2)%E7%93%B7%E7%A0%96%E6%A0%B7%E5%BC%8F/" target="_blank" rel="noopener">2017第八届蓝桥杯决赛题目解析(2)：瓷砖样式</a></p>
+<p><a href="https://smilelc3.github.io/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(3)%E5%B8%8C%E5%B0%94%E4%BC%AF%E7%89%B9%E6%9B%B2%E7%BA%BF/" target="_blank" rel="noopener">2017第八届蓝桥杯决赛题目解析(3)：希尔伯特曲线</a></p>
+<p><a href="https://smilelc3.github.io/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(4)%E5%8F%91%E7%8E%B0%E7%8E%AF/" target="_blank" rel="noopener">2017第八届蓝桥杯决赛题目解析(4)：发现环</a></p>
+<p><a href="https://smilelc3.github.io/2017/05/30/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(5)%E5%AF%B9%E5%B1%80%E5%8C%B9%E9%85%8D/" target="_blank" rel="noopener">2017第八届蓝桥杯决赛题目解析(5)：对局匹配</a></p>
+<p><a href="https://smilelc3.github.io/2017/05/30/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(6)%E8%A7%82%E5%85%89%E6%97%85%E6%B8%B8/" target="_blank" rel="noopener">2017第八届蓝桥杯决赛题目解析(6)：观光旅游</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(1)36%E8%BF%9B%E5%88%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -357,219 +583,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(3)%E5%B8%8C%E5%B0%94%E4%BC%AF%E7%89%B9%E6%9B%B2%E7%BA%BF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(3)%E5%B8%8C%E5%B0%94%E4%BC%AF%E7%89%B9%E6%9B%B2%E7%BA%BF/" class="post-title-link" itemprop="url">2017第八届蓝桥杯决赛题目解析(3)：希尔伯特曲线</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-29T00:00:00+08:00">2017-05-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-19 11:50:45" itemprop="dateModified" datetime="2020-04-19T11:50:45+08:00">2020-04-19</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>问题描述：</strong></p>
-<blockquote>
-<p>希尔伯特曲线是以下一系列分形曲线 <span class="math inline">\(H_{n}\)</span> 的极限。我们可以把 <span class="math inline">\(H_n\)</span> 看作一条覆盖$2^n × 2^n $方格矩阵的曲线，曲线上一共有 <span class="math inline">\(2^n \cdot 2^n\)</span>个顶点(包括左下角起点和右下角终点)，恰好覆盖每个方格一次。</p>
-<p><img src="https://pk4bbg.bn.files.1drv.com/y4m90e9wuer02lEiIySVTpFsC4_9q1PnBMmLVhbde8eE0Dz_dIzTV4IS0ovCp-TK9jflHdu6JrVmXq0f6KaDalAlT4DWYGTL_Zp_IacIZMyVM092ZZFEc1d95u1LTubs610Vy_aCSPomdD5zrHN1ERxS6aM7uGrkj8-qNg74NbcO9_hSpRAVGXUUfBnSZ8jDO8eB7E03B6lmJcrnFJXl-HI-g?width=1024&amp;height=354&amp;cropmode=none" /></p>
-<p><span class="math inline">\(H_n(n &gt; 1)\)</span>可以通过如下方法构造：</p>
-<ol type="1">
-<li>将 <span class="math inline">\(H_n-1\)</span>顺时针旋转90度放在左下角</li>
-<li>将 <span class="math inline">\(H_n-1\)</span>逆时针旋转90度放在右下角</li>
-<li>将2个$ H_n-1$ 分别放在左上角和右上角</li>
-<li>用3条单位线段把4部分连接起来对于 <span class="math inline">\(H_n\)</span> 上每一个顶点 <span class="math inline">\(p\)</span> ，我们定义 $p <span class="math inline">\(的坐标是它覆盖的小方格在矩阵中的坐标（左下角是\)</span>(1, 1)<span class="math inline">\(，右上角是\)</span>(2^n, 2^n)$，从左到右是X轴正方向，从下到上是Y轴正方向），定义 <span class="math inline">\(p\)</span>的序号是它在曲线上从起点开始数第几个顶点（从1开始计数）。</li>
-</ol>
-<p>以下程序对于给定的<span class="math inline">\(n(n &lt;= 30)\)</span>和<span class="math inline">\(p\)</span>点坐标<span class="math inline">\((x, y)\)</span>，输出<span class="math inline">\(p\)</span>点的序号。请仔细阅读分析源码，填写划线部分缺失的内容。</p>
-</blockquote>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> m = <span class="number">1</span> &lt;&lt; (n - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> (x &lt;= m &amp;&amp; y &lt;= m) &#123;</span><br><span class="line">        <span class="keyword">return</span> f(n - <span class="number">1</span>, y, x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (x &gt; m &amp;&amp; y &lt;= m) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">3L</span>L * m * m + f(n - <span class="number">1</span>, __________ , m * <span class="number">2</span> - x + <span class="number">1</span>); <span class="comment">//  填空</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (x &lt;= m &amp;&amp; y &gt; m) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1L</span>L * m * m + f(n - <span class="number">1</span>, x, y - m);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (x &gt; m &amp;&amp; y &gt; m) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2L</span>L * m * m + f(n - <span class="number">1</span>, x - m, y - m);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">int</span> n, x, y;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d %d %d"</span>, &amp;n, &amp;x, &amp;y); </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%lld"</span>, f(n, x, y));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>问题分析：</strong></p>
-<p>​ 这题题目表述很多，但其实没有么有想象中那么难，规律性极强，主要一个坑点是入曲线的方向问题，一开始以为是从左边进入（答案y），后来验证出错，正确应该是从右边进入。</p>
-<p><strong>答案：</strong></p>
-<p>​ <strong>m-y+1</strong></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(4)%E5%8F%91%E7%8E%B0%E7%8E%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/29/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(4)%E5%8F%91%E7%8E%B0%E7%8E%AF/" class="post-title-link" itemprop="url">2017第八届蓝桥杯决赛题目解析(4)：发现环</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-05-29 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-29T00:00:00+08:00">2017-05-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-19 21:26:51" itemprop="dateModified" datetime="2019-03-19T21:26:51+08:00">2019-03-19</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>题目描述：</strong></p>
-<blockquote>
-<p>小明的实验室有N台电脑，编号1~N。原本这N台电脑之间有N-1条数据链接相连，恰好构成一个树形网络。在树形网络上，任意两台电脑之间有唯一的路径相连。</p>
-<p>不过在最近一次维护网络时，管理员误操作使得某两台电脑之间增加了一条数据链接，于是网络中出现了环路。环路上的电脑由于两两之间不再是只有一条路径，使得这些电脑上的数据传输出现了BUG。 为了恢复正常传输。小明需要找到所有在环路上的电脑，你能帮助他吗？</p>
-</blockquote>
-<blockquote>
-<p><strong>输入</strong>：</p>
-<p>第一行包含一个整数N。</p>
-<p>以下N行每行两个整数a和b，表示a和b之间有一条数据链接相连。</p>
-<p>对于30%的数据，<span class="math inline">\(1 \le N \le 1000\)</span> 对于100%的数据, <span class="math inline">\(1 \le N \le100000， 1 \le a, b \le N\)</span> 输入保证合法。</p>
-</blockquote>
-<blockquote>
-<p><strong>输出：</strong></p>
-<p>按从小到大的顺序输出在环路上的电脑的编号，中间由一个空格分隔。</p>
-</blockquote>
-<blockquote>
-<p><strong>样例输入：</strong> 5 1 2 3 1 2 4 2 5 5 3</p>
-</blockquote>
-<blockquote>
-<p><strong>样例输出：</strong> 1 2 3 5</p>
-</blockquote>
-<blockquote>
-<p><strong>资源约定：</strong></p>
-<p>峰值内存消耗 &lt; 256M</p>
-<p>CPU消耗 &lt; 1000ms</p>
-<p>请严格按要求输出，不要画蛇添足地打印类似：“请您输入…” 的多余内容。</p>
-<p>所有代码放在同一个源文件中，调试通过后，拷贝提交该源码。</p>
-<p><strong>注意:</strong> main函数需要返回0</p>
-<p><strong>注意:</strong> 只使用ANSI C/ANSI C++ 标准，不要调用依赖于编译环境或操作系统的特殊函数。</p>
-<p><strong>注意:</strong> 所有依赖的函数必须明确地在源文件中 #include <xxx>， 不能通过工程设置而省略常用头文件。提交时，注意选择所期望的编译器类型。</p>
-</blockquote>
-<p><strong>问题分析：</strong></p>
-<p>​ 这题可能是上天对我的照顾，在2016NOIP DAY2的三道题中，我依稀记得是第二道题，当时也是一道类似的题，不过这题是仅单环，那一道题是多环。</p>
-<p>​ 当时所用的策略是遍历-&gt;深搜度为1的点-&gt;删点-&gt;直到点不在减少，但当时有个问题，就是深搜深度过深，导致栈溢出，幸好当时组委会另行通知了这一点，并在评测机器上有所更改。</p>
-<p>​ 但这次最大节点数为10w，并不算大，可以进行dfs</p>
-<p>​ 在存储边上，用vector存储邻接表</p>
-<p>​ 并通过vector,algorithm中的sort进行优化</p>
-<p><strong>代码：</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N=<span class="number">10000</span>+<span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; next[N];</span><br><span class="line"><span class="keyword">bool</span> vis[N]; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">memset</span>(vis,<span class="literal">false</span>,<span class="keyword">sizeof</span>(vis));</span><br><span class="line">	<span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> a,b;</span><br><span class="line">		<span class="built_in">cin</span>&gt;&gt;a&gt;&gt;b;</span><br><span class="line">		next[a].push_back(b);<span class="comment">//无向图，存双边 </span></span><br><span class="line">		next[b].push_back(a);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> side=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;next[k].<span class="built_in">size</span>();j++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(vis[next[k][j]]==<span class="literal">false</span>)</span><br><span class="line">			side++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(side==<span class="number">1</span> &amp;&amp; vis[k]==<span class="literal">false</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		vis[k]=<span class="literal">true</span>;</span><br><span class="line">		dfs(next[k][<span class="number">0</span>]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">work</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> remain=n;</span><br><span class="line">	<span class="keyword">int</span> tem_remain;</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">	&#123;</span><br><span class="line">		tem_remain=remain;</span><br><span class="line">		<span class="keyword">bool</span> flag=<span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">int</span> side=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;next[i].<span class="built_in">size</span>();j++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>(vis[next[i][j]]==<span class="literal">false</span>)</span><br><span class="line">					side++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(side==<span class="number">1</span> &amp;&amp; vis[i]==<span class="literal">false</span>)</span><br><span class="line">			&#123;</span><br><span class="line">				vis[i]=<span class="literal">true</span>;</span><br><span class="line">				tem_remain-=<span class="number">1</span>;</span><br><span class="line">				dfs(next[i][<span class="number">0</span>]);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;<span class="keyword">while</span>(tem_remain != remain);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">		<span class="keyword">if</span>(vis[i]==<span class="literal">false</span>)</span><br><span class="line">			<span class="built_in">cout</span>&lt;&lt;i&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	init();</span><br><span class="line">	work();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -639,7 +652,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -684,12 +697,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">156k</span>
+    <span title="站点总字数">160k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:21</span>
+    <span title="站点阅读时长">2:25</span>
 </div>
 
         

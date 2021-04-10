@@ -175,6 +175,241 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2021/04/10/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B9%8B%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/10/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B9%8B%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">动态规划之背包问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-10 10:01:46" itemprop="dateCreated datePublished" datetime="2021-04-10T10:01:46+08:00">2021-04-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-07 17:23:48" itemprop="dateModified" datetime="2021-04-07T17:23:48+08:00">2021-04-07</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>title: 动态规划之背包问题 date: 2021-4-7</p>
+<h1 id="动态规划之背包问题">动态规划之背包问题</h1>
+<blockquote>
+<p><strong>背包问题</strong>（Knapsack problem）是一种<a href="https://zh.wikipedia.org/wiki/组合优化" target="_blank" rel="noopener">组合优化</a>的<a href="https://zh.wikipedia.org/wiki/NP完全" target="_blank" rel="noopener">NP完全</a>问题。问题可以描述为：给定一组物品，每种物品都有自己的重量和价格，在限定的总重量内，我们如何选择，才能使得物品的总价格最高。问题的名称来源于如何选择最合适的物品放置于给定背包中。</p>
+</blockquote>
+<p>也可以将背包问题描述为决定性问题，即在总重量不超过<span class="math inline">\(W\)</span>的前提下，总价值是否能达到<span class="math inline">\(V\)</span>。</p>
+<h2 id="定义">定义</h2>
+<p>我们有<span class="math inline">\(n\)</span>种物品，物品<span class="math inline">\(i\)</span>的重量为<span class="math inline">\(w_i\)</span>，价值为<span class="math inline">\(v_i\)</span></p>
+<p>我们假定所有物品的重量和价值都是非负数，背包所能承受的最大重量为<span class="math inline">\(W\)</span>。</p>
+<ul>
+<li><p>如果限定每种物品最多能选择1个，则该背包称为<strong>01背包</strong>。</p>
+<p>可以用公式表示为：</p></li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+最大化 &amp; \quad \sum^{n}_{i=1}{v_{i} x_i} \\
+受限于 &amp; \quad \sum^{n}_{i=1}{w_{i} x_i} \leq W, \quad x_i \in \{0,1\} \\
+\end{align}
+\]</span></p>
+<ul>
+<li><p>如果限定物品<span class="math inline">\(i\)</span>最多只能选择<span class="math inline">\(b_i\)</span>个，则问题称为<strong>多重背包问题（有界背包问题）</strong>。</p>
+<p>可以用公式表示为： <span class="math display">\[
+\begin{align}
+最大化 &amp; \quad \sum^{n}_{i=1}{v_{j} x_i} \\
+受限于 &amp; \quad \sum^{n}_{i=1}{w_{i} x_i} \leq W, \quad x_i \in \{0,1…,b_i \} \\
+\end{align}
+\]</span></p></li>
+<li><p>如果不限定每种物品的数量，则问题称为<strong>完全背包问题（无界背包问题）</strong>。</p></li>
+<li><p>各类复杂的背包问题总可以变换为简单的0-1背包问题进行求解。</p></li>
+</ul>
+<h2 id="背包">01背包</h2>
+<p>设一共有<span class="math inline">\(N\)</span>件物品，第<span class="math inline">\(i\)</span>件物品的重量为<span class="math inline">\(w[i]\)</span>，价值为<span class="math inline">\(v[i]\)</span>，最大总重量为<span class="math inline">\(W\)</span>。</p>
+<p>如果采取暴力枚举方法，每件物品都存在装入和不装入两种情况，所以时间复杂度为<span class="math inline">\(O(n^2)\)</span>，使用动态规划可以把时间复杂度控制在<span class="math inline">\(O(N*W)\)</span>。求解的总目标是背包物品的总价值，变量有<em>是否放入物品</em>和<em>书包限重</em>。</p>
+<p>定义<span class="math inline">\(dp[i][j]\)</span>表示将前<span class="math inline">\(i\)</span>件物品放入限重为<span class="math inline">\(j\)</span>的书包可以获得的最大价值，其中$0 i N,  0 j  W $。</p>
+<p>状态转移：</p>
+<ol type="1">
+<li>不装入第<span class="math inline">\(i\)</span>物品：<span class="math inline">\(dp[i][j] = dp[i-1][j]\)</span></li>
+<li>在能装入的前提下，装入第<span class="math inline">\(i\)</span>件物品：<span class="math inline">\(dp[i][j]=dp[i-1][j-w[i]]+v[i]\)</span></li>
+</ol>
+<p>即状态转移方程为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[i][j] = <span class="built_in">max</span>(dp[i<span class="number">-1</span>][j], j-w[i] &gt;= <span class="number">0</span> ? dp[i<span class="number">-1</span>][j-w[i]]+v[i] : <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>由状态方程可知，<code>dp[i][j]</code>的值只与<code>dp[i-1][0,…,j-1]</code>有关，所以可以采用滚动数组对空间优化。需要注意的是，为了防止上一层循环`<code>dp[0,…,j-1]</code>被覆盖，需要<strong>逆向枚举</strong><span class="math inline">\(j\)</span>（空间优化前没有这个限制）。代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">solution01Knapsack</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> W, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;w, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;v)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// w[i]重量  v[i]价值</span></span><br><span class="line">    <span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(W+<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> j = W; j &gt;= w[i]; j--) &#123;</span><br><span class="line">            dp[j] = <span class="built_in">std</span>::<span class="built_in">max</span>(dp[j], dp[j - w[i]] + v[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[W];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度为<span class="math inline">\(O(NW)\)</span>，空间复杂度为<span class="math inline">\(O(W)\)</span>。第<span class="math inline">\(i\)</span>件物品装入或者不装入而获得的最大价值完全可以由前面<span class="math inline">\(i-1\)</span>件物品的最大价值决定，暴力枚举忽略了这个事实。</p>
+<h2 id="完全背包">完全背包</h2>
+<p>设一共有<span class="math inline">\(N\)</span>件物品，第<span class="math inline">\(i\)</span>件物品的重量为<span class="math inline">\(w[i]\)</span>，价值为<span class="math inline">\(v[i]\)</span>，每件可以无限多个，最大总重量为<span class="math inline">\(W\)</span>。</p>
+<p>与01背包非常相似，状态dp定义一致，只是状态转移稍微不同：</p>
+<ol type="1">
+<li>不装入第<span class="math inline">\(i\)</span>物品：<span class="math inline">\(dp[i][j] = dp[i-1][j]\)</span>（同01背包）</li>
+<li>在能装入的前提下，因为每件物品有无限个，所以不从<span class="math inline">\(dp[i-1][j-w[i]]\)</span>转移，而是从<span class="math inline">\(dp[i][j-w[i]]\)</span>转移，即装入第<span class="math inline">\(i\)</span>种商品后还可以再继续装入该种商品。即装入第<span class="math inline">\(i\)</span>件物品：<span class="math inline">\(dp[i][j]=dp[i][j-w[i]]+v[i]\)</span></li>
+</ol>
+<p>状态转移方程为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[i][j] = <span class="built_in">max</span>(dp[i<span class="number">-1</span>][j], j-w[i] &gt;= <span class="number">0</span> ? dp[i][j-w[i]]+v[i] : <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>和01背包问题相似，也可以进行空间优化，不同点在于完全背包的<span class="math inline">\(j\)</span>只能<strong>正向枚举</strong>而01背包只能逆向枚举，因为<span class="math inline">\(max\)</span>第二项是<code>dp[i]</code>而01背包是<code>dp[i-1]</code>，即完全背包需要覆盖而01背包需要避免覆盖。代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">solutionUnboundedKnapsack</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> W, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;w, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;v)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// w[i]重量  v[i]价值</span></span><br><span class="line">    <span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(W+<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> j = w[i]; j &lt;= W; j++) &#123;</span><br><span class="line">            dp[j] = <span class="built_in">std</span>::<span class="built_in">max</span>(dp[j], dp[j - w[i]] + v[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[W];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>完全背包问题也可以转化为01背包问题来解：将一种物品转换成最多能放下的若干件。</p>
+<p>最简单的想法是，考虑到第<span class="math inline">\(i\)</span>种物品最多装入<span class="math inline">\(W/w[i]\)</span>件，于是把第<span class="math inline">\(i\)</span>种物品转化为 <span class="math inline">\(W/w[i]\)</span>件费用及价值不变的物品，然后求解这个01背包问题。时间复杂度为：<span class="math inline">\(O(NW\frac{\sum{\frac{W}{w_i}}}{N}) = O(W\sum{\frac{W}{w_i}})\)</span> 。</p>
+<p>更高效的转化方法是采用二进制的思想：把第<span class="math inline">\(i\)</span>种物品拆成重量为<span class="math inline">\(w_i 2^k\)</span>、价值为<span class="math inline">\(v_i 2^k\)</span>若干件物品，其中 k 取遍满足<span class="math inline">\(w_i 2^k \leq W\)</span>的非负整数。这是因为不管最优策略选几件第<span class="math inline">\(i\)</span>种物品，总可以表示成若干个刚才这些物品的和（例：<span class="math inline">\(13 = 2^0 + 2^2 + 2^3\)</span>）。这样就将转换后的物品数目降成了对数级别。时间复杂度为：<span class="math inline">\(O(NW\frac{\sum\log_2{\frac{W}{w_i}}}{N}) = O(W\sum\log_2{\frac{W}{w_i}})\)</span>。</p>
+<h2 id="多重背包">多重背包</h2>
+<p>设一共有<span class="math inline">\(N\)</span>件物品，第<span class="math inline">\(i\)</span>件物品的重量为<span class="math inline">\(w[i]\)</span>，价值为<span class="math inline">\(v[i]\)</span>，数量限制为<span class="math inline">\(n[i]\)</span>，最大总重量为<span class="math inline">\(W\)</span>。</p>
+<p>参考完全背包转为01背包的思想，<span class="math inline">\(k\)</span>表示装入第<span class="math inline">\(i\)</span>种物品的件数，<code>k &lt;= min(n[i],j/w[i])​</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[i][j] &#x3D; max&#123;(dp[i-1][j-k*w[i]]+k*v[i]) for range(k)&#125;</span><br></pre></td></tr></table></figure>
+<p>同理也可以进行空间优化，而且<span class="math inline">\(j\)</span>也必须<strong>逆向枚举</strong>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">solutionBoundedKnapsack</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> W,</span></span></span><br><span class="line"><span class="function"><span class="params">                            <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;w,</span></span></span><br><span class="line"><span class="function"><span class="params">                            <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;v,</span></span></span><br><span class="line"><span class="function"><span class="params">                            <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// w[i]重量  v[i]价值</span></span><br><span class="line">    <span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(W + <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> j = W; j &gt;= w[i]; j--) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span> k = <span class="number">1</span>; k &lt;= <span class="built_in">std</span>::<span class="built_in">min</span>(n[i], j / w[i]); k++) &#123;</span><br><span class="line">                dp[j] = <span class="built_in">std</span>::<span class="built_in">max</span>(dp[j], dp[j - k * w[i]] + k * v[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[W];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度为：<span class="math inline">\(O(NW\bar n) = O(W\sum{n_i})\)</span>，空间复杂度为：<span class="math inline">\(O(W)\)</span>。</p>
+<p>当然也可以采用二进制思路，将第<span class="math inline">\(i\)</span>种物品分成了<span class="math inline">\(log_2{n_i}\)</span>件物品，将时间复杂度优化为：<span class="math inline">\(O(W\sum{\log_2{n_i}})\)</span>。</p>
+<h2 id="杂项">杂项</h2>
+<p>背包问题还有一些其他变种问题。</p>
+<h3 id="恰好装满">恰好装满</h3>
+<p>要求：必须恰好装满背包。</p>
+<p>只需要修改初始化，将<span class="math inline">\(dp[0,…,N][0]\)</span>初始为0，其它<span class="math inline">\(dp\)</span>值均初始化为<code>-inf</code>，因为此时只有容量为0的背包可以在什么也不装情况下被“恰好装满”，其它容量的背包初始均没有合法的解，应该被初始化为<code>-inf</code>。</p>
+<h3 id="总方案数">总方案数</h3>
+<p>要求：求背包装满或则装至某一指定容量的总方案数。</p>
+<p>修改转移方程中的<span class="math inline">\(max\)</span>为<span class="math inline">\(sum\)</span>。</p>
+<h3 id="二维背包">二维背包</h3>
+<p>上文讨论的背包都只有一个限制：最大容量。二维背包指一个背包存在两个限制（比如重量和体积限制）。</p>
+<p>此类问题的解法和一维背包相似，需要<span class="math inline">\(dp\)</span>数组要多开一维，其他和一维背包一致。</p>
+<h3 id="输出最优方案">输出最优方案</h3>
+<p>要求：输出背包问题的解方案。</p>
+<p>可以参照一般动态规划的方案输出方法：记录每一个状态是由那条策略推导而出，以便回溯出上一个状态。</p>
+<p>以01背包为例，再开辟一个数组<span class="math inline">\(P[i][j]\)</span>来记录方案，<span class="math inline">\(P[i][j]=0\)</span>表示<span class="math inline">\(dp[i][j]\)</span>采用第一种状态转移策略，即<span class="math inline">\(dp[i][j] = dp[i-1][j]\)</span>，<span class="math inline">\(P[i][j]=1\)</span>表示采用第二种状态转移策略，即<span class="math inline">\(dp[i][j]=dp[i-1][j-w[i]]+v[i]\)</span>，从而反推方案。</p>
+<p>另外我们也可以从求出的<span class="math inline">\(dp\)</span>数组进行反推，若 <span class="math inline">\(dp[i][j] = dp[i−1][j]\)</span> 说明未选第<span class="math inline">\(i\)</span>个物品，反之说明选了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2021/04/03/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E2%80%94%E2%80%94%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/03/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E2%80%94%E2%80%94%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">动态规划——背包问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-03 17:40:22 / 修改时间：17:41:43" itemprop="dateCreated datePublished" datetime="2021-04-03T17:40:22+08:00">2021-04-03</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>10</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <hr />
+<hr />
+<h1 id="动态规划背包问题">动态规划——背包问题</h1>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liuchang.men/2021/04/01/%E6%95%B0%E6%8D%AE%E5%BA%93SQL%20JOINS%E7%AC%94%E8%AE%B0%E6%B1%87%E6%80%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -443,310 +678,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2020/12/01/%E6%95%B0%E7%8B%AC%E6%B1%82%E8%A7%A3%20go%E8%AF%AD%E8%A8%80%E7%89%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/01/%E6%95%B0%E7%8B%AC%E6%B1%82%E8%A7%A3%20go%E8%AF%AD%E8%A8%80%E7%89%88/" class="post-title-link" itemprop="url">数独求解 go语言版</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-01 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-01T00:00:00+08:00">2020-12-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-12-02 21:30:56" itemprop="dateModified" datetime="2020-12-02T21:30:56+08:00">2020-12-02</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数独求解-go语言版">数独求解 go语言版</h1>
-<p>源代码<code>github</code>地址：<a href="https://github.com/smilelc3/sudoku-solver" target="_blank" rel="noopener">https://github.com/smilelc3/sudoku-solver</a></p>
-<p>关于数独<code>wiki</code>介绍：<a href="https://zh.wikipedia.org/wiki/%E6%95%B8%E7%8D%A8" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E6%95%B8%E7%8D%A8</a></p>
-<p>一个数独样例</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">+-----------------------------+</span><br><span class="line">|       5 | 3       |         |</span><br><span class="line">| 8       |         |    2    |</span><br><span class="line">|    7    |    1    | 5       |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 4       |       5 | 3       |</span><br><span class="line">|    1    |    7    |       6 |</span><br><span class="line">|       3 | 2       |    8    |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">|    6    | 5       |       9 |</span><br><span class="line">|       4 |         |    3    |</span><br><span class="line">|         |       9 | 7       |</span><br><span class="line">+-----------------------------+</span><br></pre></td></tr></table></figure>
-<h2 id="规则">规则</h2>
-<blockquote>
-<p>游戏一般由9个3×3个的九宫格组成。<br />
-每一列的数字均须包含 1～9，不能缺少，也不能重复。<br />
-每一行的数字均须包含 1～9，不能缺少，也不能重复。<br />
-每一宫(粗黑线围起来的区域，通常是 3*3 的九宫格)的数字均须包含 1～9，不能缺少，也不能重复。</p>
-</blockquote>
-<h2 id="算法介绍">算法介绍</h2>
-<p>实现了两种求数独的算法：</p>
-<ol type="1">
-<li>基于摈弃原则的深度优先搜索算法(dfs)</li>
-<li>优化的舞蹈链算法(Dance Links X)</li>
-</ol>
-<h3 id="一基于摈弃原则的深度优先搜索算法">一、基于摈弃原则的深度优先搜索算法</h3>
-<h4 id="说明">说明</h4>
-<p>计算流程如下：</p>
-<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%21100845&amp;authkey=AK_IF_N8tq8grig&amp;em=2" width="804px" height="850px" frameborder="0">
-这是嵌入 <a target="_blank" href="https://office.com">Microsoft Office</a> 关系图，由 <a target="_blank" href="https://office.com/webapps">Office</a> 提供支持。
-</iframe>
-<p>一般正常数独耗时&lt;10ms，算法主要是深度优先搜索，但是做了几点优化：</p>
-<ol type="1">
-<li>优先填写唯一解的单元格</li>
-<li>下一次搜索节点为全局可能性最小单元格（近似贪心）</li>
-</ol>
-<h4 id="补充">补充</h4>
-<ul>
-<li>其实可以做二进制编码优化，时间复杂度降低一个数量级。但主要是为了代码易读，并非为了极致时间效率；</li>
-</ul>
-<h3 id="二优化的舞蹈链算法">二、优化的舞蹈链算法</h3>
-<p><img src="https://bn1302files.storage.live.com/y4mqX71HMmy0BKWRMJs4R1m2nVjSaQDdt-prqja7Wio9tJFC3zszJAvAZH_xGEmwLqhHWUSgI-GVawen6r5_ojj1qEl0KTevEFVM8Eh46PYztPJO5Ta0928Sb4-e85l30PFNABDQKT4m6m1ohLtW5LCDBRawo9UHKXFnUoHrjR0jzYSrmLzC_8MVx4G-wmPuate?width=744&amp;height=638&amp;cropmode=none" /></p>
-<ul>
-<li><p>舞蹈链算法介绍见博客：<a href="https://www.cnblogs.com/grenet/p/3145800.html" target="_blank" rel="noopener">跳跃的舞者，舞蹈链（Dancing Links）算法——求解精确覆盖问题</a></p></li>
-<li><p>优化思路来自于博客：<a href="https://www.cnblogs.com/grenet/p/3163550.html" target="_blank" rel="noopener">算法实践——舞蹈链（Dancing Links）算法求解数独</a></p></li>
-</ul>
-<p>主要优化有三点：</p>
-<ol type="1">
-<li>提前优先处理唯一单元格</li>
-<li>优先标记最小可能舞蹈链列元素，极大降低了递归深度（近似贪心）</li>
-<li>先把有数字的格子转换为舞蹈链行，插入到矩阵中，便于计算时优先选中，且仅插入规则合法行，以便减少迭代次数</li>
-</ol>
-<h2 id="测试与对比">测试与对比</h2>
-<p><a href="https://github.com/smilelc3/sudoku-solver/tree/master/test" target="_blank" rel="noopener">test</a> 文件夹中，含有各种测试样例，包含号称 <a href="https://baike.baidu.com/item/%E4%B8%96%E7%95%8C%E6%9C%80%E9%9A%BE%E6%95%B0%E7%8B%AC/13848819" target="_blank" rel="noopener">最难数独</a> 样例文件<a href="https://github.com/smilelc3/sudoku-solver/blob/master/test/7hardest" target="_blank" rel="noopener">7hardest</a></p>
-<p>测试结果基于400次重复求解用时均值，仅具有一定参考</p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">样例文件</th>
-<th style="text-align: center;">深度优先搜索算法</th>
-<th style="text-align: center;">舞蹈链算法</th>
-<th style="text-align: center;">备注</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">0finished</td>
-<td style="text-align: center;">0 ms</td>
-<td style="text-align: center;">0.557 ms</td>
-<td style="text-align: center;">已完成的数独</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">1dream</td>
-<td style="text-align: center;">3.027 ms</td>
-<td style="text-align: center;">2.904 ms</td>
-<td style="text-align: center;">全空</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">2easier</td>
-<td style="text-align: center;">0.010 ms</td>
-<td style="text-align: center;">0.567 ms</td>
-<td style="text-align: center;">仅一个位置未填</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">3easy</td>
-<td style="text-align: center;">0.750 ms</td>
-<td style="text-align: center;">0.840 ms</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">4normal</td>
-<td style="text-align: center;">12.16 ms</td>
-<td style="text-align: center;">1.452 ms</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">5hard</td>
-<td style="text-align: center;">0.829 ms</td>
-<td style="text-align: center;">1.060 ms</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6harder</td>
-<td style="text-align: center;">3.871 ms</td>
-<td style="text-align: center;">1.239 ms</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">7hardest</td>
-<td style="text-align: center;">189.212 ms</td>
-<td style="text-align: center;">18.623 ms</td>
-<td style="text-align: center;">号称最难数独</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>在某些特殊情况下，深度优先搜索深度低，在较为简单的数独上效率高；</li>
-<li>舞蹈链算法稳定高效，适用于精确覆盖类问题，用额外的空间开销与特殊的数据结构，在复杂数独上效果显著。</li>
-</ul>
-<h3 id="最难数独运行程序结果">最难数独运行程序结果</h3>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">+-----------------------------+</span><br><span class="line">| 8       |         |         |</span><br><span class="line">|       3 | 6       |         |</span><br><span class="line">|    7    |    9    | 2       |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">|    5    |       7 |         |</span><br><span class="line">|         |    4  5 | 7       |</span><br><span class="line">|         | 1       |    3    |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">|       1 |         |    6  8 |</span><br><span class="line">|       8 | 5       |    1    |</span><br><span class="line">|    9    |         | 4       |</span><br><span class="line">+-----------------------------+</span><br><span class="line">已读取数独 test&#x2F;7hardest</span><br><span class="line">+-----------------------------+</span><br><span class="line">| 8  1  2 | 7  5  3 | 6  4  9 |</span><br><span class="line">| 9  4  3 | 6  8  2 | 1  7  5 |</span><br><span class="line">| 6  7  5 | 4  9  1 | 2  8  3 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 1  5  4 | 2  3  7 | 8  9  6 |</span><br><span class="line">| 3  6  9 | 8  4  5 | 7  2  1 |</span><br><span class="line">| 2  8  7 | 1  6  9 | 5  3  4 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 5  2  1 | 9  7  4 | 3  6  8 |</span><br><span class="line">| 4  3  8 | 5  2  6 | 9  1  7 |</span><br><span class="line">| 7  9  6 | 3  1  8 | 4  5  2 |</span><br><span class="line">+-----------------------------+</span><br><span class="line">深度优先搜索法所用时间： 189.9914 ms</span><br><span class="line">+-----------------------------+</span><br><span class="line">| 8  1  2 | 7  5  3 | 6  4  9 |</span><br><span class="line">| 9  4  3 | 6  8  2 | 1  7  5 |</span><br><span class="line">| 6  7  5 | 4  9  1 | 2  8  3 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 1  5  4 | 2  3  7 | 8  9  6 |</span><br><span class="line">| 3  6  9 | 8  4  5 | 7  2  1 |</span><br><span class="line">| 2  8  7 | 1  6  9 | 5  3  4 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 5  2  1 | 9  7  4 | 3  6  8 |</span><br><span class="line">| 4  3  8 | 5  2  6 | 9  1  7 |</span><br><span class="line">| 7  9  6 | 3  1  8 | 4  5  2 |</span><br><span class="line">+-----------------------------+</span><br><span class="line">舞蹈链法所用时间： 20.0401 ms</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2020/10/01/Tmux%20%E5%BF%AB%E6%8D%B7%E9%94%AE%E9%80%9F%E6%9F%A5%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/10/01/Tmux%20%E5%BF%AB%E6%8D%B7%E9%94%AE%E9%80%9F%E6%9F%A5%E8%A1%A8/" class="post-title-link" itemprop="url">Tmux 快捷键速查表</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-10-01 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-01T00:00:00+08:00">2020-10-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-02 17:11:13" itemprop="dateModified" datetime="2020-10-02T17:11:13+08:00">2020-10-02</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="tmux-快捷键速查表">Tmux 快捷键速查表</h1>
-<p>启动新会话：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux [new -s 会话名 -n 窗口名]</span><br></pre></td></tr></table></figure>
-<p>恢复会话：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux at [-t 会话名]</span><br></pre></td></tr></table></figure>
-<p>列出所有会话：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux ls</span><br></pre></td></tr></table></figure>
-<p>关闭会话：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux kill-session -t 会话名</span><br></pre></td></tr></table></figure>
-<p>关闭除指定会话外的所有会话：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux kill-session -a -t 会话名</span><br></pre></td></tr></table></figure>
-<p>销毁所有会话并停止<code>Tmux</code>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux kill-server</span><br></pre></td></tr></table></figure>
-<h1 id="在-tmux-中按下-tmux-前缀-ctrlb然后">在 Tmux 中，按下 Tmux 前缀 <code>ctrl+b</code>，然后：</h1>
-<h2 id="会话">会话</h2>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">:new&lt;回车&gt;  	启动新会话</span><br><span class="line">s           列出所有会话</span><br><span class="line">$           重命名当前会话</span><br></pre></td></tr></table></figure>
-<h2 id="窗口">窗口</h2>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">c	创建新窗口</span><br><span class="line">w	列出所有窗口</span><br><span class="line">n	后一个窗口</span><br><span class="line">p	前一个窗口</span><br><span class="line">f	查找窗口</span><br><span class="line">,	重命名当前窗口；这样便于识别</span><br><span class="line">.	修改当前窗口编号；相当于窗口重新排序</span><br><span class="line">&amp;	关闭当前窗口</span><br></pre></td></tr></table></figure>
-<h2 id="调整窗口排序">调整窗口排序</h2>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">:swap-window -s 2 -t 0	交换2号和0号窗口</span><br><span class="line">:swap-window -t 0		交换当前和0号窗口</span><br><span class="line">:move-window -t 0		移动当前窗口到0号</span><br></pre></td></tr></table></figure>
-<h2 id="窗格">窗格</h2>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">%	垂直分割</span><br><span class="line">&quot;	水平分割</span><br><span class="line">o	交换窗格</span><br><span class="line">x	关闭窗格</span><br><span class="line">sapce(空格键)	切换布局</span><br><span class="line">q	显示每个窗格是第几个，当数字出现的时候按数字几就选中第几个窗格</span><br><span class="line">&#123;	与上一个窗格交换位置</span><br><span class="line">&#125;	与下一个窗格交换位置</span><br><span class="line">z	切换窗格最大化&#x2F;最小化</span><br></pre></td></tr></table></figure>
-<h2 id="同步窗格">同步窗格</h2>
-<p>如果您将窗口划分为多个窗格，则可以使用<code>synchronize-panes</code>选项同时向每个窗格发送相同的键盘输入：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:setw synchronize-panes [on&#x2F;off]</span><br></pre></td></tr></table></figure>
-<p>你可以指定开启<code>on</code>或停用<code>off</code>，否则重复执行命令会在两者间切换。 这个选项值针对当前个窗口有效，不会影响别的会话和窗口。 完事儿之后再次执行命令来关闭。</p>
-<p><img src="https://y7td3w.bn.files.1drv.com/y4mlaDIjQcsjfpBk5ev72u1lBIpfQTbVfhojojkafHpIiVKOwjJxoPyOyUmtKF0cwiX-MOo-jLbtaPKAfDSES-2npAj68eZ38r4_2QB0d1m4PRTA0-ZLFkhSqlHxv43Zgd2r_fq8jI5rLUlaW_vZCyRjbzOKuxcwdg-FadaixWuU8hxKJomhAjRCaNG0JaifNZPleDjNuH-G3r-lOR3JiS9rA" /></p>
-<h2 id="调整窗格尺寸">调整窗格尺寸</h2>
-<p>如果你不喜欢默认布局，可以重调窗格的尺寸。虽然这很容易实现，但一般不需要这么干。这几个命令用来调整窗格：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">:resize-pane -D          当前窗格向下扩大 1 格</span><br><span class="line">:resize-pane -U          当前窗格向上扩大 1 格</span><br><span class="line">:resize-pane -L          当前窗格向左扩大 1 格</span><br><span class="line">:resize-pane -R          当前窗格向右扩大 1 格</span><br><span class="line">:resize-pane -D 20       当前窗格向下扩大 20 格</span><br><span class="line">:resize-pane -t 2 -L 20  编号为 2 的窗格向左扩大 20 格</span><br></pre></td></tr></table></figure>
-<h2 id="杂项">杂项</h2>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">d  退出 tmux（tmux 仍在后台运行）</span><br><span class="line">t  窗口中央显示一个数字时钟</span><br><span class="line">?  列出所有快捷键</span><br><span class="line">:  命令提示符</span><br></pre></td></tr></table></figure>
-<h2 id="配置选项">配置选项</h2>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 鼠标支持 - 设置为 on 来启用鼠标</span><br><span class="line">:set -g mouse on</span><br><span class="line"></span><br><span class="line"># 设置默认终端模式为 256color</span><br><span class="line">:set -g default-terminal &quot;screen-256color&quot;</span><br><span class="line"></span><br><span class="line"># 启用活动警告</span><br><span class="line">:setw -g monitor-activity on</span><br><span class="line">:set -g visual-activity on</span><br><span class="line"></span><br><span class="line"># 窗口名列表居中</span><br><span class="line">:set -g status-justify centre</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -816,7 +747,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -861,12 +792,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">156k</span>
+    <span title="站点总字数">160k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:21</span>
+    <span title="站点阅读时长">2:25</span>
 </div>
 
         

@@ -175,6 +175,214 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/03/26/%E4%B9%8C%E7%8F%AD%E5%9B%BEMySQL%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/03/26/%E4%B9%8C%E7%8F%AD%E5%9B%BEMySQL%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">乌班图MySQL安装</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-03-26 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-26T00:00:00+08:00">2018-03-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-19 00:29:55" itemprop="dateModified" datetime="2020-04-19T00:29:55+08:00">2020-04-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://p06peg.bn.files.1drv.com/y4mm5APcOIb1-chauC6p3Mq4ebFgsR0DaV-nPTxXskfoEcuyKfS3HSeMuH8es2BFnLRuAPdZPE3X5VrG-ZLF7i5uDOH4s0mAHOTCmnm-h_3wA_SIdoiSy_rU6e5N1tgxLZllxncREn1w9MSqaSTfcLw6lUDw8azqaAnvRmN4Rl6CSZxqYOOdNz47r0wk1mFdL680OQ97vnGXbkzTt3IPdf0fQ?width=1024&amp;height=530&amp;cropmode=none" /></p>
+<h1 id="mysql安装">MySQL安装</h1>
+<p><strong>首先在命令行中输入三个命令：</strong></p>
+<ol type="1">
+<li><p>```bash sudo apt-get install mysql-server <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2. &#96;&#96;&#96;bash</span><br><span class="line">   sudo apt install mysql-client</span><br></pre></td></tr></table></figure></p></li>
+<li><p>```bash sudo apt install libmysqlclient-dev <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">**接下来确认系统是否已经安装上Mysql:**</span><br><span class="line">输入命令：&#96;mysql --help&#96;</span><br><span class="line">出现如下一大串help，即为成功：</span><br><span class="line">![](https:&#x2F;&#x2F;p06ueg.bn.files.1drv.com&#x2F;y4mNAe06cdjT6CqEklVdezSTWyalrQwVgPqFxaTs5cJ2q2QdEnvJsCMsJs7Ge0SvUFrBCYJtPgJyeQf5Jqe_LP4zspTpKdNmUj64e6xAmLUShjA4BbBCeZ7NXBNsv2Cc39u2ya-tk53ynjv4kU-3jbTr4bOJnpgdOSRzn1A9nuNal2tACfRIajJaef0bMGdiiAOmsD5R1VvhL93lKh3Cxc4qA?width&#x3D;735&amp;height&#x3D;382&amp;cropmode&#x3D;none)</span><br><span class="line">可以通过如下命令进入MySQL服务：</span><br><span class="line">&#96;mysql -uroot -p&#96;</span><br><span class="line">会让你输入密码，在安装的时候有时候会出现让你设置密码，有些是默认登录。</span><br><span class="line">![](https:&#x2F;&#x2F;p06veg.bn.files.1drv.com&#x2F;y4mIW7MdhJAY-igcVXDXwcqeX4_UXQ3OvFvYsvO4UTyYXax3r47Tfd2vOvWrjdHnX2-EdTPWq0YxOczucbzJbMyjeTSxgawUOWAvMksXchd0QOX2KJL-YWdcJhkJMGkrLN9md7NaGPe7YR1qe1f3sbbkx3tRaX2x-vYJy-yW05GmWkxMeYM4Br-wy6mIK34RWllkxK6DUucEsqUqwFZ-hawYg?width&#x3D;732&amp;height&#x3D;243&amp;cropmode&#x3D;none)</span><br><span class="line"></span><br><span class="line">现在设置mysql允许远程访问，首先编辑文件 &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;mysqld.cnf：</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;bash</span><br><span class="line">sudo nano &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;mysqld.cnf</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<p>注释掉<strong><em>bind-address = 127.0.0.1</em></strong>： <code>sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf</code> <img src="https://ne7cha.bn.files.1drv.com/y4mQb9DVkANMfETZF6_0-xkxRkcXScb72aYdGeeq7j7iNSKNTv_dfReFsRpBRwPr8w3EDbQ-nsKlY0eBhMRBxVEzBLpYpXGectH9Cz2-8kAKLszCH1jvBoGt5EMH7pcx3g1YDEZNfMnyLMEkR6jAPO2HaYZXsL4WUg7rHGyMFUtnnKtPq271X3bxpMTvv2jhYjV7nGPXBW3q6vWPBDeEwpVNQ?width=664&amp;height=40&amp;cropmode=none" /></p>
+<p>保存退出，然后进入mysql服务，执行授权命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Grant all on *.* to &#39;root&#39;@&#39;%&#39; identified by &#39;root用户的密码&#39; with grant option;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+<p>然后执行quit命令退出mysql服务，执行如下命令重启mysql：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysql restart</span><br></pre></td></tr></table></figure>
+<p>补充：在进入MySQL时，输入<code>mysql -uroot -p</code>命令时，会出现 &gt; ERROR 1045 (28000): Access denied for user ‘root’@’localhost’这种情况。于是在网上查了许多技术网站，发现一篇不错的，据此解决。链接： https://blog.csdn.net/learner_lps/article/details/62887343</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/03/19/Google%20BBR%20%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%EF%BC%8C%E5%AE%9E%E7%8E%B0TCP%E5%8A%A0%E9%80%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/03/19/Google%20BBR%20%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%EF%BC%8C%E5%AE%9E%E7%8E%B0TCP%E5%8A%A0%E9%80%9F/" class="post-title-link" itemprop="url">Google BBR 优化算法，实现TCP加速</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-03-19 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-19T00:00:00+08:00">2018-03-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-03-20 15:32:08" itemprop="dateModified" datetime="2019-03-20T15:32:08+08:00">2019-03-20</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>997</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://pk6ceg.bn.files.1drv.com/y4mnLfkbjzcBX8gXFbniP9PeL1ZvEPpZHrnlwnkxX4O78ih7XLEKnKttGTHlGU2oggl5Z1F5iHodmH7uXFBNkogDvcG_HDhZdctL7NAycjrK5rXi-hHff__5cKe0S9jQfRVV3TkARfmHY0sXp3iGZ62ECWZGaWqJE35MKgADNgpGFCaMn9QhJ1mmSuEZYl9TGhh-LO3Li24Y3Lb9Mc122oaCQ?width=600&amp;height=450&amp;cropmode=none" /></p>
+<blockquote>
+<p>最近，Google 开源了其 TCP BBR 拥塞控制算法，并提交到了 Linux 内核，从 4.9 开始，Linux 内核已经用上了该算法。根据以往的传统，Google 总是先在自家的生产环境上线运用后，才会将代码开源，此次也不例外。 根据实地测试，在部署了最新版内核并开启了 TCP BBR 的机器上，网速甚至可以提升好几个数量级。 于是我根据目前三大发行版的最新内核，开发了一键安装最新内核并开启 TCP BBR 脚本。</p>
+</blockquote>
+<h1 id="本脚本适用环境">本脚本适用环境</h1>
+<ul>
+<li>系统支持：Ubuntu 12+</li>
+<li>虚拟技术：OpenVZ 以外的，比如 KVM、Xen、VMware 等</li>
+<li>内存要求：≥128M</li>
+<li>日期：2018 年 03 月 20 日</li>
+</ul>
+<h1 id="关于本脚本">关于本脚本</h1>
+<ol type="1">
+<li>本脚本已在 digitalocean 上的 VPS 全部测试通过。</li>
+<li>当脚本检测到 VPS 的虚拟方式为 OpenVZ 时，会提示错误，并自动退出安装。</li>
+<li>脚本运行完重启发现开不了机的，打开 VPS 后台控制面板的 VNC, 开机卡在 grub 引导, 手动选择内核即可。</li>
+<li>由于是使用最新版系统内核，最好请勿在生产环境安装，以免产生不可预测之后果。</li>
+</ol>
+<h1 id="使用方法">使用方法</h1>
+<ol type="1">
+<li><p>使用root用户登录，运行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh &amp;&amp; chmod +x bbr.sh &amp;&amp; ./bbr.sh</span><br></pre></td></tr></table></figure>
+<p>安装完成后，脚本会提示需要重启 VPS，输入 y 并回车后重启。</p></li>
+<li><p>重启完成后，进入 VPS，验证一下是否成功安装最新内核并开启 TCP BBR，输入以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname -r</span><br></pre></td></tr></table></figure>
+<p>查看内核版本，显示为最新版就表示 OK 了</p></li>
+<li><p>检查</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl net.ipv4.tcp_available_congestion_control</span><br></pre></td></tr></table></figure>
+<p>返回值一般为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.ipv4.tcp_available_congestion_control &#x3D; bbr cubic reno</span><br></pre></td></tr></table></figure></li>
+<li><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl net.ipv4.tcp_congestion_control</span><br></pre></td></tr></table></figure>
+<p>返回值一般为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.ipv4.tcp_congestion_control = bbr</span><br></pre></td></tr></table></figure></li>
+<li><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysctl net.core.default_qdisc</span><br></pre></td></tr></table></figure>
+<p>返回值一般为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.core.default_qdisc = fq</span><br></pre></td></tr></table></figure></li>
+<li><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsmod | grep bbr</span><br></pre></td></tr></table></figure>
+<p>返回值有 tcp_bbr 模块即说明 bbr 已启动。注意：并不是所有的 VPS 都会有此返回值，若没有也属正常。</p></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/01/27/LaTeX%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%EF%BC%88Linux&Win%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -540,273 +748,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/01/08/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/01/08/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B/" class="post-title-link" itemprop="url">markdown语法简介</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-01-08 00:00:00" itemprop="dateCreated datePublished" datetime="2018-01-08T00:00:00+08:00">2018-01-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-20 15:17:25" itemprop="dateModified" datetime="2019-03-20T15:17:25+08:00">2019-03-20</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>785</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="一级标题">一级标题</h1>
-<h2 id="二级标题">二级标题</h2>
-<h3 id="三级标题">三级标题</h3>
-<h4 id="四级标题">四级标题</h4>
-<h5 id="五级标题">五级标题</h5>
-<h6 id="六级标题">六级标题</h6>
-<hr />
-<h3 id="无序列表">无序列表</h3>
-<ul>
-<li><p>1</p></li>
-<li><p>2</p></li>
-<li><p>3</p></li>
-<li><p>1</p></li>
-<li><p>2</p></li>
-<li><p>3</p></li>
-</ul>
-<h3 id="有序列表">有序列表</h3>
-<ol type="1">
-<li>一</li>
-<li>二</li>
-<li>三</li>
-</ol>
-<hr />
-<blockquote>
-<p><em>这里可以写引用</em></p>
-<p>*Markdown是一种可以使用普通文本编辑器编写的标记语言，通过简单的标记语法，它可以使普通文本内容具有一定的格式。**</p>
-<p>**Markdown具有一系列衍生版本，用于扩展Markdown的功能（如表格、脚注、内嵌HTML等等），这些功能原初的Markdown尚不具备，它们能让Markdown转换成更多的格式，例如LaTeX，Docbook。Markdown增强版中比较有名的有Markdown Extra、MultiMarkdown、 Maruku等。这些衍生版本要么基于工具，如Pandoc；要么基于网站，如GitHub和Wikipedia，在语法上基本兼容，但在一些语法和渲染效果上有改动。*</p>
-</blockquote>
-<hr />
-<p>粗体：<strong>Markdown</strong> 斜体：<em>Markdown</em> 粗体+斜体：<strong><em>Markdown</em></strong> 删除线：<del>MarkDown</del> 网址引用：<a href="liuchang.men/">liuchang.men</a></p>
-<hr />
-<p>关于<code>LaTex</code>公式 行内公式：<span class="math inline">\(E=mc^2\)</span></p>
-<p>单行公式：</p>
-<p><span class="math inline">\(x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}\)</span></p>
-<hr />
-<h3 id="来张图片吧">来张图片吧</h3>
-<p><img src="https://pk6reg.bn.files.1drv.com/y4mN1y2Y8erivqCNUM4UDwAOmNOQ7pKAoyHeg5HYPzQn3gf3J3ZoQmDQmYdU-SJebZYKDvKx3ItCKHbQFb_FM8SD83P49gMy4wAU56roEMvcI3lJZZzrgaXnoGEFg6QXudvOFSUkC6w7oMG9CUgUt5eMApjgiYItHvd55kqMfbV4uxNhGzmchnzW85vXVFOY88A6oyBXf94ur-x66VOTvECHg?width=144&amp;height=140&amp;cropmode=none" /></p>
-<hr />
-<h3 id="这是表格">这是表格</h3>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: center;">Tables</th>
-<th style="text-align: center;">Are</th>
-<th style="text-align: center;">Cool</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">right-aligned</td>
-<td style="text-align: center;">$1600</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">centered</td>
-<td style="text-align: center;">$12</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">3</td>
-<td style="text-align: center;">are neat</td>
-<td style="text-align: center;">$1</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h3 id="代码测试">代码测试</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line">print(<span class="string">"hello world!"</span>)</span><br></pre></td></tr></table></figure>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"hello world!\n"</span>, );</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">cout</span>&lt;&lt;<span class="string">"hello world!"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hello world!</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/12/17/App%20Inventor2%20%E7%94%A8%E8%93%9D%E7%89%99%E4%B8%8E%E6%A0%91%E8%8E%93%E6%B4%BE%E5%B0%8F%E8%BD%A6%E9%80%9A%E8%AE%AF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/12/17/App%20Inventor2%20%E7%94%A8%E8%93%9D%E7%89%99%E4%B8%8E%E6%A0%91%E8%8E%93%E6%B4%BE%E5%B0%8F%E8%BD%A6%E9%80%9A%E8%AE%AF/" class="post-title-link" itemprop="url">App Inventor2 用蓝牙与树莓派小车通讯</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-12-17 00:00:00" itemprop="dateCreated datePublished" datetime="2017-12-17T00:00:00+08:00">2017-12-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-20 15:07:46" itemprop="dateModified" datetime="2019-03-20T15:07:46+08:00">2019-03-20</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://pk6ueg.bn.files.1drv.com/y4mHN_WmjLyzid9rX2_b27JcG_s8rfjhBF0NOKMuhrQ3oG8rH9wRMt1VzlYI2iMfvJer2oo_eODqFPiN3qBdrt5wbGQRfGxNBrM3UZnsWEpb1aOOQqe1WcKlAPRBg-Ts1n2vtV7eg_ymfZNKfQzge7t7v1tnz7c_AcbSSFfhm0jj-Nij8ywFQToztV_0LJY2IcCYKi7hiKMyStszCJF9Y1kQg?width=960&amp;height=720&amp;cropmode=none" /></p>
-<h1 id="app-inventor开发">App Inventor开发</h1>
-<p><strong><em>App Inventor 2</em></strong></p>
-<blockquote>
-<p><strong>Android应用开发者</strong>（英语：<strong>App Inventor</strong>）是一款卡通图形界面的Android智能手机应用程序开发软件。它起先由<strong>Google</strong>提供的应用软件，现在由<a href="https://zh.wikipedia.org/wiki/%E9%BA%BB%E7%9C%81%E7%90%86%E5%B7%A5%E5%AD%B8%E9%99%A2" target="_blank" rel="noopener">麻省理工学院</a>维护及营运。</p>
-</blockquote>
-<p>借助IA2 建立一个简易的游戏手柄。因为AI2 的蓝牙串口通讯协议是基于SPP（Serial Port Profile）串行端口配置。我们目的是并设定相对应代码，在手机发送，在树莓派解析，并对小车进行运动控制。</p>
-<p>对应代码如下：</p>
-<ul>
-<li><p>u –&gt; 前进 gofront()</p></li>
-<li><p>d –&gt; 后退 goback()</p></li>
-<li><p>l –&gt; 左转 turnleft()</p></li>
-<li><p>r –&gt; 右转 turnright()</p></li>
-<li><p>s –&gt; 停止 istop()</p></li>
-</ul>
-<p><em>每次代码运行周期为20ms</em></p>
-<p><img src="https://pk6veg.bn.files.1drv.com/y4mIkyyslbi4ZFrnK1cpaEg-yovBCqfB5atdhJVUQZjkkXllN9AfVWx4uzzwSgcY_2z-Oo_8B0-2QhsvPcxg5fhBFAgYWdVScXrncGOWnoFadFGx4wqIQJJ41-MSncD_6EsvddnDEZPcMbDJmQGFE3rdgkSH0CsIz0_1IWfdnItmbIh9lmNT_2p4l_3-ni3KB4qIcpzdMlCBKMwKkTgcjAhfw?width=256&amp;height=144&amp;cropmode=none" /></p>
-<p><strong>ai2截面图</strong></p>
-<p><img src="https://pk6weg.bn.files.1drv.com/y4mejbO3E7DLhRbQJ8B--9aTr98Z-lSMAcl6KyZwnlZgwv1ED7UHTneA7ofruPnB3qsXx9wy1TII8PxPySd2bVgNvHq5mSgpMajDSzTRiqU-2LJBoacYoppfrmJbST95lFrKbcGwUJPRdLsL4j3FQfVUPAse39H9yhhkvUR9h4t0YCAjsI1khfKo-E_-nkM_X63I2AFhRB95zItTcS_wwb0fA?width=1024&amp;height=276&amp;cropmode=none" /></p>
-<h1 id="树莓派蓝牙spp设置">树莓派蓝牙SPP设置</h1>
-<h2 id="树莓派蓝牙配置">树莓派蓝牙配置</h2>
-<ol type="1">
-<li><p><strong>安装支持包</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install pi-bluetooth</span><br><span class="line">sudo apt-get install bluetooth bluez blueman</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>添加pi用户到蓝牙组</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo usermod -G bluetooth -a pi</span><br><span class="line">service bluetooth status</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>启动/增加SPP</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/systemd/system/dbus-org.bluez.service</span><br></pre></td></tr></table></figure>
-<p>修改内容如下:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ExecStart=/usr/lib/bluetooth/bluetoothd -C</span><br><span class="line">ExecStartPost=/usr/bin/sdptool add SP</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>重启，启动蓝牙串口</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rfcomm watch hci0</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="串口调试软件xgcom">串口调试软件xgcom</h2>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo git clone https://github.com/helight/xgcom.git</span><br><span class="line">sudo  apt-get install make automake libglib2.0-dev libvte-dev libgtk2.0-dev</span><br><span class="line">cd xgcom</span><br><span class="line">sudo ./autogen.sh</span><br><span class="line">sudo make</span><br><span class="line">sudo make install</span><br><span class="line">xgcom</span><br></pre></td></tr></table></figure>
-<p><img src="https://pk6peg.bn.files.1drv.com/y4mKYhIYnHOXz_MyyddJN0S_04VOUJeT3ENiQNhYQ4h7yDkdhRSmTG5uNSNS46ZhJZtMz4EaMndvj4nx7aYKb8JsGE8_QuclXhzG267SlTYViIOB9jsuHN-mj-YqYXyxol65qQKh3oOdDlaL-_3JjsB0svfPJBXxL4L3TFRlfm9g0Wya4YscAT2QjH433_UMFm3uAcz1Rccmgmal7e-ZmDubw?width=631&amp;height=693&amp;cropmode=none" /></p>
-<h1 id="展示与控制代码">展示与控制代码</h1>
-<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124385&amp;authkey=AMKU6_Ou2Uh31II" width="320" height="180" frameborder="0" scrolling="no" allowfullscreen>
-</iframe>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> serial</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> btbu_robot.motor <span class="keyword">import</span> motor</span><br><span class="line">bluetooth = serial.Serial(<span class="string">"/dev/rfcomm0"</span>,<span class="number">9600</span>,timeout=<span class="number">0.5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#bluetooth.open()</span></span><br><span class="line">left = motor(<span class="number">22</span>, <span class="number">27</span>, <span class="number">17</span>)</span><br><span class="line">right = motor(<span class="number">24</span>, <span class="number">23</span>, <span class="number">18</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gofront</span><span class="params">()</span>:</span></span><br><span class="line">    left.run(<span class="number">70</span>)</span><br><span class="line">    right.run(<span class="number">70</span>)</span><br><span class="line">    <span class="comment"># print("前进")</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">goback</span><span class="params">()</span>:</span></span><br><span class="line">    left.run(<span class="number">-70</span>)</span><br><span class="line">    right.run(<span class="number">-70</span>)</span><br><span class="line">    <span class="comment">#print("后退")</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">turnleft</span><span class="params">()</span>:</span></span><br><span class="line">    left.run(<span class="number">-70</span>)</span><br><span class="line">    right.run(<span class="number">70</span>)</span><br><span class="line">    <span class="comment">#print("左转")</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">turnright</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment">#print("右转")</span></span><br><span class="line">    left.run(<span class="number">70</span>)</span><br><span class="line">    right.run(<span class="number">-70</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">istop</span><span class="params">()</span>:</span></span><br><span class="line">    left.run(<span class="number">0</span>)</span><br><span class="line">    right.run(<span class="number">0</span>)</span><br><span class="line">    <span class="comment">#print("停止")</span></span><br><span class="line"></span><br><span class="line">status = <span class="string">''</span> <span class="comment"># 记录当前状态</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    data = bluetooth.readline().decode(<span class="string">'utf-8'</span>)</span><br><span class="line">    <span class="keyword">if</span> status == <span class="string">'u'</span>: <span class="comment"># 前进</span></span><br><span class="line">        gofront()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">elif</span> status == <span class="string">'d'</span>: <span class="comment"># 后退</span></span><br><span class="line">        goback()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">elif</span> status == <span class="string">'l'</span>: <span class="comment"># 左转</span></span><br><span class="line">        turnleft()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">elif</span> status == <span class="string">'r'</span>: <span class="comment"># 右转</span></span><br><span class="line">        turnright()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">elif</span> status == <span class="string">'s'</span>: <span class="comment"># 停止</span></span><br><span class="line">        istop()</span><br><span class="line">    <span class="keyword">while</span> data != <span class="string">''</span>:</span><br><span class="line">        status = data[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> status == <span class="string">'u'</span>: <span class="comment">#　前进</span></span><br><span class="line">            gofront()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> status == <span class="string">'d'</span>: <span class="comment">#　后退</span></span><br><span class="line">            goback()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> status == <span class="string">'l'</span>: <span class="comment">#　左转</span></span><br><span class="line">            turnleft()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> status == <span class="string">'r'</span>: <span class="comment">#　右转</span></span><br><span class="line">            turnright()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> status == <span class="string">'s'</span>: <span class="comment"># 停止</span></span><br><span class="line">            istop()</span><br><span class="line">        data = data[<span class="number">1</span>:]</span><br><span class="line">        time.sleep(<span class="number">0.02</span>)</span><br><span class="line">    time.sleep(<span class="number">0.02</span>)</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -876,7 +817,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -921,12 +862,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">156k</span>
+    <span title="站点总字数">160k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:21</span>
+    <span title="站点阅读时长">2:25</span>
 </div>
 
         

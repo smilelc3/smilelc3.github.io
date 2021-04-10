@@ -4207,4 +4207,99 @@ R(\phi^{ij})\begin{bmatrix} u_i \\ v_i\end{bmatrix} - \begin{bmatrix} u_j \\ v_j
 <p>有关题目可参考Leetcode题目：<code>Longest Palindromic Substring</code> <a href="https://leetcode.com/problems/longest-palindromic-substring/" target="_blank" rel="noopener">链接</a></p>
 ]]></content>
   </entry>
+  <entry>
+    <title>动态规划——背包问题</title>
+    <url>/2021/04/03/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E2%80%94%E2%80%94%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<hr />
+<hr />
+<h1 id="动态规划背包问题">动态规划——背包问题</h1>
+]]></content>
+  </entry>
+  <entry>
+    <title>动态规划之背包问题</title>
+    <url>/2021/04/10/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B9%8B%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>title: 动态规划之背包问题 date: 2021-4-7</p>
+<h1 id="动态规划之背包问题">动态规划之背包问题</h1>
+<blockquote>
+<p><strong>背包问题</strong>（Knapsack problem）是一种<a href="https://zh.wikipedia.org/wiki/组合优化" target="_blank" rel="noopener">组合优化</a>的<a href="https://zh.wikipedia.org/wiki/NP完全" target="_blank" rel="noopener">NP完全</a>问题。问题可以描述为：给定一组物品，每种物品都有自己的重量和价格，在限定的总重量内，我们如何选择，才能使得物品的总价格最高。问题的名称来源于如何选择最合适的物品放置于给定背包中。</p>
+</blockquote>
+<p>也可以将背包问题描述为决定性问题，即在总重量不超过<span class="math inline">\(W\)</span>的前提下，总价值是否能达到<span class="math inline">\(V\)</span>。</p>
+<h2 id="定义">定义</h2>
+<p>我们有<span class="math inline">\(n\)</span>种物品，物品<span class="math inline">\(i\)</span>的重量为<span class="math inline">\(w_i\)</span>，价值为<span class="math inline">\(v_i\)</span></p>
+<p>我们假定所有物品的重量和价值都是非负数，背包所能承受的最大重量为<span class="math inline">\(W\)</span>。</p>
+<ul>
+<li><p>如果限定每种物品最多能选择1个，则该背包称为<strong>01背包</strong>。</p>
+<p>可以用公式表示为：</p></li>
+</ul>
+<p><span class="math display">\[
+\begin{align}
+最大化 &amp; \quad \sum^{n}_{i=1}{v_{i} x_i} \\
+受限于 &amp; \quad \sum^{n}_{i=1}{w_{i} x_i} \leq W, \quad x_i \in \{0,1\} \\
+\end{align}
+\]</span></p>
+<ul>
+<li><p>如果限定物品<span class="math inline">\(i\)</span>最多只能选择<span class="math inline">\(b_i\)</span>个，则问题称为<strong>多重背包问题（有界背包问题）</strong>。</p>
+<p>可以用公式表示为： <span class="math display">\[
+\begin{align}
+最大化 &amp; \quad \sum^{n}_{i=1}{v_{j} x_i} \\
+受限于 &amp; \quad \sum^{n}_{i=1}{w_{i} x_i} \leq W, \quad x_i \in \{0,1…,b_i \} \\
+\end{align}
+\]</span></p></li>
+<li><p>如果不限定每种物品的数量，则问题称为<strong>完全背包问题（无界背包问题）</strong>。</p></li>
+<li><p>各类复杂的背包问题总可以变换为简单的0-1背包问题进行求解。</p></li>
+</ul>
+<h2 id="背包">01背包</h2>
+<p>设一共有<span class="math inline">\(N\)</span>件物品，第<span class="math inline">\(i\)</span>件物品的重量为<span class="math inline">\(w[i]\)</span>，价值为<span class="math inline">\(v[i]\)</span>，最大总重量为<span class="math inline">\(W\)</span>。</p>
+<p>如果采取暴力枚举方法，每件物品都存在装入和不装入两种情况，所以时间复杂度为<span class="math inline">\(O(n^2)\)</span>，使用动态规划可以把时间复杂度控制在<span class="math inline">\(O(N*W)\)</span>。求解的总目标是背包物品的总价值，变量有<em>是否放入物品</em>和<em>书包限重</em>。</p>
+<p>定义<span class="math inline">\(dp[i][j]\)</span>表示将前<span class="math inline">\(i\)</span>件物品放入限重为<span class="math inline">\(j\)</span>的书包可以获得的最大价值，其中$0 i N,  0 j  W $。</p>
+<p>状态转移：</p>
+<ol type="1">
+<li>不装入第<span class="math inline">\(i\)</span>物品：<span class="math inline">\(dp[i][j] = dp[i-1][j]\)</span></li>
+<li>在能装入的前提下，装入第<span class="math inline">\(i\)</span>件物品：<span class="math inline">\(dp[i][j]=dp[i-1][j-w[i]]+v[i]\)</span></li>
+</ol>
+<p>即状态转移方程为：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">dp[i][j] = <span class="built_in">max</span>(dp[i<span class="number">-1</span>][j], j-w[i] &gt;= <span class="number">0</span> ? dp[i<span class="number">-1</span>][j-w[i]]+v[i] : <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>由状态方程可知，<code>dp[i][j]</code>的值只与<code>dp[i-1][0,…,j-1]</code>有关，所以可以采用滚动数组对空间优化。需要注意的是，为了防止上一层循环`<code>dp[0,…,j-1]</code>被覆盖，需要<strong>逆向枚举</strong><span class="math inline">\(j\)</span>（空间优化前没有这个限制）。代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">solution01Knapsack</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> W, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;w, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;v)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// w[i]重量  v[i]价值</span></span><br><span class="line">    <span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(W+<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> j = W; j &gt;= w[i]; j--) &#123;</span><br><span class="line">            dp[j] = <span class="built_in">std</span>::<span class="built_in">max</span>(dp[j], dp[j - w[i]] + v[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[W];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度为<span class="math inline">\(O(NW)\)</span>，空间复杂度为<span class="math inline">\(O(W)\)</span>。第<span class="math inline">\(i\)</span>件物品装入或者不装入而获得的最大价值完全可以由前面<span class="math inline">\(i-1\)</span>件物品的最大价值决定，暴力枚举忽略了这个事实。</p>
+<h2 id="完全背包">完全背包</h2>
+<p>设一共有<span class="math inline">\(N\)</span>件物品，第<span class="math inline">\(i\)</span>件物品的重量为<span class="math inline">\(w[i]\)</span>，价值为<span class="math inline">\(v[i]\)</span>，每件可以无限多个，最大总重量为<span class="math inline">\(W\)</span>。</p>
+<p>与01背包非常相似，状态dp定义一致，只是状态转移稍微不同：</p>
+<ol type="1">
+<li>不装入第<span class="math inline">\(i\)</span>物品：<span class="math inline">\(dp[i][j] = dp[i-1][j]\)</span>（同01背包）</li>
+<li>在能装入的前提下，因为每件物品有无限个，所以不从<span class="math inline">\(dp[i-1][j-w[i]]\)</span>转移，而是从<span class="math inline">\(dp[i][j-w[i]]\)</span>转移，即装入第<span class="math inline">\(i\)</span>种商品后还可以再继续装入该种商品。即装入第<span class="math inline">\(i\)</span>件物品：<span class="math inline">\(dp[i][j]=dp[i][j-w[i]]+v[i]\)</span></li>
+</ol>
+<p>状态转移方程为：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">dp[i][j] = <span class="built_in">max</span>(dp[i<span class="number">-1</span>][j], j-w[i] &gt;= <span class="number">0</span> ? dp[i][j-w[i]]+v[i] : <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>和01背包问题相似，也可以进行空间优化，不同点在于完全背包的<span class="math inline">\(j\)</span>只能<strong>正向枚举</strong>而01背包只能逆向枚举，因为<span class="math inline">\(max\)</span>第二项是<code>dp[i]</code>而01背包是<code>dp[i-1]</code>，即完全背包需要覆盖而01背包需要避免覆盖。代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">solutionUnboundedKnapsack</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> W, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;w, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;v)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// w[i]重量  v[i]价值</span></span><br><span class="line">    <span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(W+<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> j = w[i]; j &lt;= W; j++) &#123;</span><br><span class="line">            dp[j] = <span class="built_in">std</span>::<span class="built_in">max</span>(dp[j], dp[j - w[i]] + v[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[W];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>完全背包问题也可以转化为01背包问题来解：将一种物品转换成最多能放下的若干件。</p>
+<p>最简单的想法是，考虑到第<span class="math inline">\(i\)</span>种物品最多装入<span class="math inline">\(W/w[i]\)</span>件，于是把第<span class="math inline">\(i\)</span>种物品转化为 <span class="math inline">\(W/w[i]\)</span>件费用及价值不变的物品，然后求解这个01背包问题。时间复杂度为：<span class="math inline">\(O(NW\frac{\sum{\frac{W}{w_i}}}{N}) = O(W\sum{\frac{W}{w_i}})\)</span> 。</p>
+<p>更高效的转化方法是采用二进制的思想：把第<span class="math inline">\(i\)</span>种物品拆成重量为<span class="math inline">\(w_i 2^k\)</span>、价值为<span class="math inline">\(v_i 2^k\)</span>若干件物品，其中 k 取遍满足<span class="math inline">\(w_i 2^k \leq W\)</span>的非负整数。这是因为不管最优策略选几件第<span class="math inline">\(i\)</span>种物品，总可以表示成若干个刚才这些物品的和（例：<span class="math inline">\(13 = 2^0 + 2^2 + 2^3\)</span>）。这样就将转换后的物品数目降成了对数级别。时间复杂度为：<span class="math inline">\(O(NW\frac{\sum\log_2{\frac{W}{w_i}}}{N}) = O(W\sum\log_2{\frac{W}{w_i}})\)</span>。</p>
+<h2 id="多重背包">多重背包</h2>
+<p>设一共有<span class="math inline">\(N\)</span>件物品，第<span class="math inline">\(i\)</span>件物品的重量为<span class="math inline">\(w[i]\)</span>，价值为<span class="math inline">\(v[i]\)</span>，数量限制为<span class="math inline">\(n[i]\)</span>，最大总重量为<span class="math inline">\(W\)</span>。</p>
+<p>参考完全背包转为01背包的思想，<span class="math inline">\(k\)</span>表示装入第<span class="math inline">\(i\)</span>种物品的件数，<code>k &lt;= min(n[i],j/w[i])​</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dp[i][j] &#x3D; max&#123;(dp[i-1][j-k*w[i]]+k*v[i]) for range(k)&#125;</span><br></pre></td></tr></table></figure>
+<p>同理也可以进行空间优化，而且<span class="math inline">\(j\)</span>也必须<strong>逆向枚举</strong>：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">solutionBoundedKnapsack</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> W,</span></span></span><br><span class="line"><span class="function"><span class="params">                            <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;w,</span></span></span><br><span class="line"><span class="function"><span class="params">                            <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;v,</span></span></span><br><span class="line"><span class="function"><span class="params">                            <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// w[i]重量  v[i]价值</span></span><br><span class="line">    <span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(W + <span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> j = W; j &gt;= w[i]; j--) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span> k = <span class="number">1</span>; k &lt;= <span class="built_in">std</span>::<span class="built_in">min</span>(n[i], j / w[i]); k++) &#123;</span><br><span class="line">                dp[j] = <span class="built_in">std</span>::<span class="built_in">max</span>(dp[j], dp[j - k * w[i]] + k * v[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[W];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度为：<span class="math inline">\(O(NW\bar n) = O(W\sum{n_i})\)</span>，空间复杂度为：<span class="math inline">\(O(W)\)</span>。</p>
+<p>当然也可以采用二进制思路，将第<span class="math inline">\(i\)</span>种物品分成了<span class="math inline">\(log_2{n_i}\)</span>件物品，将时间复杂度优化为：<span class="math inline">\(O(W\sum{\log_2{n_i}})\)</span>。</p>
+<h2 id="杂项">杂项</h2>
+<p>背包问题还有一些其他变种问题。</p>
+<h3 id="恰好装满">恰好装满</h3>
+<p>要求：必须恰好装满背包。</p>
+<p>只需要修改初始化，将<span class="math inline">\(dp[0,…,N][0]\)</span>初始为0，其它<span class="math inline">\(dp\)</span>值均初始化为<code>-inf</code>，因为此时只有容量为0的背包可以在什么也不装情况下被“恰好装满”，其它容量的背包初始均没有合法的解，应该被初始化为<code>-inf</code>。</p>
+<h3 id="总方案数">总方案数</h3>
+<p>要求：求背包装满或则装至某一指定容量的总方案数。</p>
+<p>修改转移方程中的<span class="math inline">\(max\)</span>为<span class="math inline">\(sum\)</span>。</p>
+<h3 id="二维背包">二维背包</h3>
+<p>上文讨论的背包都只有一个限制：最大容量。二维背包指一个背包存在两个限制（比如重量和体积限制）。</p>
+<p>此类问题的解法和一维背包相似，需要<span class="math inline">\(dp\)</span>数组要多开一维，其他和一维背包一致。</p>
+<h3 id="输出最优方案">输出最优方案</h3>
+<p>要求：输出背包问题的解方案。</p>
+<p>可以参照一般动态规划的方案输出方法：记录每一个状态是由那条策略推导而出，以便回溯出上一个状态。</p>
+<p>以01背包为例，再开辟一个数组<span class="math inline">\(P[i][j]\)</span>来记录方案，<span class="math inline">\(P[i][j]=0\)</span>表示<span class="math inline">\(dp[i][j]\)</span>采用第一种状态转移策略，即<span class="math inline">\(dp[i][j] = dp[i-1][j]\)</span>，<span class="math inline">\(P[i][j]=1\)</span>表示采用第二种状态转移策略，即<span class="math inline">\(dp[i][j]=dp[i-1][j-w[i]]+v[i]\)</span>，从而反推方案。</p>
+<p>另外我们也可以从求出的<span class="math inline">\(dp\)</span>数组进行反推，若 <span class="math inline">\(dp[i][j] = dp[i−1][j]\)</span> 说明未选第<span class="math inline">\(i\)</span>个物品，反之说明选了。</p>
+]]></content>
+  </entry>
 </search>
