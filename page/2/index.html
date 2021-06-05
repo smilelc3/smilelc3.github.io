@@ -175,6 +175,198 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2020/12/01/%E6%95%B0%E7%8B%AC%E6%B1%82%E8%A7%A3%20go%E8%AF%AD%E8%A8%80%E7%89%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/01/%E6%95%B0%E7%8B%AC%E6%B1%82%E8%A7%A3%20go%E8%AF%AD%E8%A8%80%E7%89%88/" class="post-title-link" itemprop="url">数独求解 go语言版</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-01 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-01T00:00:00+08:00">2020-12-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-02 21:30:56" itemprop="dateModified" datetime="2020-12-02T21:30:56+08:00">2020-12-02</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="数独求解-go语言版">数独求解 go语言版</h1>
+<p>源代码<code>github</code>地址：<a href="https://github.com/smilelc3/sudoku-solver" target="_blank" rel="noopener">https://github.com/smilelc3/sudoku-solver</a></p>
+<p>关于数独<code>wiki</code>介绍：<a href="https://zh.wikipedia.org/wiki/%E6%95%B8%E7%8D%A8" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E6%95%B8%E7%8D%A8</a></p>
+<p>一个数独样例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">+-----------------------------+</span><br><span class="line">|       5 | 3       |         |</span><br><span class="line">| 8       |         |    2    |</span><br><span class="line">|    7    |    1    | 5       |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 4       |       5 | 3       |</span><br><span class="line">|    1    |    7    |       6 |</span><br><span class="line">|       3 | 2       |    8    |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">|    6    | 5       |       9 |</span><br><span class="line">|       4 |         |    3    |</span><br><span class="line">|         |       9 | 7       |</span><br><span class="line">+-----------------------------+</span><br></pre></td></tr></table></figure>
+<h2 id="规则">规则</h2>
+<blockquote>
+<p>游戏一般由9个3×3个的九宫格组成。<br />
+每一列的数字均须包含 1～9，不能缺少，也不能重复。<br />
+每一行的数字均须包含 1～9，不能缺少，也不能重复。<br />
+每一宫(粗黑线围起来的区域，通常是 3*3 的九宫格)的数字均须包含 1～9，不能缺少，也不能重复。</p>
+</blockquote>
+<h2 id="算法介绍">算法介绍</h2>
+<p>实现了两种求数独的算法：</p>
+<ol type="1">
+<li>基于摈弃原则的深度优先搜索算法(dfs)</li>
+<li>优化的舞蹈链算法(Dance Links X)</li>
+</ol>
+<h3 id="一基于摈弃原则的深度优先搜索算法">一、基于摈弃原则的深度优先搜索算法</h3>
+<h4 id="说明">说明</h4>
+<p>计算流程如下：</p>
+<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%21100845&amp;authkey=AK_IF_N8tq8grig&amp;em=2" width="804px" height="850px" frameborder="0">
+这是嵌入 <a target="_blank" href="https://office.com">Microsoft Office</a> 关系图，由 <a target="_blank" href="https://office.com/webapps">Office</a> 提供支持。
+</iframe>
+<p>一般正常数独耗时&lt;10ms，算法主要是深度优先搜索，但是做了几点优化：</p>
+<ol type="1">
+<li>优先填写唯一解的单元格</li>
+<li>下一次搜索节点为全局可能性最小单元格（近似贪心）</li>
+</ol>
+<h4 id="补充">补充</h4>
+<ul>
+<li>其实可以做二进制编码优化，时间复杂度降低一个数量级。但主要是为了代码易读，并非为了极致时间效率；</li>
+</ul>
+<h3 id="二优化的舞蹈链算法">二、优化的舞蹈链算法</h3>
+<p><img src="https://bn1302files.storage.live.com/y4mqX71HMmy0BKWRMJs4R1m2nVjSaQDdt-prqja7Wio9tJFC3zszJAvAZH_xGEmwLqhHWUSgI-GVawen6r5_ojj1qEl0KTevEFVM8Eh46PYztPJO5Ta0928Sb4-e85l30PFNABDQKT4m6m1ohLtW5LCDBRawo9UHKXFnUoHrjR0jzYSrmLzC_8MVx4G-wmPuate?width=744&amp;height=638&amp;cropmode=none" /></p>
+<ul>
+<li><p>舞蹈链算法介绍见博客：<a href="https://www.cnblogs.com/grenet/p/3145800.html" target="_blank" rel="noopener">跳跃的舞者，舞蹈链（Dancing Links）算法——求解精确覆盖问题</a></p></li>
+<li><p>优化思路来自于博客：<a href="https://www.cnblogs.com/grenet/p/3163550.html" target="_blank" rel="noopener">算法实践——舞蹈链（Dancing Links）算法求解数独</a></p></li>
+</ul>
+<p>主要优化有三点：</p>
+<ol type="1">
+<li>提前优先处理唯一单元格</li>
+<li>优先标记最小可能舞蹈链列元素，极大降低了递归深度（近似贪心）</li>
+<li>先把有数字的格子转换为舞蹈链行，插入到矩阵中，便于计算时优先选中，且仅插入规则合法行，以便减少迭代次数</li>
+</ol>
+<h2 id="测试与对比">测试与对比</h2>
+<p><a href="https://github.com/smilelc3/sudoku-solver/tree/master/test" target="_blank" rel="noopener">test</a> 文件夹中，含有各种测试样例，包含号称 <a href="https://baike.baidu.com/item/%E4%B8%96%E7%95%8C%E6%9C%80%E9%9A%BE%E6%95%B0%E7%8B%AC/13848819" target="_blank" rel="noopener">最难数独</a> 样例文件<a href="https://github.com/smilelc3/sudoku-solver/blob/master/test/7hardest" target="_blank" rel="noopener">7hardest</a></p>
+<p>测试结果基于400次重复求解用时均值，仅具有一定参考</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">样例文件</th>
+<th style="text-align: center;">深度优先搜索算法</th>
+<th style="text-align: center;">舞蹈链算法</th>
+<th style="text-align: center;">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0finished</td>
+<td style="text-align: center;">0 ms</td>
+<td style="text-align: center;">0.557 ms</td>
+<td style="text-align: center;">已完成的数独</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1dream</td>
+<td style="text-align: center;">3.027 ms</td>
+<td style="text-align: center;">2.904 ms</td>
+<td style="text-align: center;">全空</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2easier</td>
+<td style="text-align: center;">0.010 ms</td>
+<td style="text-align: center;">0.567 ms</td>
+<td style="text-align: center;">仅一个位置未填</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">3easy</td>
+<td style="text-align: center;">0.750 ms</td>
+<td style="text-align: center;">0.840 ms</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">4normal</td>
+<td style="text-align: center;">12.16 ms</td>
+<td style="text-align: center;">1.452 ms</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">5hard</td>
+<td style="text-align: center;">0.829 ms</td>
+<td style="text-align: center;">1.060 ms</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6harder</td>
+<td style="text-align: center;">3.871 ms</td>
+<td style="text-align: center;">1.239 ms</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">7hardest</td>
+<td style="text-align: center;">189.212 ms</td>
+<td style="text-align: center;">18.623 ms</td>
+<td style="text-align: center;">号称最难数独</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>在某些特殊情况下，深度优先搜索深度低，在较为简单的数独上效率高；</li>
+<li>舞蹈链算法稳定高效，适用于精确覆盖类问题，用额外的空间开销与特殊的数据结构，在复杂数独上效果显著。</li>
+</ul>
+<h3 id="最难数独运行程序结果">最难数独运行程序结果</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">+-----------------------------+</span><br><span class="line">| 8       |         |         |</span><br><span class="line">|       3 | 6       |         |</span><br><span class="line">|    7    |    9    | 2       |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">|    5    |       7 |         |</span><br><span class="line">|         |    4  5 | 7       |</span><br><span class="line">|         | 1       |    3    |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">|       1 |         |    6  8 |</span><br><span class="line">|       8 | 5       |    1    |</span><br><span class="line">|    9    |         | 4       |</span><br><span class="line">+-----------------------------+</span><br><span class="line">已读取数独 test&#x2F;7hardest</span><br><span class="line">+-----------------------------+</span><br><span class="line">| 8  1  2 | 7  5  3 | 6  4  9 |</span><br><span class="line">| 9  4  3 | 6  8  2 | 1  7  5 |</span><br><span class="line">| 6  7  5 | 4  9  1 | 2  8  3 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 1  5  4 | 2  3  7 | 8  9  6 |</span><br><span class="line">| 3  6  9 | 8  4  5 | 7  2  1 |</span><br><span class="line">| 2  8  7 | 1  6  9 | 5  3  4 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 5  2  1 | 9  7  4 | 3  6  8 |</span><br><span class="line">| 4  3  8 | 5  2  6 | 9  1  7 |</span><br><span class="line">| 7  9  6 | 3  1  8 | 4  5  2 |</span><br><span class="line">+-----------------------------+</span><br><span class="line">深度优先搜索法所用时间： 189.9914 ms</span><br><span class="line">+-----------------------------+</span><br><span class="line">| 8  1  2 | 7  5  3 | 6  4  9 |</span><br><span class="line">| 9  4  3 | 6  8  2 | 1  7  5 |</span><br><span class="line">| 6  7  5 | 4  9  1 | 2  8  3 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 1  5  4 | 2  3  7 | 8  9  6 |</span><br><span class="line">| 3  6  9 | 8  4  5 | 7  2  1 |</span><br><span class="line">| 2  8  7 | 1  6  9 | 5  3  4 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 5  2  1 | 9  7  4 | 3  6  8 |</span><br><span class="line">| 4  3  8 | 5  2  6 | 9  1  7 |</span><br><span class="line">| 7  9  6 | 3  1  8 | 4  5  2 |</span><br><span class="line">+-----------------------------+</span><br><span class="line">舞蹈链法所用时间： 20.0401 ms</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liuchang.men/2020/10/01/Tmux%20%E5%BF%AB%E6%8D%B7%E9%94%AE%E9%80%9F%E6%9F%A5%E8%A1%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -459,270 +651,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2020/02/24/%E4%BD%BF%E7%94%A8vagrant%E6%90%AD%E5%BB%BAhadoop+spark%E7%8E%AF%E5%A2%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/24/%E4%BD%BF%E7%94%A8vagrant%E6%90%AD%E5%BB%BAhadoop+spark%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">使用vagrant搭建hadoop+spark环境</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-02-24 00:00:00" itemprop="dateCreated datePublished" datetime="2020-02-24T00:00:00+08:00">2020-02-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-19 00:16:36" itemprop="dateModified" datetime="2020-04-19T00:16:36+08:00">2020-04-19</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="环境准备">1. 环境准备</h2>
-<ol type="1">
-<li>下载vagrant和virtualbox，并安装</li>
-</ol>
-<ul>
-<li><p>vagrant:https://www.vagrantup.com/</p></li>
-<li><p>virtualbox:https://www.virtualbox.org/</p>
-<p>注意：vagrant2.2.7发布，本次更新主要<strong>添加了对virtualbox6.1.x版本的支持。</strong></p></li>
-</ul>
-<ol start="2" type="1">
-<li>虚拟机配置</li>
-</ol>
-<ul>
-<li>1台master：内存1024MB</li>
-<li>2台slave：内存512MB</li>
-</ul>
-<h2 id="使用vagrant部署虚拟机">2. 使用vagrant部署虚拟机</h2>
-<ol type="1">
-<li><p>安装后vagrant，需提前安装<code>vagrant-hostmanager</code>插件，以便host管理</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant plugin install vagrant-hostmanager</span><br></pre></td></tr></table></figure></li>
-<li><p>从vagrant官网下载ubuntu 16镜像：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant box add ubuntu/xenial64</span><br></pre></td></tr></table></figure>
-<p>也可以使用其他镜像，镜像地址：https://app.vagrantup.com/boxes/search</p></li>
-<li><p>创建hadoopProject文件夹（可自定），并创建两个文件<code>Vagrantfile</code>和<code>init.sh</code></p>
-<p><img src="https://y3vwew.bn.files.1drv.com/y4mW3e64Eq0QcbZC0ZjpVMvzFjC0_wqhh2_AecTUV5-HdJpU2_E9BYO2zdT8sQeQ4gIax_8Z8jAG5-BqpBoJqc_L5mWaVa3sJKfjXysJJfZ9QxiNicylxpZXj_GzJAoijnQ0MxudghsywD-AcsVpgDDfpE-GD4J4QsXEgPU7opBXdt2dW28O_SEApSZHAJuRZ8DWCCzCrbs5zLRHrPNUY8Ttw?width=806&amp;height=146&amp;cropmode=none" /></p>
-<ul>
-<li>VagrantFile是vagrant的<strong>启动配置文件</strong>，</li>
-<li>init.sh是<strong>初始环境的安装脚本</strong></li>
-</ul></li>
-<li><p>编辑VagrantFile文件， 内容如下:</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">Vagrant.configure(<span class="string">"2"</span>) <span class="keyword">do</span> <span class="params">|config|</span></span><br><span class="line">    config.vm.define <span class="symbol">:master1</span>, <span class="symbol">primary:</span> <span class="literal">true</span> <span class="keyword">do</span> <span class="params">|master|</span></span><br><span class="line">        master.vm.provider <span class="string">"virtualbox"</span> <span class="keyword">do</span> <span class="params">|v|</span></span><br><span class="line">            v.customize [<span class="string">"modifyvm"</span>, <span class="symbol">:id</span>, <span class="string">"--name"</span>, <span class="string">"hadoop-master1"</span>, <span class="string">"--memory"</span>, <span class="string">"1024"</span>]</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		master.vm.box = <span class="string">"ubuntu/xenial64"</span></span><br><span class="line">		master.vm.hostname = <span class="string">"hadoop-master1"</span></span><br><span class="line">		master.vm.network <span class="symbol">:private_network</span>, <span class="symbol">ip:</span> <span class="string">"192.168.10.10"</span></span><br><span class="line">		master.vm.network <span class="string">"forwarded_port"</span>, <span class="symbol">guest:</span> <span class="number">22</span>, <span class="symbol">host:</span> <span class="number">2222</span>, <span class="symbol">id:</span> <span class="string">"ssh"</span>, <span class="symbol">disabled:</span> <span class="string">"true"</span></span><br><span class="line">		master.vm.network <span class="string">"forwarded_port"</span>, <span class="symbol">guest:</span> <span class="number">22</span>, <span class="symbol">host:</span> <span class="number">2220</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">   (<span class="number">1</span>..<span class="number">2</span>).each <span class="keyword">do</span> <span class="params">|i|</span></span><br><span class="line">    config.vm.define <span class="string">"slave<span class="subst">#&#123;i&#125;</span>"</span> <span class="keyword">do</span> <span class="params">|node|</span></span><br><span class="line">        node.vm.box = <span class="string">"ubuntu/xenial64"</span></span><br><span class="line">        node.vm.hostname = <span class="string">"hadoop-slave<span class="subst">#&#123;i&#125;</span>"</span></span><br><span class="line">        node.vm.network <span class="symbol">:private_network</span>, <span class="symbol">ip:</span> <span class="string">"192.168.10.1<span class="subst">#&#123;i&#125;</span>"</span></span><br><span class="line">		node.vm.network <span class="string">"forwarded_port"</span>, <span class="symbol">guest:</span> <span class="number">22</span>, <span class="symbol">host:</span> <span class="number">2222</span>, <span class="symbol">id:</span> <span class="string">"ssh"</span>, <span class="symbol">disabled:</span> <span class="string">"true"</span></span><br><span class="line">		node.vm.network <span class="string">"forwarded_port"</span>, <span class="symbol">guest:</span> <span class="number">22</span>, <span class="symbol">host:</span> <span class="string">"222<span class="subst">#&#123;i&#125;</span>"</span></span><br><span class="line">        node.vm.provider <span class="string">"virtualbox"</span> <span class="keyword">do</span> <span class="params">|vb|</span></span><br><span class="line">          vb.memory = <span class="string">"512"</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">     <span class="keyword">end</span></span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#manage hosts file </span></span><br><span class="line">  config.hostmanager.enabled = <span class="literal">true</span></span><br><span class="line">  config.hostmanager.manage_host = <span class="literal">true</span></span><br><span class="line">  config.hostmanager.manage_guest = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">#provision</span></span><br><span class="line">   config.vm.provision <span class="string">"shell"</span>, <span class="symbol">path:</span> <span class="string">"init.sh"</span>, <span class="symbol">privileged:</span> <span class="literal">false</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p>从代码可以看到， 我们一共创建了3个虚拟机环境 ，分别是master1, slave1, slave2。并分配好IP地址和内存空间。</p>
-<p>注意：在解决多个SSH端口时，需要先禁用默认的ssh转发，再添加自定义转发，才能生效。</p></li>
-<li><p>在当前目录启动vagrant，会自动依照<code>Vagrantfile</code>配置文件创建虚拟机并配置。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant up</span><br></pre></td></tr></table></figure>
-<p><img src="https://y3vlew.bn.files.1drv.com/y4mGDLQKk2BJhTmsPjHo_-b_LVM8db80KcsV0eOXI7mQiQa4U7s9MVhK1bUQjgM7UG713_W2I6lSZcLF9IkNCv0EO5PShz-s4-1AMQ9OoJIAz60-yjM4xApUZMo4sIFXD0SBk6Xk7y1nAvTmHTe6I5HGDq7pVC5-9x7h8zDi1Dpk6XV3bLpPdxqHOgmGMcEEj07PqZbnaS4-4sBTrZv4mxg5w?width=608&amp;height=80&amp;cropmode=none" /></p>
-<p>启动过程中如果有打印如下信息， 一般稍等即可，出错可在VirtulaBox中删除虚拟机及文件重试。</p>
-<p><img src="https://y3vkew.bn.files.1drv.com/y4m6WECn1J_Yq00FnhHU0XWVk4tnEiFML5rDEvoM49_mmw-EvOrMpsfOxQrip9L028JzWzUiWCyQT4AgOqgXfII1WuZCrG_OlGJzh2WFkdizcITKizrd9s9-_9cSYVwmDWNFFTLIh27gfdgSKajeJM4RpP-YjF2cENWsxILDajNcpPQmCWn2onoi3P4sC6mIRz8jrzfK52S2ZKyf4IvpluPGw?width=637&amp;height=40&amp;cropmode=none" /></p>
-<p>正常启动后，我们就可以在virtualBox中看到创建的虚拟机。</p>
-<p><img src="https://y3vjew.bn.files.1drv.com/y4mNrCsnuHsbUPwIJf3M0cBGiEFvPHn1QeK9DQ1qnc5NfuSgcm_XSUhFOMeIwvhAd9Gs4Tor23deyug58k4u51rzjBVCDcGRyZ1cAabTMnOrdRmKty4rWmVAjz9qobWtIl3squvFkWFOXIfMe_BK83xFnZQZGelvtTI91vj_FcwC7DO8MgxB7JqpzPFCLynvzrf9c5hFfyfiYbKfwG4sRHeQw?width=962&amp;height=553&amp;cropmode=none" /></p>
-<p>正常启动后，我们就可以使用以下命令登录到虚拟机：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant ssh master1</span><br></pre></td></tr></table></figure>
-<p>可以直接按照host名字Ping操作：</p>
-<p><img src="https://y3view.bn.files.1drv.com/y4mMPI9Nv4hqsFMh7FLGs_ZKGxGfwYpVMYKPGrWZ1uT8QS2BlEh8_Ec5Ljx-kXQoPGTsFx2rlwpy5DtTN7GWI-f6eVlJ-xV1yfChNYxhmShPpKxsOVli-WjHIhlT_glpgSeSr7Ksfn06QAkNsTInteDvi07-aBFSgjldnUv9x3wTzlj_rsxkr1OzgbJVQui_lG2jMx906pl0V5p_0zg4vokUw?width=925&amp;height=141&amp;cropmode=none" /></p>
-<p><strong>注意：此时默认用户名和密码都是<code>vagrant</code></strong></p>
-<p>此时，主机仅允许公钥私钥配对SSH链接，建议打开密码认证访问，编辑文件<code>/etc/ssh/sshd_config</code>，修改如下配置为yes：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PasswordAuthentication yes</span><br></pre></td></tr></table></figure>
-<p>重启ssh服务</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service ssh restart</span><br></pre></td></tr></table></figure>
-<ol start="6" type="1">
-<li>编写provision文件 前面安装vagrant的时候说到，provision的作用是帮助我们进行主机环境的初始化工作，现在我们来编写<code>init.sh</code>，具体内容根据实际情况进行删减。在provision里，我只是安装了linux环境必需的一些组件。</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update         # 更新apt</span><br><span class="line">sudo apt install openssh-server		# 安装SSH</span><br><span class="line">sudo apt install openjdk-8-jdk     # 安装JAVA</span><br></pre></td></tr></table></figure>
-<ul>
-<li>即使因为网络问题导致安装不成功，也可以手动逐个安装。</li>
-</ul>
-<p>编写完后，运行命令进行生效</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant provision</span><br></pre></td></tr></table></figure></li>
-</ol>
-<h2 id="配置hadoop">3. 配置Hadoop</h2>
-<p>现在我们有三台机器:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hadoop-master1		192.168.10.10</span><br><span class="line">hadoop-slave1		192.168.10.11</span><br><span class="line">hadoop-slave2		192.168.10.12</span><br></pre></td></tr></table></figure>
-<p>Hadoop 集群配置过程:</p>
-<ol type="1">
-<li><strong>选定一台机器作为 Master，在所有主机上配置网络映射；</strong></li>
-<li><strong>在 Master 主机上配置hadoop用户、安装SSH server、安装Java环境；</strong></li>
-<li><strong>在 Master 主机上安装Hadoop，并完成配置；</strong></li>
-<li><strong>在其他主机上配置hadoop用户、安装SSH server、安装Java环境；</strong></li>
-<li><strong>将 Master 主机上的Hadoop目录复制到其他主机上；</strong></li>
-<li><strong>开启、使用 Hadoop。</strong></li>
-</ol>
-<hr />
-<h3 id="配置基础环境和ssh互信">配置基础环境和SSH互信</h3>
-<p>所有主机配置hadoop用户、安装SSH server、安装Java环境（前步已执行成功的可以跳过）：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo useradd -m hadoop -s /bin/bash     # 创建hadoop用户</span><br><span class="line">sudo passwd hadoop          # 修改hadoop用户密码</span><br><span class="line">sudo adduser hadoop sudo    # 增加hadoop管理员权限</span><br></pre></td></tr></table></figure>
-<p>注销并使用 Hadoop 用户登录</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update         # 更新apt</span><br><span class="line">sudo apt install openssh-server		# 安装SSH</span><br><span class="line">sudo apt install openjdk-8-jdk     # 安装JAVA</span><br></pre></td></tr></table></figure>
-<p>设置JAVA_HOME环境变量</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo nano ~/.bashrc</span><br><span class="line"><span class="meta">#</span><span class="bash"> 最后面加上</span></span><br><span class="line">export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64</span><br></pre></td></tr></table></figure>
-<p>使 JAVA_HOME 变量生效：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bashrc    # 使变量设置生效</span><br></pre></td></tr></table></figure>
-<p>在 Master 主机上执行：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd ~/</span><br><span class="line">mkdir .ssh</span><br><span class="line">cd ~/.ssh</span><br><span class="line">ssh-keygen -t rsa              # 一直按回车就可以</span><br><span class="line">cat id_rsa.pub &gt;&gt; authorized_keys</span><br><span class="line">scp ~/.ssh/id_rsa.pub hadoop@hadoop-slave1:/home/hadoop/ # 传输公钥到slave1</span><br><span class="line">scp ~/.ssh/id_rsa.pub hadoop@hadoop-slave2:/home/hadoop/ # 传输公钥到slave2</span><br></pre></td></tr></table></figure>
-<p>接着在 slave1 节点和slave2节点上保存公钥</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~/</span><br><span class="line">mkdir .ssh</span><br><span class="line">cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
-<p>如果master主机和slave01、slave02主机的用户名一样，那么在master主机上直接执行如下测试命令，即可让master主机免密码登录slave01、slave02主机。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh hadoop-slave1</span><br></pre></td></tr></table></figure>
-<h3 id="安装hadoop">安装Hadoop</h3>
-<p>先在master主机上做安装Hadoop，暂时不需要在slave1，slave2主机上安装Hadoop。稍后会把master配置好的Hadoop发送给slave1，slave2。 在master主机执行如下操作：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tar -zxf ~/hadoop-2.7.7.tar.gz -C /usr/local    # 解压到/usr/local中</span><br><span class="line">cd /usr/local/</span><br><span class="line">sudo mv ./hadoop-2.7.7/ ./hadoop            # 将文件夹名改为hadoop</span><br><span class="line">sudo chown -R hadoop ./hadoop       # 修改文件权限</span><br></pre></td></tr></table></figure>
-<p>编辑~/.bashrc文件，末尾添加如下内容：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export HADOOP_HOME=/usr/local/hadoop</span><br><span class="line">export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin</span><br></pre></td></tr></table></figure>
-<p>接着让环境变量生效，执行如下代码：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
-<h3 id="hadoop集群配置">Hadoop集群配置</h3>
-<p>修改master主机修改Hadoop如下配置文件，这些配置文件都位于<code>/usr/local/hadoop/etc/hadoop</code>目录下。 修改<code>slaves</code>文件，把DataNode的主机名写入该文件，每行一个。</p>
-<p>这里让hadoop-master1节点主机仅作为NameNode使用（不包含在slaves文件中）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop-slave1</span><br><span class="line">hadoop-slave2</span><br></pre></td></tr></table></figure>
-<p>修改core-site.xml</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>/usr/local/hadoop/tmp<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">description</span>&gt;</span>Abase for other temporary directories.<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://hadoop-master1:9000<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>修改hdfs-site.xml：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>3<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>修改mapred-site.xml（复制并修改文件名mapred-site.xml.template）</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp mapred-site.xml.template  mapred-site.xml</span><br></pre></td></tr></table></figure>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>修改yarn-site.xml</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!-- Site specific YARN configuration properties --&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">value</span>&gt;</span>hadoop-master1<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>配置好后，将 master 上的 /usr/local/Hadoop 文件夹复制到各个节点上。之前有跑过伪分布式模式，建议在切换到集群模式前先删除之前的临时文件。在 master 节点主机上执行：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/</span><br><span class="line">rm -rf /usr/local/hadoop/tmp   # 删除临时文件</span><br><span class="line">rm -rf /usr/local/hadoop/logs/*   # 删除日志文件</span><br><span class="line">tar -zcf ~/hadoop.master.tar.gz ./hadoop			# 打包hadoop</span><br><span class="line">cd ~</span><br><span class="line">scp ./hadoop.master.tar.gz hadoop-slave1:/home/hadoop</span><br><span class="line">scp ./hadoop.master.tar.gz hadoop-slave2:/home/hadoop</span><br></pre></td></tr></table></figure>
-<p>在hadoop-slave1，hadoop-slave2节点上执行：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -rf /usr/local/hadoop/</span><br><span class="line">sudo tar -zxf ~/hadoop.master.tar.gz -C /usr/local</span><br><span class="line">sudo chown -R hadoop /usr/local/hadoop</span><br></pre></td></tr></table></figure>
-<h3 id="启动hadoop集群">启动hadoop集群</h3>
-<p>在hadoop-master1主机上执行如下命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/hadoop/bin/hdfs namenode -format</span><br><span class="line">/usr/local/hadoop/sbin/start-all.sh</span><br></pre></td></tr></table></figure>
-<p>运行后，在hadoop-master1，hadoop-slave1，hadoop-slave2运行<code>jps</code>命令，查看：</p>
-<p>hadoop-master1运行<code>jps</code>后，如下图（必须有四个进程）：</p>
-<p><img src="https://y3vxew.bn.files.1drv.com/y4m2ny5qCw4ZQbnEXPGlqBWjLv3ZHGaYKxjE42DsTE-bP-KOaluZxjQj2EwBPGOkOewhQFZ1VH61uopOGCCxzR9XgaTnelh-DpQ8f2DICvktK0kccVf89qK8ofhGNjSTaCoo9hwbubPdzx7jrzOGcpt0lkqLHuQAgdr6Tg7lF-T0w4361STn2xgcOD7NC_CLHupeOFg-SGa1dBzXxAqTayq6A?width=415&amp;height=96&amp;cropmode=none" /></p>
-<p>hadoop-slave1、hadoop-slave2运行<code>jps</code>后，如下图（必须有三个进程）：</p>
-<p><img src="https://y3vhew.bn.files.1drv.com/y4m5hBwuRWdj2NaQhHzrPnyHnZtvEEOWYQV36PlfO219syPU4goSNEUBHDINtiY1nLTLTwfnOUlTG_0nz01YCOEBn5cr4fDibPsXWRNYL-2067AlEozIewav5gcqxoXBNzJeD49oSR7uO-6NYtcwJ0lhsvwfgFfFHESV8rQkO8yA23pY0kjIHpqV-YeQQ5kP99qB1n07sgbRNxDTcfXQqwa9Q?width=402&amp;height=77&amp;cropmode=none" /></p>
-<h2 id="在hadoop上配置spark">4. 在Hadoop上配置Spark</h2>
-<h3 id="下载spark">下载Spark</h3>
-<p>访问<a href="http://spark.apache.org/downloads.html" target="_blank" rel="noopener">Spark官方下载地址</a>，按照如下图下载（不带Hadoop版本）。</p>
-<p><img src="https://y3vfew.bn.files.1drv.com/y4mmTyTOXkJKkx-CifBMtzOe4lUNLHipgrKofr7KKvf-DoKb8TSu6AE_E4Jekm05-VdnzMTjXZ7YikPolLvlkeFJRTA3KE5oUypFcrlXNOO71yz53AMxaRO_9O8I74YudkXgXdPGjDdgUn20maD568ABInyyHQo-xBq_NZFghZ67GHjOKvuUGvADyAMvxIAEsS_3SztSqvVP62zAgMYr1H0Yw?width=795&height=235&cropmode=none" alt="image-20200223202025035" style="zoom:80%;" /></p>
-<p>下载后，文件移到master虚拟机中，执行解压</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd ~</span><br><span class="line">sudo tar -zxf spark-2.4.5-bin-without-hadoop.tgz -C /usr/local/</span><br><span class="line">cd /usr/local/</span><br><span class="line">sudo mv ./spark-2.4.5-bin-without-hadoop/ ./spark</span><br><span class="line">sudo chown -R hadoop ./spark</span><br></pre></td></tr></table></figure>
-<h3 id="配置环境变量">配置环境变量</h3>
-<p>在hadoop-master1节点主机的终端中执行如下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano ~/.bashrc</span><br></pre></td></tr></table></figure>
-<p>在~/.bashrc添加如下配置：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> SPARK_HOME=/usr/<span class="built_in">local</span>/spark</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$SPARK_HOME</span>/bin:<span class="variable">$SPARK_HOME</span>/sbin</span><br></pre></td></tr></table></figure>
-<p>执行如下命令使得配置立即生效：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
-<h3 id="spark配置">Spark配置</h3>
-<p>在Master节点主机上进行如下操作：</p>
-<ul>
-<li>配置slaves文件</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/spark/</span><br><span class="line">cp ./conf/slaves.template  ./conf/slaves</span><br></pre></td></tr></table></figure>
-<p>slaves文件设置Worker节点。编辑slaves内容，把默认内容localhost替换成slave节点：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop-slave1</span><br><span class="line">hadoop-slave2</span><br></pre></td></tr></table></figure>
-<ul>
-<li>配置spark-env.sh文件</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp ./conf/spark-env.sh.template ./conf/spark-env.sh</span><br></pre></td></tr></table></figure>
-<p>添加如下内容：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export SPARK_DIST_CLASSPATH=$(/usr/local/hadoop/bin/hadoop classpath)</span><br><span class="line">export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop</span><br><span class="line">export SPARK_MASTER_IP=hadoop-master1</span><br></pre></td></tr></table></figure>
-<p>SPARK_MASTER_IP 指定 Spark 集群 Master 节点的 IP 地址或主机名。</p>
-<p>配置好后，将Master主机上的/usr/local/spark文件夹复制到各个节点上。在Master主机上执行如下命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/</span><br><span class="line">tar -zcf ~/spark.master.tar.gz ./spark     # 打包spark</span><br><span class="line">cd ~</span><br><span class="line">scp ./spark.master.tar.gz hadoop-slave1:/home/hadoop</span><br><span class="line">scp ./spark.master.tar.gz hadoop-slave2:/home/hadoop</span><br></pre></td></tr></table></figure>
-<p>在hadoop-slave1，hadoop-slave2节点上执行：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -rf /usr/local/spark/</span><br><span class="line">sudo tar -zxf ~/spark.master.tar.gz -C /usr/local</span><br><span class="line">sudo chown -R hadoop /usr/local/spark</span><br></pre></td></tr></table></figure>
-<p><strong>注意：</strong>由于我们使用<code>vagrant-hostmanager</code>插件，其会对本地hosts文件修改，导致主机名（host）直接与<code>127.0.1.1</code>绑定，若直接启动Spark master节点，会导致只在<code>127.0.1.1</code>提供服务，其他局域网内slave节点无法访问，因此需要编辑<code>/etc/hosts</code>文件，注释掉：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">127.0.1.1      hadoop-master1  hadoop-master1</span></span><br></pre></td></tr></table></figure>
-<h3 id="启动spark集群">启动Spark集群</h3>
-<ol type="1">
-<li>启动Spark集群前，要先<strong>启动Hadoop集群</strong>。在Master节点主机上运行如下命令：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/hadoop/sbin/start-all.sh</span><br></pre></td></tr></table></figure>
-<ol start="2" type="1">
-<li><strong>启动Master节点</strong>， 在Master节点主机上运行如下命令：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/spark/sbin/start-master.sh</span><br></pre></td></tr></table></figure>
-<p>在hadoop-master1节点上运行jps命令，可以看到多了<code>Master</code>进程：</p>
-<p><img src="https://ynvxew.bn.files.1drv.com/y4mMbVgZXwIAGHWVwPGhHwqxB-tT1Lhf39lukqwiq9ugeyjUFUx5nSbux9PS12hnVNyEId_yYgOUFFFl96GyVOzV738S2kegpZfR06eYOQZyWlgY9EBnrjO0nkn8qIn4upAXOGndafOWsWRZFsPGUnq7CvRNIcPoa7pdKSFcGe353cOo58R5wgdnSFGa8vm7LxTgHH3WpczkUEuhB_TvmDYow?width=407&amp;height=115&amp;cropmode=none" /></p>
-<ol start="3" type="1">
-<li><strong>启动所有Slave节点</strong>，在Master节点主机上运行如下命令：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/spark/sbin/start-slaves.sh</span><br></pre></td></tr></table></figure>
-<p>分别在hadoop-slave1、hadoop-slave2节点上运行jps命令，可以看到多了<code>Worker</code>进程：</p>
-<p><img src="https://y3veew.bn.files.1drv.com/y4mdsqxlBOt-BP0x54fWN_YsZnYddzV0G9a1FrN1w2mIr8kU1j9TNToRpC9w31sDxE1yntqWFpGdC94nMoi_51Zh-3Evphve-_vUOOC7uaRQN2pqaY5arxLErRu6ld312wmYX-TCsdIaM6P5cEEzvHjyV3W_-kPcU5pJuNW4eD1ZIPM1d0_D6tnMJC0eFaVE1ZAzLx5cuIKm2c9Sy-L9Diu-Q?width=354&amp;height=94&amp;cropmode=none" /></p>
-<p><strong>在浏览器上查看Spark独立集群管理器的集群信息</strong></p>
-<p>spark集群端口：8080</p>
-<p>spark-job监控端口：4040</p>
-<p>namenode管理端口：50070</p>
-<p>yarn端口：8088</p>
-<p>在master主机上打开浏览器，访问http://hadoop-master1:8080/，如下图：</p>
-<p><img src="https://ynvwew.bn.files.1drv.com/y4mIx3NC_PbQjUKJe7y3L2gheJGCytvyaqsMQYMHsK2Eh0d8PrGAJ9vWuXAhdGFChVmy33agEaQ0Y8KB76z_77y72C5lhUtbaTJvGwmDQ5jWSADss4zxB6aE_ZLvquriSaeTHzCzKZ5igC-HnFr90y5f36AQgwklm7iWVG5i6Abrt898lcrhQRK0pDbT8XpVPeVa7BGHVqEzLU8KPBtb5S9Hw?width=959&amp;height=700&amp;cropmode=none" /></p>
-<h3 id="关闭spark集群">关闭Spark集群</h3>
-<ol type="1">
-<li><p>关闭Master节点</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/spark/sbin/stop-master.sh</span><br></pre></td></tr></table></figure></li>
-<li><p>关闭Worker节点</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/spark/sbin/stop-slaves.sh</span><br></pre></td></tr></table></figure></li>
-<li><p>关闭Hadoop集群</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/hadoop/sbin/stop-all.sh</span><br></pre></td></tr></table></figure></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -792,7 +720,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -837,12 +765,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">160k</span>
+    <span title="站点总字数">161k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:25</span>
+    <span title="站点阅读时长">2:26</span>
 </div>
 
         

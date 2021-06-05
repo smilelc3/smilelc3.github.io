@@ -175,6 +175,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/07/09/python+opencv%20%E6%A3%80%E6%B5%8B%E5%92%8C%E8%B7%9F%E8%B8%AA%E8%BF%90%E5%8A%A8%E7%89%A9%E4%BD%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/07/09/python+opencv%20%E6%A3%80%E6%B5%8B%E5%92%8C%E8%B7%9F%E8%B8%AA%E8%BF%90%E5%8A%A8%E7%89%A9%E4%BD%93/" class="post-title-link" itemprop="url">python+opencv 检测和跟踪运动物体</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2017-07-09T00:00:00+08:00">2017-07-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-03-20 12:39:42" itemprop="dateModified" datetime="2019-03-20T12:39:42+08:00">2019-03-20</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="效果展示">效果展示</h1>
+<p><img src="https://me6veg.bn.files.1drv.com/y4mXNOvPBpWRhuLGF_qEHWSpNebSFjWgUBlK51ztBAu9xUtQTevnaXIQLgl8QzU22ZkZTKRI9Zh5zviMdFJBGgqniVWg1BoksWm9tGhkBLMxc1EH5VIPoF9QVa-kIFqrfK7iQ2-GfNXp547jATOrY6t6SVLBKtFZ4Sj6Z8qoFnsCpowqBBt40YX8HmrgkBBtxcXtONkIUfS8M0VBOPmfCHZgA?width=640&amp;height=480&amp;cropmode=none" /></p>
+<p><strong>最终效果视频</strong></p>
+<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124363&amp;authkey=AHrRqWgsnymLWnA" width="320" height="240" frameborder="0" scrolling="no" allowfullscreen>
+</iframe>
+<p><strong>监控+差值+黑白二值图像</strong></p>
+<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%2124364&amp;authkey=AE4oTGF__5N5jh8" width="320" height="240" frameborder="0" scrolling="no" allowfullscreen>
+</iframe>
+<h1 id="代码">代码</h1>
+<ul>
+<li>该程序<strong>计算量要求较低</strong>，可以部署在<strong>树莓派</strong>类的物联网设备上</li>
+</ul>
+<h2 id="python包配置">python包配置</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install argparse <span class="comment">#用于解析参数</span></span><br><span class="line">sudo pip install imutils <span class="comment">#用于修改图片格式大小</span></span><br><span class="line">sudo apt-get install libopencv-dev  </span><br><span class="line">sudo apt-get install python-opencv  <span class="comment">#安装opencv</span></span><br></pre></td></tr></table></figure>
+<h2 id="python代码">python代码</h2>
+<p>代码写的相当详细，注释的极其详细，不再赘述。（python版本2.7）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"><span class="comment">#必要的包</span></span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> imutils</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建参数解释器并解析参数</span></span><br><span class="line">ap = argparse.ArgumentParser()</span><br><span class="line">ap.add_argument(<span class="string">"-v"</span>, <span class="string">"--video"</span>, help=<span class="string">"path to the video file"</span>)</span><br><span class="line">ap.add_argument(<span class="string">"-a"</span>, <span class="string">"--min-area"</span>, type=int, default=<span class="number">1000</span>, help=<span class="string">"minimum area size"</span>)</span><br><span class="line">args = vars(ap.parse_args())</span><br><span class="line"></span><br><span class="line"><span class="comment">#如果video参数为None, 那么我们从摄像头读取数据</span></span><br><span class="line"><span class="keyword">if</span> args.get(<span class="string">"video"</span>, <span class="literal">None</span>) <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    camera = cv2.VideoCapture(<span class="number">0</span>)</span><br><span class="line">    originaltime = time.time()<span class="comment">#记录时间</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    camera = cv2.VideoCapture(args[<span class="string">"video"</span>])</span><br><span class="line"><span class="comment">#初始化视频流的第一帧</span></span><br><span class="line">firstFrame = <span class="literal">None</span></span><br><span class="line">num=<span class="number">0</span></span><br><span class="line"><span class="comment">#遍历视频的每一帧</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">if</span> time.time()-originaltime &lt;= <span class="number">2</span>:  <span class="comment">#等待摄像机开启并稳定</span></span><br><span class="line">        (grabbed, frame) = camera.read()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        (grabbed, frame) = camera.read()</span><br><span class="line">        <span class="comment">#调用camera.read()返回一个２元组。元组第一个值是grabbed，表明是否成功从缓冲中读取frame。元组第二个值为frame本身</span></span><br><span class="line">        text = <span class="string">"not exist"</span></span><br><span class="line">        <span class="comment">#表明正在监控的房间“没有被占领”。如果确实有活动，就更新该字符串</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> grabbed:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="comment">#调整该帧的大小，转换为灰阶图像并且对其进行高斯模糊</span></span><br><span class="line">        frame = imutils.resize(frame, width = <span class="number">500</span>)</span><br><span class="line">        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)<span class="comment">#灰阶图片</span></span><br><span class="line">        gray = cv2.GaussianBlur(gray, (<span class="number">21</span>, <span class="number">21</span>), <span class="number">0</span>)<span class="comment">#高斯模糊</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#如果第一帧是None, 对其进行初始化</span></span><br><span class="line">        <span class="keyword">if</span> firstFrame <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            firstFrame = gray</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#计算当前帧和第一帧的不同</span></span><br><span class="line">        frameDelta = cv2.absdiff(firstFrame, gray)<span class="comment">#两幅图的差的绝对值输出到另一幅图上面来</span></span><br><span class="line"></span><br><span class="line">        thresh = cv2.threshold(frameDelta, <span class="number">25</span>, <span class="number">255</span>, cv2.THRESH_BINARY)[<span class="number">1</span>]<span class="comment">#黑白二值化</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#扩展阈值图像填充孔洞，然后找到阈值图像上的轮廓</span></span><br><span class="line">        thresh = cv2.dilate(thresh, <span class="literal">None</span>, iterations = <span class="number">2</span>)<span class="comment">#图像膨胀</span></span><br><span class="line">        (cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,</span><br><span class="line">                                     cv2.CHAIN_APPROX_SIMPLE</span><br><span class="line">                                     )<span class="comment">#findcontours函数会“原地”修改输入的图像,只检测的外轮廓，仅保存矩形４个顶点</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">#遍历轮廓</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">            <span class="comment">#如果轮廓太小，忽视轮廓</span></span><br><span class="line">            <span class="keyword">if</span> cv2.contourArea(c)&lt;args[<span class="string">"min_area"</span>]:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">#计算轮廓边界，在当前帧中画出该框，并更新text</span></span><br><span class="line">            (x, y, w, h) = cv2.boundingRect(c)</span><br><span class="line">            cv2.rectangle(frame, (x, y), (x + w,y + h), (<span class="number">0</span>, <span class="number">255</span>, <span class="number">255</span>), <span class="number">2</span>)</span><br><span class="line">            text = <span class="string">"exist"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">#在当前帧上写文字以及时间戳</span></span><br><span class="line">        cv2.putText(frame, <span class="string">"room stats:&#123;&#125;"</span>.format(text), (<span class="number">10</span>, <span class="number">20</span>),</span><br><span class="line">                    cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.5</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">1</span>)</span><br><span class="line">        cv2.putText(frame, datetime.datetime.now().strftime(<span class="string">"%A %d %B %Y %I:%M:%S%p"</span>),</span><br><span class="line">                    (<span class="number">10</span>, frame.shape[<span class="number">0</span>] - <span class="number">10</span>), cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.4</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#显示当前帧</span></span><br><span class="line">        cv2.imshow(<span class="string">"二值化图像"</span>, thresh)</span><br><span class="line">        cv2.imshow(<span class="string">"差值图像"</span>, frameDelta)</span><br><span class="line">        cv2.imshow(<span class="string">"监控"</span>, frame)</span><br><span class="line">        cv2.waitKey(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#对环境渐变的适应</span></span><br><span class="line">        flag = <span class="literal">True</span><span class="comment">#标记是否值得更新（第一帧）背景帧</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">            <span class="keyword">if</span> cv2.contourArea(c)&gt;args[<span class="string">"min_area"</span>]//<span class="number">4</span>:</span><br><span class="line">                flag = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span>  flag <span class="keyword">is</span> <span class="literal">True</span>:<span class="comment">#新背景＝旧背景＊(1-0.618)＋当前无物体背景＊(0.618)</span></span><br><span class="line">            firstFrame = cv2.addWeighted(firstFrame, <span class="number">1</span><span class="number">-0.618</span>, gray, <span class="number">0.618</span>, <span class="number">0.0</span>)</span><br><span class="line">        <span class="comment">#cv2.imwrite("Security Feed.png", frame)</span></span><br><span class="line">        <span class="comment">#cv2.imwrite("Thresh.png", thresh)</span></span><br><span class="line">        <span class="comment">#cv2.imwrite("Frame delta.png", frameDelta)</span></span><br><span class="line">        <span class="comment">#cv2.waitKey(0)</span></span><br><span class="line"><span class="comment">#清理摄像机资源并关闭打开的窗口</span></span><br><span class="line">camera.release()</span><br><span class="line">cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/07/01/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -632,147 +727,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/05/30/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(5)%E5%AF%B9%E5%B1%80%E5%8C%B9%E9%85%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/05/30/2017%E7%AC%AC%E5%85%AB%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AF%E5%86%B3%E8%B5%9B%E9%A2%98%E7%9B%AE%E8%A7%A3%E6%9E%90(5)%E5%AF%B9%E5%B1%80%E5%8C%B9%E9%85%8D/" class="post-title-link" itemprop="url">2017第八届蓝桥杯决赛题目解析(5)：对局匹配</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-05-30 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-30T00:00:00+08:00">2017-05-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-03-19 22:06:55" itemprop="dateModified" datetime="2019-03-19T22:06:55+08:00">2019-03-19</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>题目描述：</strong></p>
-<blockquote>
-<p>小明喜欢在一个围棋网站上找别人在线对弈。这个网站上所有注册用户都有一个积分，代表他的围棋水平。</p>
-<p>小明发现网站的自动对局系统在匹配对手时，只会将积分差恰好是K的两名用户匹配在一起。如果两人分差小于或大于K，系统都不会将他们匹配。</p>
-<p>现在小明知道这个网站总共有N名用户，以及他们的积分分别是A1, A2, … AN。</p>
-<p>小明想了解最多可能有多少名用户同时在线寻找对手，但是系统却一场对局都匹配不起来(任意两名用户积分差不等于K)？</p>
-</blockquote>
-<blockquote>
-<p><strong>输入</strong>：</p>
-<p>第一行包含两个个整数N和K。</p>
-<p>第二行包含N个整数A1, A2, … AN。</p>
-<p>对于30%的数据，<span class="math inline">\(1 \le N \le 10​\)</span></p>
-<p>对于100%的数据，$1 N , 0 Ai , 0 K  $</p>
-</blockquote>
-<blockquote>
-<p><strong>输出：</strong></p>
-<p>一个整数，代表答案。</p>
-</blockquote>
-<blockquote>
-<p><strong>样例输入：</strong> 5 1 2 3 1 2 4 2 5 5 3</p>
-</blockquote>
-<blockquote>
-<p><strong>样例输出：</strong> 6</p>
-</blockquote>
-<blockquote>
-<p>再比如，</p>
-<p><strong>样例输入：</strong></p>
-<p>10 1</p>
-<p>2 1 1 1 1 4 4 3 4 4</p>
-</blockquote>
-<blockquote>
-<p><strong>样例输出：</strong> 8</p>
-</blockquote>
-<blockquote>
-<p><strong>资源约定：</strong></p>
-<p>峰值内存消耗 &lt; 256M</p>
-<p>CPU消耗 &lt; 1000ms</p>
-<p>请严格按要求输出，不要画蛇添足地打印类似：“请您输入…” 的多余内容。</p>
-<p>所有代码放在同一个源文件中，调试通过后，拷贝提交该源码。</p>
-<p><strong>注意:</strong> main函数需要返回0</p>
-<p><strong>注意:</strong> 只使用ANSI C/ANSI C++ 标准，不要调用依赖于编译环境或操作系统的特殊函数。</p>
-<p><strong>注意:</strong> 所有依赖的函数必须明确地在源文件中 #include <xxx>， 不能通过工程设置而省略常用头文件。提交时，注意选择所期望的编译器类型。</p>
-</blockquote>
-<p><strong>问题分析：</strong></p>
-<p>​ 这题就相较于前几题就有难度提升，不在依靠于单一基础算法就能较好的解决问题。</p>
-<p>​ 比赛时，我一开始就认为搜索能解决问题，纸上推演的半个小时才发现有问题，始终是一个NP问题。后来经过分析：这样的策略可能达到解决问题的目的：</p>
-<ol type="1">
-<li><p>因为当K&gt;0时，若选值为m的点，则应该选上值为m的所有点，依照桶排序的思想，进行优化</p></li>
-<li><p>当K=0时，最大选择数=不同值的点的类别数</p></li>
-<li><p>依照K值，形成关系链（可以为多条关系链）</p></li>
-<li><p>单一关系链中，选择类数和并且不关联的最大一个或几个点，该算法应为动态规划</p></li>
-</ol>
-<p><strong>如图所示：</strong></p>
-<p>22 2</p>
-<p>2 1 1 1 1 4 4 3 4 4 6 7 7 8 8 8 8 9 11 11 12 13</p>
-<p><img src="https://p071bq.bn.files.1drv.com/y4m67x1ddyuU_F7SZB4mL2Qm8ClAyaq7TLDZKe85r3KXiHmtsmsD0AbDS1t601bUn0nVWP8-_jxBLfDno2d7WlVoSH8eFop0-Qorr8-BMyA0aMVC0Tahn1BjjxvGGSCgLAmc3LDqO4kC7oeZ1hmPU0LlfoDYwt1s3NomgiCZ4bJL-eioW2_ArJK1kD0CUi0YF0RQmU8BRkUKBRMHs-Rs1rUVQ?width=1024&amp;height=511&amp;cropmode=none" /></p>
-<p>第一条链最大个数和：4</p>
-<p>第二条链最大个数和：8</p>
-<p>第三条链最大个数和：4</p>
-<p>第四条链最大个数和：1</p>
-<p>最大个数和：4+8+4+1=17</p>
-<p><strong>代码：</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N=<span class="number">100000</span>;</span><br><span class="line"><span class="keyword">int</span> n,k;</span><br><span class="line"><span class="keyword">int</span> num[N];</span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; link[N];</span><br><span class="line"><span class="keyword">int</span> node[N];</span><br><span class="line"><span class="keyword">int</span> num_node=<span class="number">0</span>; </span><br><span class="line"><span class="keyword">int</span> num_link=<span class="number">0</span>;<span class="comment">//关系链数 </span></span><br><span class="line">short vis[N];<span class="comment">//1代表已访问，0代表未访问，-1代表点不存在 </span></span><br><span class="line"><span class="keyword">int</span> F[N];<span class="comment">//dp F[i]=max(F[i-1],F[F-2]+num[i]) </span></span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> tot=<span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(num,<span class="number">0</span>,<span class="keyword">sizeof</span>(num));</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n&gt;&gt;k;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> t;</span><br><span class="line">        <span class="built_in">cin</span>&gt;&gt;t;</span><br><span class="line">        num[t]++;</span><br><span class="line">        vis[i]=<span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">work</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=N;i++)</span><br><span class="line">        <span class="keyword">if</span>(num[i]!=<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            node[num_node++]=i;</span><br><span class="line">            vis[i]=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;num_node;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(vis[node[i]]==<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            vis[node[i]]=<span class="number">1</span>;</span><br><span class="line">            link[num_link].push_back(node[i]);</span><br><span class="line">            <span class="keyword">int</span> next=node[i]+k;</span><br><span class="line">            <span class="keyword">while</span>(vis[next]==<span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                link[num_link].push_back(next);</span><br><span class="line">                vis[next]=<span class="number">1</span>;</span><br><span class="line">                next=next+k;</span><br><span class="line">            &#125;</span><br><span class="line">            num_link++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dp</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;num_link;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">memset</span>(F,<span class="number">0</span>,<span class="keyword">sizeof</span>(F));</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;link[i].<span class="built_in">size</span>();j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(j&gt;=<span class="number">2</span>)</span><br><span class="line">                F[j]=<span class="built_in">max</span>(F[j<span class="number">-1</span>],F[j<span class="number">-2</span>]+num[link[i][j]]);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(j==<span class="number">0</span>)</span><br><span class="line">                F[j]=num[link[i][j]];</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(j==<span class="number">1</span>)</span><br><span class="line">                F[j]=<span class="built_in">max</span>(F[j<span class="number">-1</span>],num[link[i][j]]); </span><br><span class="line">        &#125; </span><br><span class="line">        <span class="comment">//cout&lt;&lt;F[link[i].size()-1]&lt;&lt;endl;</span></span><br><span class="line">        tot+=F[link[i].<span class="built_in">size</span>()<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    init();</span><br><span class="line">    work();</span><br><span class="line">    dp();</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;tot;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    for(int i=0;i&lt;num_node;i++)</span></span><br><span class="line"><span class="comment">        cout&lt;&lt;node[i]&lt;&lt;"-&gt;"&lt;&lt;num[node[i]]&lt;&lt;" ";</span></span><br><span class="line"><span class="comment">    cout&lt;&lt;endl;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    for(int i=0;i&lt;num_link;i++)</span></span><br><span class="line"><span class="comment">    &#123;</span></span><br><span class="line"><span class="comment">        for(int j=0;j&lt;link[i].size();j++)</span></span><br><span class="line"><span class="comment">        &#123;</span></span><br><span class="line"><span class="comment">            cout&lt;&lt;link[i][j]&lt;&lt;" ";</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">        cout&lt;&lt;endl;</span></span><br><span class="line"><span class="comment">    &#125;*/</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -842,7 +796,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -887,12 +841,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">160k</span>
+    <span title="站点总字数">161k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:25</span>
+    <span title="站点阅读时长">2:26</span>
 </div>
 
         

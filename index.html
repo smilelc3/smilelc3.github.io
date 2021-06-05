@@ -175,6 +175,178 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2021/06/01/%E2%80%9C%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E5%85%AC%E6%B0%91%E8%BA%AB%E4%BB%BD%E5%8F%B7%E7%A0%81%E2%80%9D%20%E9%AA%8C%E8%AF%81%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/01/%E2%80%9C%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E5%85%AC%E6%B0%91%E8%BA%AB%E4%BB%BD%E5%8F%B7%E7%A0%81%E2%80%9D%20%E9%AA%8C%E8%AF%81%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">“中华人民共和国公民身份号码” 验证算法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-06-01 00:00:00 / 修改时间：18:00:33" itemprop="dateCreated datePublished" datetime="2021-06-01T00:00:00+08:00">2021-06-01</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>775</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="中华人民共和国公民身份号码-验证算法">“中华人民共和国公民身份号码” 验证算法</h1>
+<p>中华人民共和国公民身份号码由<strong>18位</strong>组成，其中<strong>前17位</strong>由阿拉伯数字<code>0~9</code>组成，<strong>最后一位</strong>由<code>0~9或X</code> 构成，按构造顺序如下：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th>位置</th>
+<th style="text-align: center;">长度</th>
+<th style="text-align: center;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>区域码</strong></td>
+<td>1~6位</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">指公民常住户口所在地的<a href="http://www.mca.gov.cn/article/sj/xzqh/" target="_blank" rel="noopener">行政划区代码</a>，由省（2位）+市（2位）+区（县）（2位）构成</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>出生日期码</strong></td>
+<td>7~14位</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">指公民出生的公历日期，由年（4位）+月（2位）+日（2位）构成</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>顺序码</strong></td>
+<td>15、16位</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">表示在同一区域码所标识的区域范围内，对同年、同月、同日出生的人编定的顺序号</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>性别码</strong></td>
+<td>17位</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">奇数代表男性，偶数代表女性</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>校验码</strong></td>
+<td>18位</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">通过前17位计算所得，见<a href="http://www.gb688.cn/bzgk/gb/newGbInfo?hcno=080D6FBF2BB468F9007657F26D60013E" target="_blank" rel="noopener">国标GB11643-1999</a></td>
+</tr>
+</tbody>
+</table>
+<p>根据标准，最后一位校验码采用<a href="https://zh.wikipedia.org/wiki/%E6%A0%A1%E9%AA%8C%E7%A0%81" target="_blank" rel="noopener">ISO 7064:1983.MOD 11-2校验码计算法</a>，具体计算方法解释如下，令<span class="math inline">\(N_i (i=1,2...16,17)\)</span>表示每一位身份证号，需要首先计算各位的权重<span class="math inline">\(W_i\)</span>： <span class="math display">\[
+W_i = 2^{17-(i-1)} \mod 11
+\]</span> 计算所得权重数据如下表：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>位数<span class="math inline">\(i\)</span></strong></th>
+<th style="text-align: center;"><strong>1</strong></th>
+<th style="text-align: center;"><strong>2</strong></th>
+<th style="text-align: center;"><strong>3</strong></th>
+<th style="text-align: center;"><strong>4</strong></th>
+<th style="text-align: center;"><strong>5</strong></th>
+<th style="text-align: center;"><strong>6</strong></th>
+<th style="text-align: center;"><strong>7</strong></th>
+<th style="text-align: center;"><strong>8</strong></th>
+<th style="text-align: center;"><strong>9</strong></th>
+<th style="text-align: center;"><strong>10</strong></th>
+<th style="text-align: center;"><strong>11</strong></th>
+<th style="text-align: center;"><strong>12</strong></th>
+<th style="text-align: center;"><strong>13</strong></th>
+<th style="text-align: center;"><strong>14</strong></th>
+<th style="text-align: center;"><strong>15</strong></th>
+<th style="text-align: center;"><strong>16</strong></th>
+<th style="text-align: center;"><strong>17</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>权重<span class="math inline">\(W_i\)</span></strong></td>
+<td style="text-align: center;"><strong>7</strong></td>
+<td style="text-align: center;"><strong>9</strong></td>
+<td style="text-align: center;"><strong>10</strong></td>
+<td style="text-align: center;"><strong>5</strong></td>
+<td style="text-align: center;"><strong>8</strong></td>
+<td style="text-align: center;"><strong>4</strong></td>
+<td style="text-align: center;"><strong>2</strong></td>
+<td style="text-align: center;"><strong>1</strong></td>
+<td style="text-align: center;"><strong>6</strong></td>
+<td style="text-align: center;"><strong>3</strong></td>
+<td style="text-align: center;"><strong>7</strong></td>
+<td style="text-align: center;"><strong>9</strong></td>
+<td style="text-align: center;"><strong>10</strong></td>
+<td style="text-align: center;"><strong>5</strong></td>
+<td style="text-align: center;"><strong>8</strong></td>
+<td style="text-align: center;"><strong>4</strong></td>
+<td style="text-align: center;"><strong>2</strong></td>
+</tr>
+</tbody>
+</table>
+<p>最后一位校验码 <span class="math inline">\(C\)</span> 由下式计算而出： <span class="math display">\[
+C= (12 - (\sum_{i=1}^{17}{(N_i W_i)} \mod 11 ) \mod 11
+\]</span> 可以发现，<span class="math inline">\(C\)</span>因为最后与<span class="math inline">\(11\)</span>求余计算，导致<span class="math inline">\(C\)</span>必然小于等于<span class="math inline">\(10\)</span>。又因为阿拉伯数字限制，如果<span class="math inline">\(C=10\)</span>，则校验码为字符"X"；如果<span class="math inline">\(C \leq 10\)</span>，则校验码为数字"C"。</p>
+<p>我们可以根据计算前17位身份证码所得校验码与所提供的第18位校验码进行是否相等判定，从而得出所输入的18位身份证号是否有误。这也是一些网站初步验证身份证号的机制。</p>
+<blockquote>
+<p>附上本人所写的一个提取身份号码有关信息的小工具——<a href="https://github.com/smilelc3/ChinaIdNumberCheck" target="_blank" rel="noopener">“中华人民共和国公民身份号码”验证工具</a></p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liuchang.men/2021/04/07/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E4%B9%8B%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -206,7 +378,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-10 11:49:14" itemprop="dateModified" datetime="2021-04-10T11:49:14+08:00">2021-04-10</time>
+                <time title="修改时间：2021-04-13 12:00:38" itemprop="dateModified" datetime="2021-04-13T12:00:38+08:00">2021-04-13</time>
               </span>
 
           <br>
@@ -274,7 +446,7 @@
 </ol>
 <p>即状态转移方程为：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[i][j] = <span class="built_in">max</span>(dp[i<span class="number">-1</span>][j], j-w[i] &gt;= <span class="number">0</span> ? dp[i<span class="number">-1</span>][j-w[i]]+v[i] : <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<p>由状态方程可知，<code>dp[i][j]</code>的值只与<code>dp[i-1][0,…,j-1]</code>有关，所以可以采用滚动数组对空间优化。需要注意的是，为了防止上一层循环`<code>dp[0,…,j-1]</code>被覆盖，需要<strong>逆向枚举</strong><span class="math inline">\(j\)</span>（空间优化前没有这个限制）。代码如下：</p>
+<p>由状态方程可知，<code>dp[i][j]</code>的值只与<code>dp[i-1][0,…,j-1]</code>有关，所以可以采用滚动数组对空间优化。需要注意的是，为了防止上一层循环<code>dp[0,…,j-1]</code>被覆盖，需要<strong>逆向枚举</strong><span class="math inline">\(j\)</span>（空间优化前没有这个限制）。代码如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">solution01Knapsack</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> W, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;w, <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;v)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// w[i]重量  v[i]价值</span></span><br><span class="line">    <span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(W+<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> j = W; j &gt;= w[i]; j--) &#123;</span><br><span class="line">            dp[j] = <span class="built_in">std</span>::<span class="built_in">max</span>(dp[j], dp[j - w[i]] + v[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[W];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>时间复杂度为<span class="math inline">\(O(NW)\)</span>，空间复杂度为<span class="math inline">\(O(W)\)</span>。第<span class="math inline">\(i\)</span>件物品装入或者不装入而获得的最大价值完全可以由前面<span class="math inline">\(i-1\)</span>件物品的最大价值决定，暴力枚举忽略了这个事实。</p>
 <h2 id="完全背包">完全背包</h2>
@@ -465,7 +637,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2020/12/29/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95%20-%20%E5%89%AF%E6%9C%AC/">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2020/12/29/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -479,7 +651,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/12/29/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95%20-%20%E5%89%AF%E6%9C%AC/" class="post-title-link" itemprop="url">最长回文子串算法——Manacher算法</a>
+            <a href="/2020/12/29/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">最长回文子串算法——Manacher算法</a>
         </h2>
 
         <div class="post-meta">
@@ -602,198 +774,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2020/12/01/%E6%95%B0%E7%8B%AC%E6%B1%82%E8%A7%A3%20go%E8%AF%AD%E8%A8%80%E7%89%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/01/%E6%95%B0%E7%8B%AC%E6%B1%82%E8%A7%A3%20go%E8%AF%AD%E8%A8%80%E7%89%88/" class="post-title-link" itemprop="url">数独求解 go语言版</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-01 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-01T00:00:00+08:00">2020-12-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-12-02 21:30:56" itemprop="dateModified" datetime="2020-12-02T21:30:56+08:00">2020-12-02</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="数独求解-go语言版">数独求解 go语言版</h1>
-<p>源代码<code>github</code>地址：<a href="https://github.com/smilelc3/sudoku-solver" target="_blank" rel="noopener">https://github.com/smilelc3/sudoku-solver</a></p>
-<p>关于数独<code>wiki</code>介绍：<a href="https://zh.wikipedia.org/wiki/%E6%95%B8%E7%8D%A8" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E6%95%B8%E7%8D%A8</a></p>
-<p>一个数独样例</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">+-----------------------------+</span><br><span class="line">|       5 | 3       |         |</span><br><span class="line">| 8       |         |    2    |</span><br><span class="line">|    7    |    1    | 5       |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 4       |       5 | 3       |</span><br><span class="line">|    1    |    7    |       6 |</span><br><span class="line">|       3 | 2       |    8    |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">|    6    | 5       |       9 |</span><br><span class="line">|       4 |         |    3    |</span><br><span class="line">|         |       9 | 7       |</span><br><span class="line">+-----------------------------+</span><br></pre></td></tr></table></figure>
-<h2 id="规则">规则</h2>
-<blockquote>
-<p>游戏一般由9个3×3个的九宫格组成。<br />
-每一列的数字均须包含 1～9，不能缺少，也不能重复。<br />
-每一行的数字均须包含 1～9，不能缺少，也不能重复。<br />
-每一宫(粗黑线围起来的区域，通常是 3*3 的九宫格)的数字均须包含 1～9，不能缺少，也不能重复。</p>
-</blockquote>
-<h2 id="算法介绍">算法介绍</h2>
-<p>实现了两种求数独的算法：</p>
-<ol type="1">
-<li>基于摈弃原则的深度优先搜索算法(dfs)</li>
-<li>优化的舞蹈链算法(Dance Links X)</li>
-</ol>
-<h3 id="一基于摈弃原则的深度优先搜索算法">一、基于摈弃原则的深度优先搜索算法</h3>
-<h4 id="说明">说明</h4>
-<p>计算流程如下：</p>
-<iframe src="https://onedrive.live.com/embed?cid=19E17784439BEF4E&amp;resid=19E17784439BEF4E%21100845&amp;authkey=AK_IF_N8tq8grig&amp;em=2" width="804px" height="850px" frameborder="0">
-这是嵌入 <a target="_blank" href="https://office.com">Microsoft Office</a> 关系图，由 <a target="_blank" href="https://office.com/webapps">Office</a> 提供支持。
-</iframe>
-<p>一般正常数独耗时&lt;10ms，算法主要是深度优先搜索，但是做了几点优化：</p>
-<ol type="1">
-<li>优先填写唯一解的单元格</li>
-<li>下一次搜索节点为全局可能性最小单元格（近似贪心）</li>
-</ol>
-<h4 id="补充">补充</h4>
-<ul>
-<li>其实可以做二进制编码优化，时间复杂度降低一个数量级。但主要是为了代码易读，并非为了极致时间效率；</li>
-</ul>
-<h3 id="二优化的舞蹈链算法">二、优化的舞蹈链算法</h3>
-<p><img src="https://bn1302files.storage.live.com/y4mqX71HMmy0BKWRMJs4R1m2nVjSaQDdt-prqja7Wio9tJFC3zszJAvAZH_xGEmwLqhHWUSgI-GVawen6r5_ojj1qEl0KTevEFVM8Eh46PYztPJO5Ta0928Sb4-e85l30PFNABDQKT4m6m1ohLtW5LCDBRawo9UHKXFnUoHrjR0jzYSrmLzC_8MVx4G-wmPuate?width=744&amp;height=638&amp;cropmode=none" /></p>
-<ul>
-<li><p>舞蹈链算法介绍见博客：<a href="https://www.cnblogs.com/grenet/p/3145800.html" target="_blank" rel="noopener">跳跃的舞者，舞蹈链（Dancing Links）算法——求解精确覆盖问题</a></p></li>
-<li><p>优化思路来自于博客：<a href="https://www.cnblogs.com/grenet/p/3163550.html" target="_blank" rel="noopener">算法实践——舞蹈链（Dancing Links）算法求解数独</a></p></li>
-</ul>
-<p>主要优化有三点：</p>
-<ol type="1">
-<li>提前优先处理唯一单元格</li>
-<li>优先标记最小可能舞蹈链列元素，极大降低了递归深度（近似贪心）</li>
-<li>先把有数字的格子转换为舞蹈链行，插入到矩阵中，便于计算时优先选中，且仅插入规则合法行，以便减少迭代次数</li>
-</ol>
-<h2 id="测试与对比">测试与对比</h2>
-<p><a href="https://github.com/smilelc3/sudoku-solver/tree/master/test" target="_blank" rel="noopener">test</a> 文件夹中，含有各种测试样例，包含号称 <a href="https://baike.baidu.com/item/%E4%B8%96%E7%95%8C%E6%9C%80%E9%9A%BE%E6%95%B0%E7%8B%AC/13848819" target="_blank" rel="noopener">最难数独</a> 样例文件<a href="https://github.com/smilelc3/sudoku-solver/blob/master/test/7hardest" target="_blank" rel="noopener">7hardest</a></p>
-<p>测试结果基于400次重复求解用时均值，仅具有一定参考</p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">样例文件</th>
-<th style="text-align: center;">深度优先搜索算法</th>
-<th style="text-align: center;">舞蹈链算法</th>
-<th style="text-align: center;">备注</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">0finished</td>
-<td style="text-align: center;">0 ms</td>
-<td style="text-align: center;">0.557 ms</td>
-<td style="text-align: center;">已完成的数独</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">1dream</td>
-<td style="text-align: center;">3.027 ms</td>
-<td style="text-align: center;">2.904 ms</td>
-<td style="text-align: center;">全空</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">2easier</td>
-<td style="text-align: center;">0.010 ms</td>
-<td style="text-align: center;">0.567 ms</td>
-<td style="text-align: center;">仅一个位置未填</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">3easy</td>
-<td style="text-align: center;">0.750 ms</td>
-<td style="text-align: center;">0.840 ms</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">4normal</td>
-<td style="text-align: center;">12.16 ms</td>
-<td style="text-align: center;">1.452 ms</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">5hard</td>
-<td style="text-align: center;">0.829 ms</td>
-<td style="text-align: center;">1.060 ms</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">6harder</td>
-<td style="text-align: center;">3.871 ms</td>
-<td style="text-align: center;">1.239 ms</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">7hardest</td>
-<td style="text-align: center;">189.212 ms</td>
-<td style="text-align: center;">18.623 ms</td>
-<td style="text-align: center;">号称最难数独</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>在某些特殊情况下，深度优先搜索深度低，在较为简单的数独上效率高；</li>
-<li>舞蹈链算法稳定高效，适用于精确覆盖类问题，用额外的空间开销与特殊的数据结构，在复杂数独上效果显著。</li>
-</ul>
-<h3 id="最难数独运行程序结果">最难数独运行程序结果</h3>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">+-----------------------------+</span><br><span class="line">| 8       |         |         |</span><br><span class="line">|       3 | 6       |         |</span><br><span class="line">|    7    |    9    | 2       |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">|    5    |       7 |         |</span><br><span class="line">|         |    4  5 | 7       |</span><br><span class="line">|         | 1       |    3    |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">|       1 |         |    6  8 |</span><br><span class="line">|       8 | 5       |    1    |</span><br><span class="line">|    9    |         | 4       |</span><br><span class="line">+-----------------------------+</span><br><span class="line">已读取数独 test&#x2F;7hardest</span><br><span class="line">+-----------------------------+</span><br><span class="line">| 8  1  2 | 7  5  3 | 6  4  9 |</span><br><span class="line">| 9  4  3 | 6  8  2 | 1  7  5 |</span><br><span class="line">| 6  7  5 | 4  9  1 | 2  8  3 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 1  5  4 | 2  3  7 | 8  9  6 |</span><br><span class="line">| 3  6  9 | 8  4  5 | 7  2  1 |</span><br><span class="line">| 2  8  7 | 1  6  9 | 5  3  4 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 5  2  1 | 9  7  4 | 3  6  8 |</span><br><span class="line">| 4  3  8 | 5  2  6 | 9  1  7 |</span><br><span class="line">| 7  9  6 | 3  1  8 | 4  5  2 |</span><br><span class="line">+-----------------------------+</span><br><span class="line">深度优先搜索法所用时间： 189.9914 ms</span><br><span class="line">+-----------------------------+</span><br><span class="line">| 8  1  2 | 7  5  3 | 6  4  9 |</span><br><span class="line">| 9  4  3 | 6  8  2 | 1  7  5 |</span><br><span class="line">| 6  7  5 | 4  9  1 | 2  8  3 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 1  5  4 | 2  3  7 | 8  9  6 |</span><br><span class="line">| 3  6  9 | 8  4  5 | 7  2  1 |</span><br><span class="line">| 2  8  7 | 1  6  9 | 5  3  4 |</span><br><span class="line">|---------+---------+---------|</span><br><span class="line">| 5  2  1 | 9  7  4 | 3  6  8 |</span><br><span class="line">| 4  3  8 | 5  2  6 | 9  1  7 |</span><br><span class="line">| 7  9  6 | 3  1  8 | 4  5  2 |</span><br><span class="line">+-----------------------------+</span><br><span class="line">舞蹈链法所用时间： 20.0401 ms</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -863,7 +843,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -908,12 +888,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">160k</span>
+    <span title="站点总字数">161k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:25</span>
+    <span title="站点阅读时长">2:26</span>
 </div>
 
         

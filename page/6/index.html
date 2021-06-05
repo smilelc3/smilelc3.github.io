@@ -175,6 +175,112 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/07/13/%E4%BD%BF%E7%94%A8shadowsocks-libev%E4%BB%A3%E6%9B%BFshadowsocks-python%EF%BC%8C%E5%B9%B6%E5%BC%80%E5%90%AFipv6%E6%94%AF%E6%8C%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/07/13/%E4%BD%BF%E7%94%A8shadowsocks-libev%E4%BB%A3%E6%9B%BFshadowsocks-python%EF%BC%8C%E5%B9%B6%E5%BC%80%E5%90%AFipv6%E6%94%AF%E6%8C%81/" class="post-title-link" itemprop="url">使用shadowsocks-libev代替shadowsocks-python，并开启ipv6支持</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-13 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-13T00:00:00+08:00">2018-07-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-19 00:26:53" itemprop="dateModified" datetime="2020-04-19T00:26:53+08:00">2020-04-19</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://nk6qha.bn.files.1drv.com/y4m3_GRonSavOty5OmbA9AmiiLNpsmvxbl_EyfrB85VFM8XZ7x388aCoYa0Ezoyr8E0L7Yiro2RepZjwgD_2qCBh751eHW4HRVbZzNQkBxjO15hx-wpKNxrHcpdtHFm2BTfBCk-3dGAh6rye88SeAtU2acM6rCYI3i-uOeTnFinrw9M5zEvyasNrC2Ct4O0GwJDpENQi-COROkc2kta46MLXw?width=865&amp;height=307&amp;cropmode=none" /></p>
+<h1 id="ubuntu安装shadowsocks-libev">ubuntu安装shadowsocks-libev</h1>
+<p>本有一篇博文写的是使用<code>docker</code>快速部署shadowsocks，但是存在以下问题：</p>
+<ul>
+<li><code>docker</code>部署上是基于<code>python2.7</code>下的<code>shadowsocks</code>包，效率不高；</li>
+<li><code>python</code>（包括2/3）下的<code>shadowsocks</code>包上次更新已经是2015年8月，距今时间过久，存在版本迭代上的一些bug。</li>
+</ul>
+<p>这次的安装使用<code>shadowsocks-libev</code>，其使用C写的ss服务端，附上github项目地址：</p>
+<p><a href="https://github.com/shadowsocks/shadowsocks-libev" target="_blank" rel="noopener" class="uri">https://github.com/shadowsocks/shadowsocks-libev</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install shadowsocks-libev</span><br></pre></td></tr></table></figure>
+<p><strong>相关文件位置说明</strong></p>
+<p>启动文件：<em>/etc/init.d/shadowsocks-libev</em> 配置文件： <em>/etc/shadowsocks-libev/config.json</em> 一些默认启动配置： <em>/etc/default/shadowsocks-libev</em></p>
+<h1 id="编辑shadowsocks参数">编辑shadowsocks参数</h1>
+<p><strong>修改配置文件：</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/shadowsocks-libev/config.json</span><br></pre></td></tr></table></figure>
+<p><strong>修改样例：</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"server"</span>:[<span class="string">"[::0]"</span>, <span class="string">"0.0.0.0"</span>],</span><br><span class="line">    <span class="attr">"server_port"</span>:<span class="number">8388</span>,</span><br><span class="line">    <span class="attr">"local_port"</span>:<span class="number">1080</span>,</span><br><span class="line">    <span class="attr">"password"</span>:<span class="string">"PASSWORD"</span>,</span><br><span class="line">    <span class="attr">"timeout"</span>:<span class="number">60</span>,</span><br><span class="line">    <span class="attr">"method"</span>:<span class="string">"aes-256-cfb"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>"server"</code>中：使用<code>["[::0]", "0.0.0.0"]</code>分别监听ipv6、ipv4所有请求 <code>"password"</code>中：修改为所想设置的密码</p>
+<ul>
+<li>注意：以前在<code>shadowsock-python</code>有使用<code>"server":"::"</code>会默认监听ipv4、ipv6，但是该设置在<code>shadowsocks-libev</code>不生效，仅仅监听ipv6</li>
+</ul>
+<h1 id="控制shadowsocks">控制shadowsocks</h1>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo service shadowsocks-libev start    # 重启shadowsocks</span><br><span class="line">sudo service shadowsocks-libev stop     # 关闭shadowsocks</span><br><span class="line">sudo service shadowsocks-libev restart  # 参数改变后重启生效</span><br></pre></td></tr></table></figure>
+<p>查看是否启动，返回结果样例</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ps aux |grep ss-server</span><br><span class="line"></span><br><span class="line">nobody   16623  0.0  0.9  32088  4672 ?        Ss   12:05   0:00 /usr/bin/ss-server -c /etc/shadowsocks-libev/config.json -u</span><br><span class="line">root     16825  0.0  0.2  14856  1068 pts/1    S+   13:12   0:00 grep --color=auto ss-server</span><br></pre></td></tr></table></figure>
+<p>注意：使用shadowsocks的ipv6必须保证双栈（服务器和客户端均启用ipv6）支持。<a href="http://test-ipv6.com/" target="_blank" rel="noopener">附一个ipv6检测网址</a></p>
+<p>本来听说校园网是支持ipv6的，还有可能不限流量，但是……</p>
+<p><img src="https://nk7aha.bn.files.1drv.com/y4mmnGMK5MasCOxys40WUr0_ZpT6X5tMaQL-l3_SVuzJ5Ry-VNFjBOHLGouF4H6ji7kX_QK8tWdFFNYqc2jCCL-pLaz8va_2W5U940tFac6p8OOP6KIlY3QFvVsAs8KkBcOxNwdqWD_vahDH8C-a_JA--XJ97duS76IJLc3zp-GRnXROyFMv3VE5VyN2XW-5FveLcXXL1UEMAr3pZwtpvi9Lw?width=1857&amp;height=655&amp;cropmode=none" /></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/05/12/linux%E4%B8%8B%E7%94%A8idea%E8%B0%83%E8%AF%95java%20web%EF%BC%9A%E7%82%B9%E5%87%BB%E5%9B%BE%E7%89%87%E6%96%87%E5%AD%97%E9%AA%8C%E8%AF%81%E7%A0%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -505,97 +611,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2018/03/26/%E4%B9%8C%E7%8F%AD%E5%9B%BEMySQL%E5%AE%89%E8%A3%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="smile">
-      <meta itemprop="description" content="smile's blog">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="生命不息，奋斗不止">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/03/26/%E4%B9%8C%E7%8F%AD%E5%9B%BEMySQL%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">乌班图MySQL安装</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-26 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-26T00:00:00+08:00">2018-03-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-19 00:29:55" itemprop="dateModified" datetime="2020-04-19T00:29:55+08:00">2020-04-19</time>
-              </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://p06peg.bn.files.1drv.com/y4mm5APcOIb1-chauC6p3Mq4ebFgsR0DaV-nPTxXskfoEcuyKfS3HSeMuH8es2BFnLRuAPdZPE3X5VrG-ZLF7i5uDOH4s0mAHOTCmnm-h_3wA_SIdoiSy_rU6e5N1tgxLZllxncREn1w9MSqaSTfcLw6lUDw8azqaAnvRmN4Rl6CSZxqYOOdNz47r0wk1mFdL680OQ97vnGXbkzTt3IPdf0fQ?width=1024&amp;height=530&amp;cropmode=none" /></p>
-<h1 id="mysql安装">MySQL安装</h1>
-<p><strong>首先在命令行中输入三个命令：</strong></p>
-<ol type="1">
-<li><p>```bash sudo apt-get install mysql-server <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2. &#96;&#96;&#96;bash</span><br><span class="line">   sudo apt install mysql-client</span><br></pre></td></tr></table></figure></p></li>
-<li><p>```bash sudo apt install libmysqlclient-dev <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">**接下来确认系统是否已经安装上Mysql:**</span><br><span class="line">输入命令：&#96;mysql --help&#96;</span><br><span class="line">出现如下一大串help，即为成功：</span><br><span class="line">![](https:&#x2F;&#x2F;p06ueg.bn.files.1drv.com&#x2F;y4mNAe06cdjT6CqEklVdezSTWyalrQwVgPqFxaTs5cJ2q2QdEnvJsCMsJs7Ge0SvUFrBCYJtPgJyeQf5Jqe_LP4zspTpKdNmUj64e6xAmLUShjA4BbBCeZ7NXBNsv2Cc39u2ya-tk53ynjv4kU-3jbTr4bOJnpgdOSRzn1A9nuNal2tACfRIajJaef0bMGdiiAOmsD5R1VvhL93lKh3Cxc4qA?width&#x3D;735&amp;height&#x3D;382&amp;cropmode&#x3D;none)</span><br><span class="line">可以通过如下命令进入MySQL服务：</span><br><span class="line">&#96;mysql -uroot -p&#96;</span><br><span class="line">会让你输入密码，在安装的时候有时候会出现让你设置密码，有些是默认登录。</span><br><span class="line">![](https:&#x2F;&#x2F;p06veg.bn.files.1drv.com&#x2F;y4mIW7MdhJAY-igcVXDXwcqeX4_UXQ3OvFvYsvO4UTyYXax3r47Tfd2vOvWrjdHnX2-EdTPWq0YxOczucbzJbMyjeTSxgawUOWAvMksXchd0QOX2KJL-YWdcJhkJMGkrLN9md7NaGPe7YR1qe1f3sbbkx3tRaX2x-vYJy-yW05GmWkxMeYM4Br-wy6mIK34RWllkxK6DUucEsqUqwFZ-hawYg?width&#x3D;732&amp;height&#x3D;243&amp;cropmode&#x3D;none)</span><br><span class="line"></span><br><span class="line">现在设置mysql允许远程访问，首先编辑文件 &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;mysqld.cnf：</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;bash</span><br><span class="line">sudo nano &#x2F;etc&#x2F;mysql&#x2F;mysql.conf.d&#x2F;mysqld.cnf</span><br></pre></td></tr></table></figure></p></li>
-</ol>
-<p>注释掉<strong><em>bind-address = 127.0.0.1</em></strong>： <code>sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf</code> <img src="https://ne7cha.bn.files.1drv.com/y4mQb9DVkANMfETZF6_0-xkxRkcXScb72aYdGeeq7j7iNSKNTv_dfReFsRpBRwPr8w3EDbQ-nsKlY0eBhMRBxVEzBLpYpXGectH9Cz2-8kAKLszCH1jvBoGt5EMH7pcx3g1YDEZNfMnyLMEkR6jAPO2HaYZXsL4WUg7rHGyMFUtnnKtPq271X3bxpMTvv2jhYjV7nGPXBW3q6vWPBDeEwpVNQ?width=664&amp;height=40&amp;cropmode=none" /></p>
-<p>保存退出，然后进入mysql服务，执行授权命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Grant all on *.* to &#39;root&#39;@&#39;%&#39; identified by &#39;root用户的密码&#39; with grant option;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
-<p>然后执行quit命令退出mysql服务，执行如下命令重启mysql：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysql restart</span><br></pre></td></tr></table></figure>
-<p>补充：在进入MySQL时，输入<code>mysql -uroot -p</code>命令时，会出现 &gt; ERROR 1045 (28000): Access denied for user ‘root’@’localhost’这种情况。于是在网上查了许多技术网站，发现一篇不错的，据此解决。链接： https://blog.csdn.net/learner_lps/article/details/62887343</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -665,7 +680,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -710,12 +725,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">160k</span>
+    <span title="站点总字数">161k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:25</span>
+    <span title="站点阅读时长">2:26</span>
 </div>
 
         
