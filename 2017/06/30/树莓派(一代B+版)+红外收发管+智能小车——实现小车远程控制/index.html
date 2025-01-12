@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"liuchang.men","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前段时间的，新生工程体验课上，两人一组，靠厂家提供的元器件和烧录代码，焊接了了一台智能小车。 最进，碰巧手头有空闲的一块树莓派，本来打算用树莓派去实现远程控制空调，但发现空调的红外编码带有逻辑控制，只能退而求其次，试试远程控制小车，大体框架结构如图。  2017-07-03更新，已经实现对空调类带逻辑编码设备的简单控制。   烧录系统 几乎所有的新手教程都使用Win32DiskImager作为系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制">
+<meta property="og:url" content="https://liuchang.men/2017/06/30/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/index.html">
+<meta property="og:site_name" content="生命不息，奋斗不止">
+<meta property="og:description" content="前段时间的，新生工程体验课上，两人一组，靠厂家提供的元器件和烧录代码，焊接了了一台智能小车。 最进，碰巧手头有空闲的一块树莓派，本来打算用树莓派去实现远程控制空调，但发现空调的红外编码带有逻辑控制，只能退而求其次，试试远程控制小车，大体框架结构如图。  2017-07-03更新，已经实现对空调类带逻辑编码设备的简单控制。   烧录系统 几乎所有的新手教程都使用Win32DiskImager作为系统">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/unnamed-file%20%5B%E5%8E%9F%E5%A7%8B%E5%A4%A7%E5%B0%8F%5D.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/20130831204912500-0-1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/6619373360026755635-1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/c259e358ccbf6c813fdb4c76bb3eb13531fa409f-1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/20120921154663386338-1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/201453125427363-1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/20170701222333.jpg">
+<meta property="article:published_time" content="2017-06-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-12T00:40:54.421Z">
+<meta property="article:author" content="smile">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/unnamed-file%20%5B%E5%8E%9F%E5%A7%8B%E5%A4%A7%E5%B0%8F%5D.jpg">
+
+
+<link rel="canonical" href="https://liuchang.men/2017/06/30/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://liuchang.men/2017/06/30/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/","path":"2017/06/30/树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制/","title":"树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制 | 生命不息，奋斗不止</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">生命不息，奋斗不止</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%83%A7%E5%BD%95%E7%B3%BB%E7%BB%9F"><span class="nav-text">烧录系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99sd%E5%8D%A1%E7%9B%B4%E6%8E%A5%E8%AF%BB%E5%8F%96zip%E5%8E%8B%E7%BC%A9%E5%8C%85"><span class="nav-text">写SD卡：直接读取zip压缩包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ssh%E6%97%A0%E6%B3%95%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98"><span class="nav-text">SSH无法连接问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%86%E7%BA%A2%E5%A4%96%E6%8E%A5%E5%8F%97%E7%AE%A1%E5%92%8C%E5%8F%91%E5%B0%84%E7%AE%A1%E8%BF%9E%E6%8E%A5%E8%87%B3%E6%A0%91%E8%8E%93%E6%B4%BEgpio%E6%8E%A5%E5%8F%A3"><span class="nav-text">将红外接受管和发射管连接至树莓派GPIO接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E8%BF%9E%E6%8E%A5"><span class="nav-text">硬件连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%84%E5%85%88%E8%A7%A3%E6%9E%90%E6%8E%A7%E5%88%B6%E7%A0%81"><span class="nav-text">预先解析控制码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-raspbian-%E4%BB%93%E5%BA%93%E9%BB%98%E8%AE%A4%E6%BA%90"><span class="nav-text">修改 raspbian 仓库默认源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E6%8D%A2vi%E6%96%87%E6%9C%AC%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%BAvim"><span class="nav-text">更换vi文本编译器为vim</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85lirc"><span class="nav-text">安装lirc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%95%E5%88%B6%E8%A7%A3%E6%9E%90%E6%8E%A7%E5%88%B6%E7%A0%81"><span class="nav-text">录制解析控制码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%A0%91%E8%8E%93%E6%B4%BE%E5%8F%91%E5%B0%84%E7%BA%A2%E5%A4%96%E7%BC%96%E7%A0%81"><span class="nav-text">通过树莓派发射红外编码</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">smile</p>
+  <div class="site-description" itemprop="description">smile's blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smilelc3" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smilelc3" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:smile@liuchang.men" title="E-Mail → mailto:smile@liuchang.men" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2017/06/30/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制 | 生命不息，奋斗不止">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-07-01 00:00:00" itemprop="dateCreated datePublished" datetime="2017-07-01T00:00:00+08:00">2017-07-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-01-12 08:40:54" itemprop="dateModified" datetime="2025-01-12T08:40:54+08:00">2025-01-12</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>前段时间的，新生工程体验课上，两人一组，靠厂家提供的元器件和烧录代码，焊接了了一台智能小车。</p>
+<p>最进，碰巧手头有空闲的一块树莓派，本来打算用树莓派去实现远程控制空调，但发现空调的红外编码带有逻辑控制，只能退而求其次，试试远程控制小车，大体框架结构如图。</p>
+<hr />
+<p>2017-07-03更新，已经实现对空调类带逻辑编码设备的简单控制。</p>
+<hr />
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制/unnamed-file%20%5B原始大小%5D.jpg" /></p>
+<h1 id="烧录系统">烧录系统</h1>
+<p>几乎所有的新手教程都使用<a
+target="_blank" rel="noopener" href="https://sourceforge.net/projects/win32diskimager/">Win32DiskImager</a>作为系统安装工具——中文的、英文的、官方的、eLinux
+wiki的，不一而足。
+但是这个工具不支持中文目录名（文件或目录有中文，会出现123错误），不支持压缩，必须先插好SD卡，再开软件。
+而<a
+target="_blank" rel="noopener" href="https://www.techspot.com/downloads/6355-usb-image-tool.html">USB
+Image Tool</a>，就是Win32DiskImager的一个更方便的替代品。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制/20130831204912500-0-1.jpg" /></p>
+<h2 id="写sd卡直接读取zip压缩包">写SD卡：直接读取zip压缩包</h2>
+<p>USB Image
+Tool可以直读.zip压缩包。网上下载的zip格式系统镜像，下完直接可以烧录。
+点击<strong>Restore</strong>，选择.zip文件即可。注意打开对话框中默认看不到.zip文件，在“文件类型”处选择“<strong>All
+Files (<em>.</em>)</strong>”即可。</p>
+<h2 id="ssh无法连接问题">SSH无法连接问题</h2>
+<p>自从2016年11月开始，树莓派官方推荐 <a
+target="_blank" rel="noopener" href="https://www.raspberrypi.org/downloads/raspbian/">Raspbian</a>
+系统镜像关闭了默认<em>ssh</em>连接，重新开启也很简单，把SD卡拔下来，进入到根目录，新建一个名为<em>ssh</em>的空白文件(无后缀)就可以。</p>
+<p>好了然后再把卡插回树莓派，就可以使用SSH了。</p>
+<ul>
+<li>初始用户名：<strong>pi</strong></li>
+<li>初始密码：<strong>raspberry</strong></li>
+</ul>
+<h1
+id="将红外接受管和发射管连接至树莓派gpio接口">将红外接受管和发射管连接至树莓派GPIO接口</h1>
+<p><strong>材料：</strong></p>
+<p>红外接受管（3pin），红外接受管（2pin）,杜邦线若干。</p>
+<p>根据不同树莓派版本，查看GPIO的引线图，该实验采用B+版，具体实物对应图和<strong>GPIO</strong>与pin对应图如下图：</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制/6619373360026755635-1.jpg" /></p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制/c259e358ccbf6c813fdb4c76bb3eb13531fa409f-1.png" /></p>
+<h2 id="硬件连接">硬件连接</h2>
+<p><strong>红外接收器</strong></p>
+<ul>
+<li><p>vcc 连 pin1 (3.3v)</p></li>
+<li><p>gnd 连 pin6(ground)</p></li>
+<li><p>data 连 pin12(gpio18)</p></li>
+</ul>
+<p><strong>红外发射器</strong></p>
+<ul>
+<li><p>gnd 连 pin25(ground)</p></li>
+<li><p>data 连 pin11(gpio17)</p></li>
+</ul>
+<p><strong>红外接受器规格见图，左引脚为data，中为接地，右为3.3V供电</strong></p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制/20120921154663386338-1.jpg" /></p>
+<p><strong>红外发射器规格见图，长脚为data,短脚为接地</strong></p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制/201453125427363-1.jpg" /></p>
+<p>接收器和发射器通过杜邦线跟树莓派相连，最后的连接实物图</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制/20170701222333.jpg" /></p>
+<h1 id="预先解析控制码">预先解析控制码</h1>
+<h2 id="修改-raspbian-仓库默认源">修改 raspbian 仓库默认源</h2>
+<ol type="1">
+<li>修改apt源</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nano /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+<p>例如使用大连东软信息学院软件源镜像，修改之后的内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb http://mirrors.aliyun.com/raspbian/raspbian jessie main contrib non-free rpi</span><br></pre></td></tr></table></figure>
+<p>其他可用源如下：</p>
+<ul>
+<li><p>中国科学技术大学 Raspbian <a
+target="_blank" rel="noopener" href="http://mirrors.ustc.edu.cn/raspbian/raspbian/"
+class="uri">http://mirrors.ustc.edu.cn/raspbian/raspbian/</a></p></li>
+<li><p>阿里云 Raspbian <a
+target="_blank" rel="noopener" href="http://mirrors.aliyun.com/raspbian/raspbian/"
+class="uri">http://mirrors.aliyun.com/raspbian/raspbian/</a></p></li>
+<li><p>清华大学 Raspbian <a
+target="_blank" rel="noopener" href="http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/"
+class="uri">http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/</a></p></li>
+<li><p>华中科技大学 Raspbian <a
+target="_blank" rel="noopener" href="http://mirrors.hustunique.com/raspbian/raspbian/"
+class="uri">http://mirrors.hustunique.com/raspbian/raspbian/</a> Arch
+Linux ARM <a target="_blank" rel="noopener" href="http://mirrors.hustunique.com/archlinuxarm/"
+class="uri">http://mirrors.hustunique.com/archlinuxarm/</a></p></li>
+<li><p>华南农业大学（华南用户） Raspbian <a
+target="_blank" rel="noopener" href="http://mirrors.scau.edu.cn/raspbian/"
+class="uri">http://mirrors.scau.edu.cn/raspbian/</a></p></li>
+<li><p>大连东软信息学院源（北方用户） Raspbian <a
+target="_blank" rel="noopener" href="http://mirrors.neusoft.edu.cn/raspbian/raspbian/"
+class="uri">http://mirrors.neusoft.edu.cn/raspbian/raspbian/</a></p></li>
+<li><p>重庆大学源（中西部用户）</p>
+<p>Raspbian <a target="_blank" rel="noopener" href="http://mirrors.cqu.edu.cn/Raspbian/raspbian/"
+class="uri">http://mirrors.cqu.edu.cn/Raspbian/raspbian/</a></p></li>
+</ul>
+<ol start="2" type="1">
+<li>更新软件源和软件</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 更新软件源</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"><span class="comment"># 更新软件</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get upgrade</span><br></pre></td></tr></table></figure>
+<h2 id="更换vi文本编译器为vim">更换vi文本编译器为vim</h2>
+<p>因为vi在insert模式下，方向键会变为ABCD，故用vim进行替换</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#卸载vi</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get remove vi-common</span><br><span class="line"><span class="comment">#安装vim</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install -y vim</span><br></pre></td></tr></table></figure>
+<h2 id="安装lirc">安装lirc</h2>
+<p>LIRC (<em>Linux Infrared remote
+control</em>)是一个linux系统下开源的软件包。这个软件可以让Linux系统接收及发送红外线信号。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install lirc</span><br></pre></td></tr></table></figure>
+<p><strong>配置硬件</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sudo vim /boot/config.txt #在文件结尾添加</span></span><br><span class="line"><span class="comment"># 修改一下内容</span></span><br><span class="line">dtoverlay=lirc-rpi</span><br><span class="line">gpio_in_pin=18</span><br><span class="line">gpio_out_pin=17</span><br><span class="line"></span><br><span class="line"><span class="comment"># sudo vim /etc/lirc/hardware.conf  #编辑LRIC的配置文件</span></span><br><span class="line"><span class="comment"># 修改以下内容</span></span><br><span class="line">LIRCD_ARGS=<span class="string">&quot;--uinput&quot;</span></span><br><span class="line">DRIVER=<span class="string">&quot;default&quot;</span></span><br><span class="line">DEVICE=<span class="string">&quot;/dev/lirc0&quot;</span></span><br><span class="line">MODULES=<span class="string">&quot;lirc_rpi&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启生效</span></span><br><span class="line"><span class="built_in">sudo</span> /etc/init.d/lirc restart</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>配置gpio_in_pin和gpio_out_pin时，编号为GPIO号，并非pin号</p>
+<p><strong>启动测试</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mode2 -d /dev/lirc0</span><br></pre></td></tr></table></figure>
+<p>红外接收器已经打开，处于监听状态。这个时候，利用任何红外发射器（可以是电视遥控器或其他遥控器）对红外接收模块按任意按钮，就可以在树莓派终端上看到类似如下的代码</p>
+<p>看到这个代码便证明红外接收模块是正常工作的。</p>
+<p>如果没有看到，请检查你的接线、电压、以及通过<strong>lsusb</strong>查看是否加载了相应模块。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pulse 1681</span><br><span class="line">space 4816</span><br><span class="line">pulse 1695</span><br><span class="line">space 4784</span><br><span class="line">pulse 1333</span><br><span class="line">space 3638</span><br></pre></td></tr></table></figure>
+<h2 id="录制解析控制码">录制解析控制码</h2>
+<ol type="1">
+<li>开始录制</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irrecord -d /dev/lirc0 ~/lircd.conf <span class="comment">#按照提示操作即可,录制完后会让你输入按键名</span></span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>查看可用键名列表</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irrecord --list-namespace</span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>将已录制的编码加载进 <em>lirc</em> 配置参数</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">cp</span> ~/lircd.conf /etc/lirc/lircd.conf</span><br></pre></td></tr></table></figure>
+<h1 id="通过树莓派发射红外编码">通过树莓派发射红外编码</h1>
+<ol type="1">
+<li>启动lircd服务</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lircd -d /dev/lirc0</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>查看录制好可以使用的键名</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irsend LIST /home/pi/lircd.conf <span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>发送红外编码</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">irsend SEND_ONCE /home/pi/lircd.conf KEY_XXX</span><br></pre></td></tr></table></figure>
+<p><strong>演示效果</strong></p>
+<video src="https://raw.githubusercontent.com/smilelc3/blog/main/images/树莓派(一代B+版)+红外收发管+智能小车——实现小车远程控制/VID_20170701_211221_1-1.mp4" controls preload="metadata">
+</video>
+<hr />
+<p><strong>关于录制带逻辑编码的红外编码</strong></p>
+<p>一个比较令人兴奋的消息，谢谢博客<a
+target="_blank" rel="noopener" href="http://blog.just4fun.site/raspberrypi-lirc.html"
+class="uri">http://blog.just4fun.site/raspberrypi-lirc.html</a>的帮助，直接发送raw原始码就可以实现简单的控制程序。😘</p>
+<p><strong>注意：</strong>其只能使用raw原始码，记录是通过mode2命令实现。</p>
+<ol type="1">
+<li>制作模版（不设置按键，初始化玩直接跳过）</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> /etc/init.d/lirc restart</span><br><span class="line">irrecord  -f -d /dev/lirc0 ~/lircd.conf</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li>录制需要实现的按键</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mode2  -d /dev/lirc0 &gt; /tmp/temp.code  </span><br><span class="line"><span class="built_in">cat</span> /tmp/temp.code | sed -n <span class="string">&#x27;2,$p&#x27;</span> | grep -o  -E <span class="string">&quot;[0-9]+&quot;</span> | xargs <span class="built_in">echo</span>  <span class="comment"># 移除第一行,之后把所有数字取出</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 把上述指令写入 ~/lircd.conf 的 KEY_OPEN里</span></span><br><span class="line"><span class="comment"># 值得注意的是 ~/lircd.conf文件里的空格十分重要</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">cp</span> ~/lircd.conf /etc/lirc/lircd.conf</span><br><span class="line"><span class="built_in">sudo</span> /etc/init.d/lirc restart</span><br><span class="line"><span class="comment"># irsend LIST /home/pi/lircd.conf &quot;&quot; #列出指令</span></span><br></pre></td></tr></table></figure>
+<ol start="3" type="1">
+<li>最后一个参考格式的<strong><em>lircd.conf</em></strong>文件（保证空格正确）</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">begin remote</span><br><span class="line"></span><br><span class="line">  name  /home/pi/lircd.conf</span><br><span class="line">  flags RAW_CODES</span><br><span class="line">  eps            30</span><br><span class="line">  aeps          100</span><br><span class="line"></span><br><span class="line">  gap          8015</span><br><span class="line"></span><br><span class="line">      begin raw_codes</span><br><span class="line"></span><br><span class="line">          name KEY_POWER</span><br><span class="line">               8927 4522 531 1711 551 1706 559 598 549 599 551 600 551 598 551 597 552 1719 558 597 549 1715 549 1724 540 614 535 592 559 597 550 599 551 610 551 602 549 598 553 1706 558 598 549 601 549 599 550 601 548 614 551 593 557 1717 545 598 551 598 552 598 552 599 549 598 553 1720 556 597 563 589 549 600 549 601 549 607 545 593 555 599 551 614 548 598 551 598 551 600 550 594 604 548 555 597 551 599 551 597 573 7967 558 597 549 598 548 603 548 601 554 598 550 599 550 600 545 619 549 600 545 599 556 598 551 600 549 611 541 597 551 599 551 609 548 601 555 598 552 596 554 598 550 598 563 587 551 600 543 615 556 598 550 598 551 599 576 574 552 596 552 598 552 613 538 612 551 595 552 597 553 598 552 599 552 596 552 1720 545 596 552 610 551 599 551 599 575 575 551 593 559 595 553 598 552 598 549 612 552 598 551 1705 559 597 574 1689 550 1724 540 598 552 592 559 609 553 599 548 598 552 1711 551 1705 560 1708 553 1711 550 599 553 1716 563 7970 559 597 551 600 573 578 550 599 551 600 575 573 565 589 575 586 552 1710 554 597 556 596 553 597 549 604 552 600 550 599 551 614 551 598 552 599 552 599 548 602 553 598 550 1713 552 599 552 613 593 558 545 604 564 586 552 598 552 598 554 595 554 601 546 617 546 607 550 597 551 611 541 597 553 598 553 598 580 572 548 615 552 599 554 596 552 599 551 598 554 598 547 614 536 604 552 609 554 1714 548 598 556 597 548 599 553 601 553 1711 553 598 553 593 549</span><br><span class="line"></span><br><span class="line">      end raw_codes</span><br><span class="line"></span><br><span class="line">end remote</span><br></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li>启动服务，运行指令</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> lircd -d /dev/lirc0</span><br><span class="line">irsend SEND_ONCE /home/pi/lircd.conf KEY_POWER</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/06/22/Android-Nougat(7.1.1)%E7%9A%84%E5%8E%9F%E7%94%9F%E4%BD%93%E9%AA%8C/" rel="prev" title="Android-Nougat(7.1.1)的原生体验">
+                  <i class="fa fa-angle-left"></i> Android-Nougat(7.1.1)的原生体验
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/07/08/python+opencv%20%E6%A3%80%E6%B5%8B%E5%92%8C%E8%B7%9F%E8%B8%AA%E8%BF%90%E5%8A%A8%E7%89%A9%E4%BD%93/" rel="next" title="python+opencv 检测和跟踪运动物体">
+                  python+opencv 检测和跟踪运动物体 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">smile</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">186k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:49</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/smilelc3" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"https://liuchang.men/2017/06/30/%E6%A0%91%E8%8E%93%E6%B4%BE(%E4%B8%80%E4%BB%A3B+%E7%89%88)+%E7%BA%A2%E5%A4%96%E6%94%B6%E5%8F%91%E7%AE%A1+%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6%E2%80%94%E2%80%94%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%BD%A6%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"smilelc3/smilelc3.github.io","issue_term":"pathname","theme":"github-dark"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
