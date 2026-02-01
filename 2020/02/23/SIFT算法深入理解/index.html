@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"liuchang.men","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false,"highlight_theme":"night"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="SIFT算法深入理解 SIFT（Scale Invariant Feature Transform），尺度不变特征变换匹配算法，是由David G. Lowe在1999年（《Object Recognition from Local Scale-Invariant Features》）提出的高效区域检测算法，在2004年（《Distinctive Image Features from Scale">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SIFT算法深入理解">
+<meta property="og:url" content="https://liuchang.men/2020/02/23/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:site_name" content="生命不息，奋斗不止">
+<meta property="og:description" content="SIFT算法深入理解 SIFT（Scale Invariant Feature Transform），尺度不变特征变换匹配算法，是由David G. Lowe在1999年（《Object Recognition from Local Scale-Invariant Features》）提出的高效区域检测算法，在2004年（《Distinctive Image Features from Scale">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/image-20200217173150487.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/image-20200217173545733.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/1350134809_7582.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/lena.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/lena2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/lena4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/lena8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/lena16.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/1350135856_9590.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/image-LoG.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/image-LoG-DoG.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/1350190136_9031.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/1350191844_1872.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/1350653024_7639.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/1350655644_9292.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/111601374373316.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/f(x).png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/image-20200220135925022.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/081646497655888.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/081646516874975.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/081646524376603.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/081646535629047.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/image-20200220174818293.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/1350823039_5697.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/1350826032_9513.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/1351213289_3302.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/1351213506_4881.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/1351217343_1515.png">
+<meta property="article:published_time" content="2020-02-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-01T01:23:06.867Z">
+<meta property="article:author" content="smile">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/image-20200217173150487.png">
+
+
+<link rel="canonical" href="https://liuchang.men/2020/02/23/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://liuchang.men/2020/02/23/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/","path":"2020/02/23/SIFT算法深入理解/","title":"SIFT算法深入理解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>SIFT算法深入理解 | 生命不息，奋斗不止</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"https://liuchang.men/2020/02/23/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">生命不息，奋斗不止</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#sift%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3"><span class="nav-text">SIFT算法深入理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dog%E5%B0%BA%E5%BA%A6%E7%A9%BA%E9%97%B4%E6%9E%84%E9%80%A0"><span class="nav-text">1. DOG尺度空间构造</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%BA%E5%BA%A6%E7%A9%BA%E9%97%B4%E7%90%86%E8%AE%BA"><span class="nav-text">尺度空间理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E6%A8%A1%E7%B3%8A"><span class="nav-text">高斯模糊</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%91%E5%AD%97%E5%A1%94%E5%A4%9A%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-text">金字塔多分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%B0%BA%E5%BA%A6%E7%A9%BA%E9%97%B4%E5%92%8C%E9%87%91%E5%AD%97%E5%A1%94%E5%A4%9A%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-text">多尺度空间和金字塔多分辨率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E9%87%91%E5%AD%97%E5%A1%94-log"><span class="nav-text">高斯拉普拉斯金字塔（ LoG）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E5%B7%AE%E5%88%86%E9%87%91%E5%AD%97%E5%A1%94-dog"><span class="nav-text">高斯差分金字塔（ DoG）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E9%AB%98%E6%96%AF%E9%87%91%E5%AD%97%E5%A1%94"><span class="nav-text">构建高斯金字塔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BAdog%E9%87%91%E5%AD%97%E5%A1%94"><span class="nav-text">构建DoG金字塔</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%90%9C%E7%B4%A2%E4%B8%8E%E5%AE%9A%E4%BD%8D"><span class="nav-text">2. 关键点搜索与定位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dog%E5%B1%80%E9%83%A8%E6%9E%81%E5%80%BC%E7%82%B9"><span class="nav-text">DoG局部极值点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E7%B2%BE%E7%A1%AE%E5%AE%9A%E4%BD%8Ddog%E7%89%B9%E5%BE%81%E7%82%B9%E7%9A%84%E4%BF%AE%E6%AD%A3"><span class="nav-text">关键点精确定位(DoG特征点的修正)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%92%E6%A3%80%E6%B5%8B%E5%99%A8"><span class="nav-text">角检测器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#harris%E8%A7%92%E7%82%B9"><span class="nav-text">Harris角点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#harris%E8%A7%92%E7%82%B9%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-text">Harris角点算法实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0alpha%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">参数α的影响</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#harris%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-text">Harris的特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#opencv-hairrs%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B%E5%87%BD%E6%95%B0"><span class="nav-text">openCV Hairrs角点检测函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E8%BE%B9%E7%BC%98%E6%95%88%E5%BA%94"><span class="nav-text">删除边缘效应</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E5%90%91%E8%B5%8B%E5%80%BC"><span class="nav-text">3. 方向赋值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%96%B9%E5%90%91%E5%92%8C%E5%B9%85%E5%80%BC"><span class="nav-text">梯度方向和幅值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E7%9B%B4%E6%96%B9%E5%9B%BE"><span class="nav-text">梯度直方图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%96%B9%E5%90%91"><span class="nav-text">关键点方向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E6%8F%8F%E8%BF%B0"><span class="nav-text">3. 关键点描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0%E5%AD%90%E9%87%87%E6%A0%B7%E5%8C%BA%E5%9F%9F"><span class="nav-text">描述子采样区域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%9F%9F%E5%9D%90%E6%A0%87%E8%BD%B4%E6%97%8B%E8%BD%AC"><span class="nav-text">区域坐标轴旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E9%87%87%E6%A0%B7%E5%8C%BA%E5%9F%9F%E6%A2%AF%E5%BA%A6%E7%9B%B4%E6%96%B9%E5%9B%BE"><span class="nav-text">计算采样区域梯度直方图</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">smile</p>
+  <div class="site-description" itemprop="description">smile's blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smilelc3" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smilelc3" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:smile@liuchang.men" title="E-Mail → mailto:smile@liuchang.men" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2020/02/23/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="SIFT算法深入理解 | 生命不息，奋斗不止">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SIFT算法深入理解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-02-24 00:00:00" itemprop="dateCreated datePublished" datetime="2020-02-24T00:00:00+08:00">2020-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-01 09:23:06" itemprop="dateModified" datetime="2026-02-01T09:23:06+08:00">2026-02-01</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>27k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>24 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="sift算法深入理解">SIFT算法深入理解</h1>
+<p><strong>SIFT</strong>（<em>Scale Invariant Feature
+Transform</em>），<strong>尺度不变特征变换匹配算法</strong>，是由David
+G. Lowe在1999年（《Object Recognition from Local Scale-Invariant
+Features》）提出的高效区域检测算法，在2004年（《Distinctive Image
+Features from Scale-Invariant Keypoints》）得以完善。</p>
+<p>SIFT特征对<code>旋转</code>、<code>尺度缩放</code>、<code>亮度变化</code>等保持不变性，是非常稳定的局部特征，现在应用很广泛。SIFT算法是将<strong>Blob检测，特征矢量生成，特征匹配搜索等</strong>步骤结合在一起优化。
+<span id="more"></span></p>
+<h2 id="dog尺度空间构造">1. DOG尺度空间构造</h2>
+<h3 id="尺度空间理论">尺度空间理论</h3>
+<p><strong><em>尺度越大图像越模糊。</em></strong></p>
+<p>用机器视觉系统分析未知场景时，计算机并不预先知道图像中物体的尺度。我们需要同时考虑图像在多尺度下的描述，获知感兴趣物体的<strong>最佳尺度</strong>。另外如果不同的尺度下都有同样的关键点，那么在不同的尺度的输入图像下就都可以检测出来关键点匹配，也就是<strong>尺度不变性</strong>。
+<strong>图像的尺度空间表达</strong>就是图像在所有尺度下的描述。</p>
+<h3 id="高斯模糊">高斯模糊</h3>
+<p>高斯核是唯一可以产生<strong>多尺度</strong>空间的核。一个图像的尺度空间<span
+class="math inline"><em>L</em>(<em>x</em>, <em>y</em>, <em>σ</em>)</span>，定义为原始图像<span
+class="math inline"><em>I</em>(<em>x</em>, <em>y</em>)</span>与一个可变尺度的2维高斯函数<span
+class="math inline"><em>G</em>(<em>x</em>, <em>y</em>, <em>σ</em>)</span>的卷积运算。</p>
+<p>二维空间高斯函数：<span
+class="math inline">$G(x_i,y_i,\sigma)=\frac{1}{2\pi\sigma^2}exp\lgroup-\frac{(x-x_i)^2+(y-y_i)^2}{2\sigma^2}\rgroup$</span></p>
+<p>尺度空间：<span
+class="math inline"><em>L</em>(<em>x</em>, <em>y</em>, <em>σ</em>) = <em>G</em>(<em>x</em>, <em>y</em>, <em>σ</em>) * <em>I</em>(<em>x</em>, <em>y</em>)</span></p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/image-20200217173150487.png" style="zoom:80%;" /></p>
+<p>matlab代码：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 先限定三维图中的x,y轴坐标范围</span></span><br><span class="line">X = <span class="number">1</span> : <span class="number">1</span> : <span class="number">100</span>;</span><br><span class="line">Y = <span class="number">1</span> : <span class="number">1</span> : <span class="number">100</span>;</span><br><span class="line"><span class="comment">% X，Y方向公用的标准差</span></span><br><span class="line">sigma = <span class="number">15</span>;</span><br><span class="line">Z = <span class="built_in">zeros</span>( <span class="number">51</span>, <span class="number">51</span> );</span><br><span class="line"><span class="keyword">for</span> row = <span class="number">1</span> : <span class="number">1</span> : <span class="number">100</span></span><br><span class="line">    <span class="keyword">for</span> col = <span class="number">1</span> : <span class="number">1</span> : <span class="number">100</span></span><br><span class="line">        Z( row, col ) = ( X(row) - <span class="number">50</span> ).^<span class="number">2</span> + ( Y(col) - <span class="number">50</span> ).^<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">Z = <span class="number">1</span>/(<span class="number">2</span> * <span class="built_in">pi</span> * sigma^<span class="number">2</span>) * <span class="built_in">exp</span>(-Z / ( <span class="number">2</span> * sigma^<span class="number">2</span> ));</span><br><span class="line"><span class="comment">% 显示高斯函数的三维曲面</span></span><br><span class="line"><span class="built_in">figure</span>, surf(X, Y, Z);</span><br></pre></td></tr></table></figure>
+<p>分布不为零的点组成卷积阵与原始图像做变换，<strong>即每个像素值是周围相邻像素值的高斯平均。</strong>一个5*5的高斯模版如下所示：</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/image-20200217173545733.png" style="zoom:67%;" /></p>
+<ul>
+<li><p><strong>高斯模板是圆对称的</strong>。模板中心权重最大，距离中心越远权重越小。实际计算中，大于<span
+class="math inline">3<em>σ</em></span>以外的像素基本不起作用，计算可忽略。所以，单像素只需要计算<span
+class="math inline">(6<em>σ</em> + 1) ⋅ (6<em>σ</em> + 1)</span>的<strong>方形区域</strong>。</p></li>
+<li><p><strong>高斯模糊是线性可分的。</strong>二维高斯矩阵变换可以通过在水平和竖直方向上用一维高斯矩阵变换相加得到。</p></li>
+</ul>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/1350134809_7582.png" /></p>
+<p>当N为高斯核大小，m，n为图像长和宽时，直接计算复杂度为<span
+class="math inline"><em>O</em>(<em>N</em><sup>2</sup><em>m</em><em>n</em>)</span>次乘法；使用相加简化为<span
+class="math inline"><em>O</em>(<em>N</em><em>m</em><em>n</em> + <em>N</em><em>m</em><em>n</em>)</span>。</p>
+<p>openCV中的函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">void cv::GaussianBlur(</span><br><span class="line">	InputArray src,</span><br><span class="line">	OutputArray dst,</span><br><span class="line">	Size 	ksize,</span><br><span class="line">	double 	sigmaX,</span><br><span class="line">	double 	sigmaY = 0,</span><br><span class="line">	int 	borderType = BORDER_DEFAULT </span><br><span class="line">)</span><br><span class="line">		</span><br><span class="line">Python:</span><br><span class="line">dst	= cv.GaussianBlur(src, ksize, sigmaX[, dst[, sigmaY[, borderType]]])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>src</strong> - 输入图像</li>
+<li><strong>dst</strong> - 与输入图像尺寸一致的输出图像</li>
+<li><strong>ksize</strong> -
+高斯核大小。可定制长宽，必须为正奇数，当为零是采用sigma计算</li>
+<li><strong>sigmaX</strong> - X方向上的高斯核标准偏差</li>
+<li><strong>sigmaY</strong> - Y方向上的高斯核标准偏差</li>
+<li><strong>boerderType</strong> - 像素外推法</li>
+</ul>
+<h3 id="金字塔多分辨率">金字塔多分辨率</h3>
+<p>金字塔是早期图像多尺度的表示方式。图像金字塔化一般两个步骤：</p>
+<ol type="1">
+<li>使用低通滤波器（LPF）平滑图像；</li>
+<li>对平滑图像降采样（通常<span
+class="math inline">$\frac{1}{2}$</span>）</li>
+</ol>
+<p>该方式能得到系列尺寸缩小的图片。</p>
+<p>原图（<span class="math inline"><em>l</em> = 0</span>）<img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/lena.png" /></p>
+<p><span class="math inline">$\frac{1}{2}(l=1)$</span><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/lena2.png" /></p>
+<p><span class="math inline">$\frac{1}{4}(l=2)$</span><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/lena4.png" /></p>
+<p><span class="math inline">$\frac{1}{8}(l=3)$</span><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/lena8.png" /></p>
+<p><span class="math inline">$\frac{1}{16}(l=4)$</span><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/lena16.png" /></p>
+<p>matlab代码：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">lena=imread(<span class="string">&#x27;lena.png&#x27;</span>);</span><br><span class="line">lena_size = <span class="built_in">size</span>(lena);</span><br><span class="line"><span class="comment">% 3*3高斯滤波算子(sigma=0.5)，这里暂时使用相同的sigma</span></span><br><span class="line">GF=fspecial(<span class="string">&#x27;gaussian&#x27;</span>,<span class="number">3</span>,<span class="number">0.5</span>);</span><br><span class="line"><span class="comment">% 使用卷积conv，沿自身边界进行镜像扩展symmetric，输出与输入大小一致same</span></span><br><span class="line">lena_GF=imfilter(lena, GF, <span class="string">&#x27;conv&#x27;</span>,<span class="string">&#x27;symmetric&#x27;</span>,<span class="string">&#x27;same&#x27;</span>);</span><br><span class="line"><span class="comment">%去除偶数行和列，得到降采样</span></span><br><span class="line">imageDS=lena_GF(<span class="number">1</span>:<span class="number">2</span>:lena_size(<span class="number">1</span>), <span class="number">1</span>:<span class="number">2</span>:lena_size(<span class="number">2</span>),:);</span><br><span class="line">imshow(imageDS);</span><br></pre></td></tr></table></figure>
+<p>可见对于二维图像，一个传统的金字塔，每一层图像尺寸为上一层的<span
+class="math inline">$\frac{1}{2}*\frac{1}{2}=\frac{1}{4}$</span>。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/1350135856_9590.png" style="zoom:80%;" /></p>
+<h3 id="多尺度空间和金字塔多分辨率">多尺度空间和金字塔多分辨率</h3>
+<p>尺度空间表达和金字塔分辨率表达的明显区别有：</p>
+<ul>
+<li>尺度空间表达是由<strong>不同高斯核</strong>平滑卷积得到的，在所有尺度上<strong>分辨率相同</strong>；</li>
+<li>金字塔多分辨率表达每层分辨率减少固定比率。</li>
+</ul>
+<p>因此，<strong>金字塔多分辨率生成快，空间少</strong>，但局部特征描述单一；<strong>多尺度空间的图片局部特征可以在不同尺度描述</strong>，但随尺度参数增加会增加冗余信息。</p>
+<h3 id="高斯拉普拉斯金字塔-log">高斯拉普拉斯金字塔（ LoG）</h3>
+<p>LoG（Laplace of
+Gaussian），也称作拉普拉斯金字塔。其结合了尺度空间表达核金字塔多分辨率表达，在使用尺度空间时使用金字塔表示，其算子是对高斯函数进行拉普拉斯变换。
+<span class="math display">$$
+L(x,y,\sigma)=\frac{\partial^2G}{\partial x^2} +
+\frac{\partial^2G}{\partial y^2}
+$$</span> 标准高斯卷积表达式<span
+class="math inline"><em>G</em></span>如下： <span
+class="math display">$$
+G(x,y,\sigma)=\frac{1}{2\pi\sigma^2}e^{-\frac{x^2+y^2}{2\sigma^2}}
+$$</span> 原图像与高斯卷积的结果求二阶偏导（拉普拉斯变换）如下： <span
+class="math display"><em>Δ</em>[<em>G</em>(<em>x</em>, <em>y</em>, <em>σ</em>) * <em>I</em>(<em>x</em>, <em>y</em>)] = [<em>Δ</em><em>G</em>(<em>x</em>, <em>y</em>, <em>σ</em>)] * <em>I</em>(<em>x</em>, <em>y</em>) = <em>L</em>(<em>x</em>, <em>y</em>, <em>σ</em>) * <em>I</em>(<em>x</em>, <em>y</em>)</span>
+对<span class="math inline"><em>L</em></span>求解如下： <span
+class="math display">$$
+\begin{align}
+\frac{\partial G}{\partial x} &amp;=
+\frac{1}{2\pi\sigma^2}e^{-\frac{x^2+y^2}{2\sigma^2}}\cdot(-\frac{x}{\sigma^2})=-\frac{x}{2\pi\sigma^4}e^{-\frac{x^2+y^2}{2\sigma^2}}
+\\
+\frac{\partial^2 G}{\partial x^2} &amp;= \frac{\partial}{\partial
+x}\lgroup\frac{\partial G}{\partial x}\rgroup =
+-\frac{1}{2\pi\sigma^4}e^{-\frac{x^2+y^2}{2\sigma^2}}+\frac{x^2}{2\pi\sigma^6}e^{-\frac{x^2+y^2}{2\sigma^2}}
+\end{align}
+$$</span> 同理： <span class="math display">$$
+\frac{\partial^2 G}{\partial y^2} =
+-\frac{1}{2\pi\sigma^4}e^{-\frac{x^2+y^2}{2\sigma^2}}+\frac{y^2}{2\pi\sigma^6}e^{-\frac{x^2+y^2}{2\sigma^2}}
+$$</span></p>
+<p><span class="math display">$$
+\therefore L(x,y,\sigma)=\frac{\partial^2 G}{\partial
+x^2}+\frac{\partial^2 G}{\partial y^2} =
+-\frac{1}{\pi\sigma^4}[1-\frac{x^2+y^2}{2\sigma^2}]e^{-\frac{x^2+y^2}{2\sigma^2}}
+$$</span></p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/image-LoG.png" style="zoom:50%;" /></p>
+<p>matlab代码：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 先限定三维图中的x,y轴坐标范围</span></span><br><span class="line">X = <span class="number">1</span> : <span class="number">1</span> : <span class="number">100</span>;</span><br><span class="line">Y = <span class="number">1</span> : <span class="number">1</span> : <span class="number">100</span>;</span><br><span class="line"><span class="comment">% X，Y方向公用的标准差</span></span><br><span class="line">sigma = <span class="number">15</span>;</span><br><span class="line">Z = <span class="built_in">zeros</span>( <span class="number">51</span>, <span class="number">51</span> );</span><br><span class="line"><span class="keyword">for</span> row = <span class="number">1</span> : <span class="number">1</span> : <span class="number">100</span></span><br><span class="line">    <span class="keyword">for</span> col = <span class="number">1</span> : <span class="number">1</span> : <span class="number">100</span></span><br><span class="line">        Z( row, col ) = ( X(row) - <span class="number">50</span> ).^<span class="number">2</span> + ( Y(col) - <span class="number">50</span> ).^<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">Z = - <span class="number">1</span>/(<span class="built_in">pi</span> * sigma^<span class="number">4</span>) * (<span class="number">1</span> - Z/(<span class="number">2</span>*sigma^<span class="number">2</span>) ) .* <span class="built_in">exp</span>(-Z / ( <span class="number">2</span> * sigma^<span class="number">2</span> ));</span><br><span class="line"><span class="comment">% 显示高斯函数的三维曲面</span></span><br><span class="line"><span class="built_in">figure</span>, surf(X, Y, Z);</span><br></pre></td></tr></table></figure>
+<p>LoG用来从金字塔低层图像重建上层未采样图像，在数字图像处理中也即是预测残差，可以对图像进行最大程度的还原，配合高斯金字塔一起使用。</p>
+<p>高斯金字塔用来向下降采样图像，而拉普拉斯金字塔则用来从金字塔底层图像中向上采样重建一个图像。</p>
+<p>在高斯金字塔中，要从金字塔第<span
+class="math inline"><em>i</em></span>层生成第<span
+class="math inline"><em>i</em> + 1</span>层（我们表示第<span
+class="math inline"><em>i</em> + 1</span>层为<span
+class="math inline"><em>G</em><sub><em>i</em> + 1</sub></span>），我们先要用高斯核对<span
+class="math inline"><em>G</em><sub><em>i</em></sub></span>进行卷积，然后删除所有偶数行和偶数列。新得到图像面积会变为源图像的四分之一。按上述过程对输入图像<span
+class="math inline"><em>G</em><sub>0</sub></span>执行操作就可产生出整个金字塔。</p>
+<p>下式是LoG第<span class="math inline"><em>i</em></span>层的数学定义：
+<span class="math display">$$
+\begin{align}
+L_i &amp;= G_i-Up(G_{i+1})\otimes g \\
+&amp;=G_i - PyrUp(G_{i+1}) \\
+\end{align}
+$$</span> 式中，<span
+class="math inline"><em>G</em><sub><em>i</em></sub></span>表示高金字塔中第<span
+class="math inline"><em>i</em></span>层图像。<span
+class="math inline"><em>U</em><em>p</em>()</span>上采样操作是将<span
+class="math inline"><em>G</em><sub><em>i</em> + 1</sub></span>层图像位置中为<span
+class="math inline">(<em>x</em>, <em>y</em>)</span>的像素映射到图像<span
+class="math inline">(2<em>x</em> + 1, 2<em>y</em> + 1)</span>的位置，其余位置用0填充。采样结果与高斯核<span
+class="math inline"><em>g</em></span>卷积，注意缩小的时候用什么核，这里就用什么核。<span
+class="math inline"><em>G</em><sub><em>i</em></sub> − <em>U</em><em>p</em>(<em>G</em><sub><em>i</em> + 1</sub>) ⊗ <em>g</em></span>可以描述为<span
+class="math inline"><em>P</em><em>y</em><em>r</em><em>U</em><em>p</em>(<em>G</em><sub><em>i</em> + 1</sub>)</span>函数。</p>
+<p>也就是说，<strong>拉普拉斯金字塔是通过高斯金字塔图像减去先缩小后再放大的图像的一系列图像构成的</strong>。</p>
+<h3 id="高斯差分金字塔-dog">高斯差分金字塔（ DoG）</h3>
+<p>LoG的主要缺点是需要求二阶导，计算较复杂，因此我们就想用别的算子去近似它。DoG（Difference
+of Gaussian），相当于对LoG（<span
+class="math inline"><em>σ</em><sup>2</sup><em>Δ</em><sup>2</sup><em>G</em></span>）的近似计算，SIFT算法中，建议某一尺度的特征检测，可以通过两个相邻高斯尺度空间的图像相减，得到DoG的响应值图像<span
+class="math inline"><em>D</em>(<em>x</em>, <em>y</em>, <em>σ</em>)</span>。然后仿照LoG方法，对<span
+class="math inline"><em>D</em>(<em>x</em>, <em>y</em>, <em>σ</em>)</span>进行局部最大值搜索，在空间位置和尺度空间定位局部特征点。</p>
+<p>DoG与LoG也存在以下关系： <span class="math display">$$
+\begin{align}
+D(x,y,\sigma) &amp;= (G(x,y,k\sigma)-G(x,y,\sigma))*I(x,y) \\
+   &amp;=L(x,y,k\sigma)-L(x,y,\sigma) \\
+\end{align}
+$$</span> <span
+class="math inline"><em>k</em></span>为相邻两个尺度空间倍数的常数。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/image-LoG-DoG.png" style="zoom:50%;" /></p>
+<p>matlab绘图代码：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%LoG与DoG一维函数图像差异</span></span><br><span class="line">syms LoG(x) DoG(x);</span><br><span class="line">sigma = <span class="number">1</span>;</span><br><span class="line">k = <span class="number">2</span>^(<span class="number">1</span>/<span class="number">2</span>);    <span class="comment">%此处设S=2，k=2^(1/S)</span></span><br><span class="line">LoG(x) = - <span class="number">1</span>/(<span class="built_in">pi</span> * sigma^<span class="number">4</span>) * (<span class="number">1</span> - x^<span class="number">2</span>/(<span class="number">2</span>*sigma^<span class="number">2</span>) ) * <span class="built_in">exp</span>(-x^<span class="number">2</span> / ( <span class="number">2</span> * sigma^<span class="number">2</span> ));</span><br><span class="line">DoG(x) = - <span class="number">1</span>/(<span class="built_in">pi</span> * (k*sigma)^<span class="number">4</span>) * (<span class="number">1</span> - x^<span class="number">2</span>/(<span class="number">2</span>*(k*sigma)^<span class="number">2</span>) ) * <span class="built_in">exp</span>(-x^<span class="number">2</span> / ( <span class="number">2</span> * (k*sigma)^<span class="number">2</span> )) - LoG;</span><br><span class="line">fplot(LoG, <span class="string">&#x27;Linewidth&#x27;</span>, <span class="number">2</span>);</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line">fplot(-DoG, <span class="string">&#x27;Linewidth&#x27;</span>, <span class="number">2</span>);</span><br><span class="line"><span class="comment">% x=0;y=0显示</span></span><br><span class="line">grid on;</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">&#x27;LoG&#x27;</span>, <span class="string">&#x27;DoG&#x27;</span>)</span><br><span class="line">line([<span class="number">0</span>,<span class="number">0</span>],[<span class="number">-0.35</span>,<span class="number">0.06</span>], <span class="string">&#x27;Color&#x27;</span>,<span class="string">&#x27;black&#x27;</span>, <span class="string">&#x27;LineWidth&#x27;</span>, <span class="number">0.5</span>);</span><br><span class="line">line([<span class="number">-5</span>,<span class="number">5</span>],[<span class="number">0</span>,<span class="number">0</span>], <span class="string">&#x27;Color&#x27;</span>,<span class="string">&#x27;black&#x27;</span>, <span class="string">&#x27;LineWidth&#x27;</span>, <span class="number">0.5</span>);</span><br></pre></td></tr></table></figure>
+<p>上图是某层DoG与LoG的对比。</p>
+<h3 id="构建高斯金字塔">构建高斯金字塔</h3>
+<p>为了得到DoG图像，先要构造<strong>高斯金字塔</strong>。
+高斯金字塔在多分辨率金字塔简单降采样基础上加了高斯滤波，也就是对金字塔每层图像用<strong>不同参数的<span
+class="math inline"><em>σ</em></span>（上层为下层的<span
+class="math inline"><em>k</em></span>倍）</strong>，做高斯模糊，使得每层金字塔有多张高斯模糊图像。</p>
+<p>金字塔每层多张图像合称为一组（Octave），每组有多张（Interval）图像。另外，降采样时，金字塔<strong>上边一组图像的第一张图像</strong>（最底层的一张）是由<strong>前一组（下面一组）图像的倒数第三张</strong>(从上往下第三张)隔点采样得到。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/1350190136_9031.png" style="zoom:67%;" /></p>
+<p>因此有以下特点：</p>
+<ul>
+<li><p><strong>在同一组内，不同层图像的尺寸是一样的，后一层图像的高斯平滑因子<span
+class="math inline"><em>σ</em></span>是前一层图像平滑因子的<span
+class="math inline"><em>k</em></span>倍；</strong></p></li>
+<li><p><strong>在不同组内，后一组第一个图像是前一组倒数第三个图像的<span
+class="math inline">$\frac{1}{2}$</span>采样，图像尺寸是前一组的<span
+class="math inline">$\frac{1}{4}$</span>。</strong></p></li>
+</ul>
+<p>以下是openCV 2.4.2中高斯金字塔的构建源码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构建nOctaves组（每组nOctaveLayers+3层）高斯金字塔, nOctaves为输入变量</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">SIFT::buildGaussianPyramid</span><span class="params">( <span class="type">const</span> Mat&amp; base, vector&lt;Mat&gt;&amp; pyr, <span class="type">int</span> nOctaves )</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">vector&lt;<span class="type">double</span>&gt; <span class="title">sig</span><span class="params">(nOctaveLayers + <span class="number">3</span>)</span></span>;</span><br><span class="line">    pyr.<span class="built_in">resize</span>(nOctaves*(nOctaveLayers + <span class="number">3</span>));</span><br><span class="line"> </span><br><span class="line">    <span class="comment">//  \sigma_&#123;total&#125;^2 = \sigma_&#123;i&#125;^2 + \sigma_&#123;i-1&#125;^2</span></span><br><span class="line">	<span class="comment">// 预计算对不同层的高斯平滑因子，关于此处的计算见下说明2</span></span><br><span class="line">    sig[<span class="number">0</span>] = sigma;</span><br><span class="line">    <span class="type">double</span> k = <span class="built_in">pow</span>( <span class="number">2.</span>, <span class="number">1.</span> / nOctaveLayers );	</span><br><span class="line">	<span class="comment">//k = 2^&#123;\frac&#123;1&#125;&#123;nOctaveLayers&#125;&#125;</span></span><br><span class="line">    <span class="keyword">for</span>( <span class="type">int</span> i = <span class="number">1</span>; i &lt; nOctaveLayers + <span class="number">3</span>; i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">double</span> sig_prev = <span class="built_in">pow</span>(k, (<span class="type">double</span>)(i<span class="number">-1</span>))*sigma;</span><br><span class="line">        <span class="type">double</span> sig_total = sig_prev*k;</span><br><span class="line">        <span class="comment">//关于此处计算见说明3</span></span><br><span class="line">        sig[i] = std::<span class="built_in">sqrt</span>(sig_total*sig_total - sig_prev*sig_prev);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span>( <span class="type">int</span> o = <span class="number">0</span>; o &lt; nOctaves; o++ )</span><br><span class="line">    &#123;</span><br><span class="line">		<span class="comment">// DoG金子塔需要nOctaveLayers+2层图像来检测nOctaves层尺度</span></span><br><span class="line">		<span class="comment">//所以高斯金字塔需要nOctaveLayers+3层图像得到nOctaveLayers+2层DoG金字塔</span></span><br><span class="line">        <span class="keyword">for</span>( <span class="type">int</span> i = <span class="number">0</span>; i &lt; nOctaveLayers + <span class="number">3</span>; i++ )</span><br><span class="line">        &#123;</span><br><span class="line">			<span class="comment">// dst为第o组（Octave）金字塔</span></span><br><span class="line">            Mat&amp; dst = pyr[o*(nOctaveLayers + <span class="number">3</span>) + i];</span><br><span class="line">			<span class="comment">// 第0组第0层为原始图像</span></span><br><span class="line">            <span class="keyword">if</span>( o == <span class="number">0</span>  &amp;&amp;  i == <span class="number">0</span> )</span><br><span class="line">                dst = base;</span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">			<span class="comment">// 每一组第0副图像时上一组倒数第三幅图像隔点采样得到</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>( i == <span class="number">0</span> )</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="type">const</span> Mat&amp; src = pyr[(o<span class="number">-1</span>)*(nOctaveLayers + <span class="number">3</span>) + nOctaveLayers];</span><br><span class="line">                <span class="built_in">resize</span>(src, dst, <span class="built_in">Size</span>(src.cols/<span class="number">2</span>, src.rows/<span class="number">2</span>),</span><br><span class="line">                       <span class="number">0</span>, <span class="number">0</span>, INTER_NEAREST);</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">//每一组第i(i!=0)副图像是由第i-1副图像进行sig[i]的高斯模糊得到</span></span><br><span class="line">			<span class="comment">// 也就是本组图像在sig[i]的尺度空间下的图像</span></span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="type">const</span> Mat&amp; src = pyr[o*(nOctaveLayers + <span class="number">3</span>) + i<span class="number">-1</span>];</span><br><span class="line">                <span class="built_in">GaussianBlur</span>(src, dst, <span class="built_in">Size</span>(), sig[i], sig[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong></p>
+<ol type="1">
+<li><p>高斯金字塔的组数<span
+class="math inline"><em>O</em> = [<em>l</em><em>o</em><em>g</em><sub>2</sub>(<em>m</em><em>i</em><em>n</em>(<em>m</em>, <em>n</em>))] − 3</span>；</p></li>
+<li><p>关于计算计算高斯模糊的系数<span
+class="math inline"><em>σ</em></span>，有以下关系：</p>
+<p><span class="math display">$$
+\sigma(o,s) = \sigma(o,0)\cdot2^{\frac{s}{S}}
+$$</span></p>
+<p>且存在以下关系：</p>
+<p><span
+class="math display"><em>σ</em>(<em>o</em> + 1, 0) = <em>σ</em>(<em>o</em>, <em>S</em>)</span></p>
+<p>其中，<span
+class="math inline"><em>σ</em></span>为尺度空间坐标，<span
+class="math inline"><em>o</em></span>为组坐标，<span
+class="math inline"><em>s</em></span>为每组中的层座标，<span
+class="math inline"><em>σ</em>(<em>o</em>, 0)</span>为该组的初始尺度，<span
+class="math inline"><em>S</em></span>为每组层数（3~5）。可以得到：</p>
+<ul>
+<li><p>组内相邻图像尺度关系：<span
+class="math inline">$\sigma(o,s+1)=\sigma(o,s)\cdot2^\frac{1}{S}$</span></p></li>
+<li><p>相邻组间尺度关系： <span class="math display">$$
+\begin{align}
+\sigma(o+1,s) &amp;= \sigma(o+1,0)\cdot2^{\frac{s}{S}} \\
+&amp;= \sigma(o,S)\cdot2^{\frac{s}{S}} \\
+&amp;= \sigma(o,0)\cdot2^{\frac{s+S}{S}} \\
+&amp;=2\sigma(o,s)
+\end{align}
+$$</span></p></li>
+</ul>
+<p>所以<strong>相邻两组的同一层尺度大小为2倍关系</strong>。</p>
+<p>最终尺度序列可得： <span class="math display">$$
+\bar\sigma = 2^{o-1}(\sigma,k\sigma,k^2\sigma,\dots k^{s-1}\sigma),\
+k=2^{\frac{1}{S}}
+$$</span> 即： <span class="math display">$$
+\sigma(o,s)=2^{o-1}k^{(s-1)}\sigma,\ k=2^{\frac{1}{S}}
+$$</span></p></li>
+<li><p><span class="math display">$$
+\begin{align}
+\bar\sigma_i&amp;=\sqrt{k^{(i-1)}\sigma*k*k^{(i-1)}\sigma*k-k^{(i-1)}\sigma*k^{(i-1)}\sigma}
+\\
+(\bar\sigma_i)^2&amp;=k^{2(i-1)}\sigma^2(k^2-1) \\
+&amp;= k^{2(i-1)}\sigma^2(2^{\frac{2}{S}}-1)
+\end{align}
+$$</span></p>
+<p>当且仅当<span
+class="math inline"><em>S</em> = 2</span>时成立，此时每组<span
+class="math inline">2 + 3 = 5</span>层</p></li>
+</ol>
+<h3 id="构建dog金字塔">构建DoG金字塔</h3>
+<p>构建高斯金字塔之后，就是用金字塔相邻图像相减构造DoG金字塔。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/1350191844_1872.png" style="zoom:80%;" /></p>
+<p>如上图所示，高斯尺度金字塔每组中有五层不同尺度图像，<strong>相邻两层相减</strong>得到四层DoG结果，接下来需要这四层DoG图像上寻找局部极值点（关键点）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//构建nOctaves组（每组nOctaveLayers+2层，因为相减生成会少一层）高斯差分金字塔</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">SIFT::buildDoGPyramid</span><span class="params">(<span class="type">const</span> vector&lt;Mat&gt;&amp; gpyr, vector&lt;Mat&gt;&amp; dogpyr )</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> nOctaves = (<span class="type">int</span>)gpyr.<span class="built_in">size</span>()/(nOctaveLayers + <span class="number">3</span>);</span><br><span class="line">    dogpyr.<span class="built_in">resize</span>( nOctaves*(nOctaveLayers + <span class="number">2</span>) );</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span>( <span class="type">int</span> o = <span class="number">0</span>; o &lt; nOctaves; o++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>( <span class="type">int</span> i = <span class="number">0</span>; i &lt; nOctaveLayers + <span class="number">2</span>; i++ )</span><br><span class="line">        &#123;</span><br><span class="line">			<span class="comment">// DoG第o组第i副 = 高斯金字塔第o组第i+1层 - 高斯金字塔第o组i层</span></span><br><span class="line">            <span class="type">const</span> Mat&amp; src1 = gpyr[o*(nOctaveLayers + <span class="number">3</span>) + i];</span><br><span class="line">            <span class="type">const</span> Mat&amp; src2 = gpyr[o*(nOctaveLayers + <span class="number">3</span>) + i + <span class="number">1</span>];</span><br><span class="line">            Mat&amp; dst = dogpyr[o*(nOctaveLayers + <span class="number">2</span>) + i];</span><br><span class="line">            <span class="built_in">subtract</span>(src2, src1, dst, <span class="built_in">noArray</span>(), CV_16S);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>值得注意的是高斯金字塔每组为nOctaves+3层，为得到DoG金字塔相减计算后，会少一层为nOctaves+2层。</p>
+<h2 id="关键点搜索与定位">2. 关键点搜索与定位</h2>
+<h3 id="dog局部极值点">DoG局部极值点</h3>
+<p><code>极值点</code>定义：每一个像素点与它所有相邻点比较，当其大于（或小于）它的<strong>图像域和尺度域</strong>的所有相邻点时，即为极值点。</p>
+<p>如下图所示，比较范围是一个<span
+class="math inline">3 × 3 × 3</span>的<strong>立方体</strong>，中间检测点需与周围26个点比较，确保尺度空间和图像空间都为极值点。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/1350653024_7639.png" style="zoom:35%;" /></p>
+<p>具体方法是：在每一组（Octaves）中，从第二层（设为当前层）开始搜索，此时第一层和第三层分别为二层的下层和上层；搜索完成后，置当前层为第三层，开始下次搜索；因此每层会被比较两次。通常我们将组编号索引从-1开始，每组除0层和最高层都会被当作当前搜索层。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/1350655644_9292.png" style="zoom:50%;" /></p>
+<p>如上图，表示了高斯金字塔，DoG金字塔和DoG极值点计算层的关系。</p>
+<h3
+id="关键点精确定位dog特征点的修正">关键点精确定位(DoG特征点的修正)</h3>
+<p>上述的的关键点计算中，使用的是离散空间的像素值点，但由于离散点并不能准确描述“真正”的极值点，存在误差，需要对DoG金字塔图像进行进一步拟合。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/111601374373316.jpg" style="zoom:67%;" /></p>
+<p>利用已知的离散空间点插值得到连续空间极值点的方法叫做<strong>子像元插值</strong>。</p>
+<p>首先来看一个一维函数插值的例子<span
+class="math inline"><em>f</em>(<em>x</em>) = −3<em>x</em><sup>2</sup> + 2<em>x</em> + 6</span>，如下图：</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/f(x).png" style="zoom:67%;" /></p>
+<p>matlab绘图代码：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">syms f(x);</span><br><span class="line">f(x) = <span class="number">-3</span>*x^<span class="number">2</span> + <span class="number">2</span>*x + <span class="number">6</span>;</span><br><span class="line">fplot(f(x), <span class="string">&#x27;Linewidth&#x27;</span>, <span class="number">1.5</span>)</span><br><span class="line"><span class="built_in">hold</span> on;</span><br><span class="line">axis([<span class="number">-1.5</span>, <span class="number">2</span>, <span class="number">-1</span>, <span class="number">7</span>]);  <span class="comment">% 设置坐标轴在指定的区间</span></span><br><span class="line"><span class="comment">% 特殊点</span></span><br><span class="line">x = [<span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>/<span class="number">3</span>, <span class="number">1</span>];</span><br><span class="line">y = f(x);</span><br><span class="line"><span class="built_in">plot</span>(x, y,  <span class="string">&#x27;LineWidth&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;LineStyle&#x27;</span>, <span class="string">&#x27;--&#x27;</span>);</span><br><span class="line">line([<span class="number">-2</span>,<span class="number">2</span>],[<span class="number">0</span>,<span class="number">0</span>], <span class="string">&#x27;Color&#x27;</span>,<span class="string">&#x27;black&#x27;</span>, <span class="string">&#x27;LineWidth&#x27;</span>, <span class="number">0.7</span>);</span><br><span class="line">line([<span class="number">-1</span>,<span class="number">-1</span>],[<span class="number">0</span>,<span class="number">1</span>], <span class="string">&#x27;Color&#x27;</span>,<span class="string">&#x27;black&#x27;</span>, <span class="string">&#x27;LineWidth&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;LineStyle&#x27;</span>, <span class="string">&#x27;--&#x27;</span>);</span><br><span class="line">line([<span class="number">0</span>,<span class="number">0</span>],[<span class="number">0</span>,<span class="number">6</span>], <span class="string">&#x27;Color&#x27;</span>,<span class="string">&#x27;black&#x27;</span>, <span class="string">&#x27;LineWidth&#x27;</span>, <span class="number">1</span>,  <span class="string">&#x27;LineStyle&#x27;</span>, <span class="string">&#x27;--&#x27;</span>);</span><br><span class="line">line([<span class="number">1</span>/<span class="number">3</span>,<span class="number">1</span>/<span class="number">3</span>],[<span class="number">0</span>,<span class="number">19</span>/<span class="number">3</span>], <span class="string">&#x27;Color&#x27;</span>,<span class="string">&#x27;black&#x27;</span>, <span class="string">&#x27;LineWidth&#x27;</span>, <span class="number">1</span>,  <span class="string">&#x27;LineStyle&#x27;</span>, <span class="string">&#x27;--&#x27;</span>);</span><br><span class="line">line([<span class="number">1</span>,<span class="number">1</span>],[<span class="number">0</span>,<span class="number">5</span>], <span class="string">&#x27;Color&#x27;</span>,<span class="string">&#x27;black&#x27;</span>, <span class="string">&#x27;LineWidth&#x27;</span>, <span class="number">1</span>,  <span class="string">&#x27;LineStyle&#x27;</span>, <span class="string">&#x27;--&#x27;</span>);</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">&#x27;f(x) = -3*x^2 + 2*x + 6&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>图中可见，连续空间和离散空间的极值点并不重合。我们需要先引进Taylor（泰勒）展开式：
+<span class="math display">$$
+f(x)=\sum_{i=0}^{n} \frac{f^{(i)}(x_0)}{i!}(x-x_0)^i
+$$</span> 我们对函数<span
+class="math inline"><em>f</em>(<em>x</em>)</span>使用泰勒级数展开：
+<span class="math display">$$
+\begin{align}
+f(x)&amp; \approx f(0) + f'(0)x + \frac{f''(0)}{2}x^2 \\
+f(x)&amp; \approx 6 + 2x -3x^2
+\end{align}
+$$</span> 补充——<strong>离散空间</strong>的一阶导数和二阶导数的求法：
+<span class="math display">$$
+\begin{align}
+f'(x)&amp;=\frac{f(x+h)-f(x-h)}{2h} \\
+f''(x)&amp;=\frac{f(x+h)+f(x-h)-2f(x)}{h^2}
+\end{align}
+$$</span> 使用泰勒展开后求得<span
+class="math inline"><em>f</em>(<em>x</em>)</span>后，可以求得连续函数<span
+class="math inline"><em>f</em>(<em>x</em>)</span>真正的极大值坐标：
+<span class="math display">$$
+\begin{align}
+f'(x)=2-6x=0 \Rightarrow \bar x= \frac{1}{3} \\
+f(\bar x)=6+2\times\frac{1}{3}-3\times(\frac{1}{3})^2=6\frac{1}{3}
+\end{align}
+$$</span> 对于二维函数，其泰勒展开为： <span class="math display">$$
+f(x,y)\approx f(0,0)+(\frac{\partial f}{\partial x}x+\frac{\partial
+f}{\partial y}y)+\frac{1}{2}(x^2\frac{\partial^2f}{\partial x \partial
+y}+2xy\frac{\partial^2f}{\partial x \partial
+y}+y^2\frac{\partial^2f}{\partial y \partial y})
+$$</span> 若将<span class="math inline">$\begin{bmatrix} x\\
+y\end{bmatrix}$</span>表示成向量<span
+class="math inline"><em>x⃗</em></span>，上式变形为： <span
+class="math display">$$
+f(\vec{x})\approx f(\vec{0})+\frac{\partial f^T}{\partial x}x+
+\frac{1}{2}x^T\frac{\partial^2f}{\partial x^2}x
+$$</span> 注意：此处的存在的一阶导数和二阶导数都是<span
+class="math inline">$x= \begin{bmatrix} 0\\
+0\end{bmatrix}$</span>这个点时的一阶导和二阶导的值。</p>
+<p>对上式<strong>求导</strong>，以便取得<strong>极值点</strong>： <span
+class="math display">$$
+\frac{\partial f}{\partial x} = \frac{\partial f^T}{\partial
+x}+\frac{1}{2}(\frac{\partial^2f}{\partial
+x^2}+\frac{\partial^2f^T}{\partial x^2})x=0
+$$</span> 此处两个导数和之前一样，此时可以求得真正的极值点： <span
+class="math display">$$
+\hat x=-\frac{\partial^2f^{-1}}{\partial x^2}\cdot\frac{\partial
+f}{\partial x}
+$$</span> 带入泰勒展开式，得到极值点函数值： <span
+class="math display">$$
+f(\hat x)=f(\vec{0})+\frac{\partial f^T}{\partial
+x}\hat{x}+\frac{1}{2}\hat{x}^T\frac{\partial^2f}{\partial
+x^2}\hat{x}=f(\vec{0})+\frac{1}{2}\frac{\partial f^T}{\partial x}\hat{x}
+$$</span> 我们回到DoG函数，同样得到<span
+class="math inline"><em>D</em>(<em>X</em>)</span>的泰勒展开： <span
+class="math display">$$
+D(X)\approx D+\frac{\partial D^T}{\partial X}X+
+\frac{1}{2}X^T\frac{\partial^2D}{\partial X^2}X
+$$</span> 此处的D即是在0点的函数值。设极值点为<span
+class="math inline"><em>X̂</em> = (<em>x</em>, <em>y</em>, <em>σ</em>)<sup><em>T</em></sup></span></p>
+<p>若<span
+class="math inline"><em>X̂</em></span>在任何方向上的偏移大于<span
+class="math inline">$\frac{1}{2}$</span>时(一格的一半)，意味着插值中心点已经偏移到它的临近点上，所以这样的点需要删除。另外，下示程序还删除了极值小于0.04的点（<span
+class="math inline">|<em>D</em>(<em>X̂</em>)| &lt; 0.04</span>，图像的灰度值在0~1之间），其响应值过小，这样的点易受噪声的干扰而变得不稳定，所以也要被删除。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在DoG尺度空间寻特征点（极值点） Bad features are discarded</span></span><br><span class="line"><span class="comment">// based on contrast and ratio of principal curvatures.</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">SIFT::findScaleSpaceExtrema</span><span class="params">( <span class="type">const</span> vector&lt;Mat&gt;&amp; gauss_pyr, <span class="type">const</span> vector&lt;Mat&gt;&amp; dog_pyr, vector&lt;KeyPoint&gt;&amp; keypoints )</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> nOctaves = (<span class="type">int</span>)gauss_pyr.<span class="built_in">size</span>()/(nOctaveLayers + <span class="number">3</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 用于过滤掉半均匀（低对比度）区域中的弱特征的对比度阈值。 阈值越大，检测器产生的特征越少。</span></span><br><span class="line">	<span class="comment">// 过滤掉弱特征的阈值 contrastThreshold默认为0.04</span></span><br><span class="line">    <span class="type">int</span> threshold = <span class="built_in">cvFloor</span>(<span class="number">0.5</span> * contrastThreshold / nOctaveLayers * <span class="number">255</span> * SIFT_FIXPT_SCALE);</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> n = SIFT_ORI_HIST_BINS; <span class="comment">//36</span></span><br><span class="line">    <span class="type">float</span> hist[n];</span><br><span class="line">    KeyPoint kpt;</span><br><span class="line"> </span><br><span class="line">    keypoints.<span class="built_in">clear</span>();</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span>( <span class="type">int</span> o = <span class="number">0</span>; o &lt; nOctaves; o++ )</span><br><span class="line">        <span class="keyword">for</span>( <span class="type">int</span> i = <span class="number">1</span>; i &lt;= nOctaveLayers; i++ )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> idx = o*(nOctaveLayers<span class="number">+2</span>)+i;	<span class="comment">//idx当前DoG层序号</span></span><br><span class="line">            <span class="type">const</span> Mat&amp; img = dog_pyr[idx];</span><br><span class="line">            <span class="type">const</span> Mat&amp; prev = dog_pyr[idx<span class="number">-1</span>];</span><br><span class="line">            <span class="type">const</span> Mat&amp; next = dog_pyr[idx<span class="number">+1</span>];</span><br><span class="line">            <span class="type">int</span> step = (<span class="type">int</span>)img.<span class="built_in">step1</span>();		<span class="comment">//面的总通道数，方便指针访问</span></span><br><span class="line">            <span class="type">int</span> rows = img.rows, cols = img.cols;</span><br><span class="line"> </span><br><span class="line">            <span class="keyword">for</span>( <span class="type">int</span> r = SIFT_IMG_BORDER; r &lt; rows-SIFT_IMG_BORDER; r++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="type">const</span> <span class="type">short</span>* currptr = img.<span class="built_in">ptr</span>&lt;<span class="type">short</span>&gt;(r);</span><br><span class="line">                <span class="type">const</span> <span class="type">short</span>* prevptr = prev.<span class="built_in">ptr</span>&lt;<span class="type">short</span>&gt;(r);</span><br><span class="line">                <span class="type">const</span> <span class="type">short</span>* nextptr = next.<span class="built_in">ptr</span>&lt;<span class="type">short</span>&gt;(r);</span><br><span class="line"> </span><br><span class="line">                <span class="keyword">for</span>( <span class="type">int</span> c = SIFT_IMG_BORDER; c &lt; cols-SIFT_IMG_BORDER; c++)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="type">int</span> val = currptr[c];</span><br><span class="line"> </span><br><span class="line">                    <span class="comment">// find local extrema with pixel accuracy</span></span><br><span class="line">					<span class="comment">// 寻找局部极值点，DoG中每个点与其所在的立方体周围的26个点比较</span></span><br><span class="line">					<span class="comment">// if （val比所有都大 或者 val比所有都小）</span></span><br><span class="line">                    <span class="keyword">if</span>( std::<span class="built_in">abs</span>(val) &gt; threshold &amp;&amp;</span><br><span class="line">                       ((val &gt; <span class="number">0</span> &amp;&amp; val &gt;= currptr[c<span class="number">-1</span>] &amp;&amp; val &gt;= currptr[c<span class="number">+1</span>] &amp;&amp;</span><br><span class="line">                         val &gt;= currptr[c-step<span class="number">-1</span>] &amp;&amp; val &gt;= currptr[c-step] &amp;&amp; </span><br><span class="line">						 val &gt;= currptr[c-step<span class="number">+1</span>] &amp;&amp; val &gt;= currptr[c+step<span class="number">-1</span>] &amp;&amp; </span><br><span class="line">						 val &gt;= currptr[c+step] &amp;&amp; val &gt;= currptr[c+step<span class="number">+1</span>] &amp;&amp;</span><br><span class="line">                         val &gt;= nextptr[c] &amp;&amp; val &gt;= nextptr[c<span class="number">-1</span>] &amp;&amp; </span><br><span class="line">						 val &gt;= nextptr[c<span class="number">+1</span>] &amp;&amp; val &gt;= nextptr[c-step<span class="number">-1</span>] &amp;&amp; </span><br><span class="line">						 val &gt;= nextptr[c-step] &amp;&amp; val &gt;= nextptr[c-step<span class="number">+1</span>] &amp;&amp; </span><br><span class="line">						 val &gt;= nextptr[c+step<span class="number">-1</span>] &amp;&amp; val &gt;= nextptr[c+step] &amp;&amp; </span><br><span class="line">						 val &gt;= nextptr[c+step<span class="number">+1</span>] &amp;&amp; val &gt;= prevptr[c] &amp;&amp; </span><br><span class="line">						 val &gt;= prevptr[c<span class="number">-1</span>] &amp;&amp; val &gt;= prevptr[c<span class="number">+1</span>] &amp;&amp;</span><br><span class="line">                         val &gt;= prevptr[c-step<span class="number">-1</span>] &amp;&amp; val &gt;= prevptr[c-step] &amp;&amp; </span><br><span class="line">						 val &gt;= prevptr[c-step<span class="number">+1</span>] &amp;&amp; val &gt;= prevptr[c+step<span class="number">-1</span>] &amp;&amp; </span><br><span class="line">						 val &gt;= prevptr[c+step] &amp;&amp; val &gt;= prevptr[c+step<span class="number">+1</span>]) ||</span><br><span class="line">						(val &lt; <span class="number">0</span> &amp;&amp; val &lt;= currptr[c<span class="number">-1</span>] &amp;&amp; val &lt;= currptr[c<span class="number">+1</span>] &amp;&amp;</span><br><span class="line">                         val &lt;= currptr[c-step<span class="number">-1</span>] &amp;&amp; val &lt;= currptr[c-step] &amp;&amp; </span><br><span class="line">						 val &lt;= currptr[c-step<span class="number">+1</span>] &amp;&amp; val &lt;= currptr[c+step<span class="number">-1</span>] &amp;&amp; </span><br><span class="line">						 val &lt;= currptr[c+step] &amp;&amp; val &lt;= currptr[c+step<span class="number">+1</span>] &amp;&amp;</span><br><span class="line">                         val &lt;= nextptr[c] &amp;&amp; val &lt;= nextptr[c<span class="number">-1</span>] &amp;&amp; </span><br><span class="line">						 val &lt;= nextptr[c<span class="number">+1</span>] &amp;&amp; val &lt;= nextptr[c-step<span class="number">-1</span>] &amp;&amp; </span><br><span class="line">						 val &lt;= nextptr[c-step] &amp;&amp; val &lt;= nextptr[c-step<span class="number">+1</span>] &amp;&amp; </span><br><span class="line">						 val &lt;= nextptr[c+step<span class="number">-1</span>] &amp;&amp; val &lt;= nextptr[c+step] &amp;&amp; </span><br><span class="line">						 val &lt;= nextptr[c+step<span class="number">+1</span>] &amp;&amp; val &lt;= prevptr[c] &amp;&amp; </span><br><span class="line">						 val &lt;= prevptr[c<span class="number">-1</span>] &amp;&amp; val &lt;= prevptr[c<span class="number">+1</span>] &amp;&amp;</span><br><span class="line">                         val &lt;= prevptr[c-step<span class="number">-1</span>] &amp;&amp; val &lt;= prevptr[c-step] &amp;&amp; </span><br><span class="line">						 val &lt;= prevptr[c-step<span class="number">+1</span>] &amp;&amp; val &lt;= prevptr[c+step<span class="number">-1</span>] &amp;&amp; </span><br><span class="line">						 val &lt;= prevptr[c+step] &amp;&amp; val &lt;= prevptr[c+step<span class="number">+1</span>])))</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="type">int</span> r1 = r, c1 = c, layer = i;</span><br><span class="line">						</span><br><span class="line">						<span class="comment">// 关键点精确定位，adjustLocalExtrema函数见下述说明</span></span><br><span class="line">                        <span class="keyword">if</span>( !<span class="built_in">adjustLocalExtrema</span>(dog_pyr, kpt, o, layer, r1, c1,</span><br><span class="line">                                                nOctaveLayers, (<span class="type">float</span>)contrastThreshold,</span><br><span class="line">                                                (<span class="type">float</span>)edgeThreshold, (<span class="type">float</span>)sigma) )</span><br><span class="line">                            <span class="keyword">continue</span>;</span><br><span class="line">                        </span><br><span class="line">						<span class="type">float</span> scl_octv = kpt.size*<span class="number">0.5f</span>/(<span class="number">1</span> &lt;&lt; o);</span><br><span class="line">						<span class="comment">// 计算梯度直方图（HOG）</span></span><br><span class="line">                        <span class="type">float</span> omax = <span class="built_in">calcOrientationHist</span>(</span><br><span class="line">							gauss_pyr[o*(nOctaveLayers<span class="number">+3</span>) + layer],</span><br><span class="line">                            <span class="built_in">Point</span>(c1, r1),</span><br><span class="line">                            <span class="built_in">cvRound</span>(SIFT_ORI_RADIUS * scl_octv),</span><br><span class="line">                            SIFT_ORI_SIG_FCTR * scl_octv,</span><br><span class="line">                            hist, n);</span><br><span class="line">                        <span class="type">float</span> mag_thr = (<span class="type">float</span>)(omax * SIFT_ORI_PEAK_RATIO);</span><br><span class="line">                        <span class="keyword">for</span>( <span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++ )</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="type">int</span> l = j &gt; <span class="number">0</span> ? j - <span class="number">1</span> : n - <span class="number">1</span>;</span><br><span class="line">                            <span class="type">int</span> r2 = j &lt; n<span class="number">-1</span> ? j + <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line"> </span><br><span class="line">                            <span class="keyword">if</span>( hist[j] &gt; hist[l]  &amp;&amp;  hist[j] &gt; hist[r2]  &amp;&amp;  hist[j] &gt;= mag_thr )</span><br><span class="line">                            &#123;</span><br><span class="line">                                <span class="type">float</span> bin = j + <span class="number">0.5f</span> * (hist[l]-hist[r2]) / </span><br><span class="line">								(hist[l] - <span class="number">2</span>*hist[j] + hist[r2]);</span><br><span class="line">                                bin = bin &lt; <span class="number">0</span> ? n + bin : bin &gt;= n ? bin - n : bin;</span><br><span class="line">                                kpt.angle = (<span class="type">float</span>)((<span class="number">360.f</span>/n) * bin);</span><br><span class="line">                                keypoints.<span class="built_in">push_back</span>(kpt);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="角检测器">角检测器</h3>
+<p>在接下推导时，我们需要先了解角检测器原理。</p>
+<p>现有对角点的定义有两个版本：</p>
+<ol type="1">
+<li>角点可以是两个边缘的角点；</li>
+<li>角点是邻域内具有两个主方向的特征点；</li>
+</ol>
+<p>角点检测算法大致可以分为三类：</p>
+<ol type="1">
+<li>基于模板（基于二值图像）</li>
+<li>基于边缘特征（基于轮廓曲线，例如CSS方法）</li>
+<li>基于亮度变化（基于灰度图像，主要有Moravec算子、Forstner算子、Harris算子、SUSAN算子等）</li>
+</ol>
+<p>下面会说明Harris角点检测的算法原理，openCV的函数接口是<a
+target="_blank" rel="noopener" href="https://docs.opencv.org/2.4/modules/imgproc/doc/feature_detection.html?highlight=cornerharris">cornerHairrs()</a>；另外比较著名的角点检测方法还有Shi-Tomasi算法，这个算法开始主要是为了解决跟踪问题，用来衡量两幅图像的相似度，我们也可以把它看为Harris算法的改进。OpenCV中已经对它进行了实现，接口函数名为<a
+target="_blank" rel="noopener" href="http://www.opencv.org.cn/opencvdoc/2.3.2/html/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack">GoodFeaturesToTrack()</a>。</p>
+<p>另外还有一个著名的角点检测算子即SUSAN（Smallest Univalue Segment
+Assimilating
+Nucleus，最小核值相似区）算子。SUSAN使用一个圆形模板和一个圆的中心点，通过圆中心点像素与模板圆内其他像素值的比较，统计出与圆中心像素近似的像元数量，当这样的像元数量小于某一个阈值时，就被认为是要检测的角点。可以把SUSAN算子看为Harris算法的一个简化。这个算法原理非常简单，算法效率也高，所以在OpenCV中，它的接口函数名称为：<a
+target="_blank" rel="noopener" href="http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#fast">FAST()</a>
+。</p>
+<p>先引入曲率的概念：曲线的曲率（curvature）就是针对曲线上某个点的切线方向角对弧长的转动率，通过微分来定义，表明曲线偏移直线的程度。数学上表明曲线在某一点的弯曲程度的数值。曲率越大，表示曲线的弯曲程度越大。曲率的倒数就是曲率半径。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/image-20200220135925022.png" style="zoom:67%;" /></p>
+<p>例如在曲线<span
+class="math inline"><em>C</em><em>D</em></span>上点<span
+class="math inline"><em>A</em></span>和临近一点<span
+class="math inline"><em>B</em></span>各做一条切线，<span
+class="math inline"><em>A</em></span>和<span
+class="math inline"><em>B</em></span>之间的弧长为<span
+class="math inline"><em>S̃</em></span>，两条切线夹角为<span
+class="math inline"><em>α</em></span>，则曲线<span
+class="math inline"><em>C</em><em>D</em></span>在<span
+class="math inline"><em>A</em></span>点的曲率为：<span
+class="math inline">$\lim\limits_{\Delta S\to 0}\frac{\alpha}{\Delta
+S}$</span></p>
+<h3 id="harris角点">Harris角点</h3>
+<p><strong>人眼对角点的识别通常是在一个局部的小区域或小窗口完成的。</strong></p>
+<ul>
+<li>如果在各个方向上移动这个特征的小窗口，窗口内区域的灰度发生了较大的变化，那么就认为在窗口内遇到了角点。</li>
+<li>如果这个特定的窗口在图像各个方向上移动时，窗口内图像的灰度没有发生变化，那么窗口内就不存在角点；</li>
+<li>如果窗口在某一个方向移动时，窗口内图像的灰度发生了较大的变化，而在另一些方向上没有发生变化，那么，窗口内的图像可能就是一条直线的线段。</li>
+</ul>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/081646497655888.png" style="zoom:67%;" /></p>
+<p>对于图像<span
+class="math inline"><em>I</em>(<em>x</em>, <em>y</em>)</span>，当在点<span
+class="math inline">(<em>x</em>, <em>y</em>)</span>处平移<span
+class="math inline">(<em>Δ</em><em>x</em>, <em>Δ</em><em>y</em>)</span>后的自相似性，可以通过自相关函数给出：
+<span class="math display">$$
+c(x,y;\Delta x,\Delta y)=\sum\limits_{(u,v)\in
+W(x,y)}w(u,v)(I(u,v)–I(u+\Delta x,v+\Delta y))^2
+$$</span> 其中，<span
+class="math inline"><em>W</em>(<em>x</em>, <em>y</em>)</span>是以点<span
+class="math inline">(<em>x</em>, <em>y</em>)</span>为中心的<strong>窗口</strong>，<span
+class="math inline"><em>w</em>(<em>u</em>, <em>v</em>)</span>为加权函数，它既可是常数（下图左），也可以是高斯加权函数（下图右）。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/081646516874975.png" /></p>
+<p>对图像<span
+class="math inline"><em>I</em>(<em>x</em>, <em>y</em>)</span>在平移<span
+class="math inline">(<em>Δ</em><em>x</em>, <em>Δ</em><em>y</em>)</span>后进行<strong>一阶泰勒近似</strong>：
+<span class="math display">$$
+\begin{align}
+I(u+\Delta x,v+\Delta y) &amp;=
+I(u,v)+I_x(u,v)\Delta x+I_y(u,v)\Delta y+O(\Delta x^2,\Delta y^2)  \\
+&amp;\approx I(u,v)+I_x(u,v)\Delta x+I_y(u,v)\Delta y \\
+\end{align}
+$$</span> 其中，<span
+class="math inline"><em>I</em><sub><em>x</em></sub></span>、<span
+class="math inline"><em>I</em><sub><em>y</em></sub></span>是图像<span
+class="math inline"><em>I</em>(<em>x</em>, <em>y</em>)</span>的偏导数，这样的话，自相关函数则可以简化为（暂时省略<span
+class="math inline"><em>w</em>(<em>u</em>, <em>v</em>)</span>，不影响结算结果）：
+<span class="math display">$$
+\begin{align}
+c(x,y;\Delta x, \Delta y) &amp; \approx \sum_\limits{w}(I_x(x,y)\Delta x
++ I_y(x,y)\Delta y)^2 \\
+&amp;= \begin{bmatrix} \Delta x &amp; \Delta y\end{bmatrix}M(x,y)
+\begin{bmatrix} \Delta x\\ \Delta y\end{bmatrix}
+\end{align}
+$$</span> 其中 <span class="math display">$$
+\begin{align}
+M(x,y) &amp;= \sum_\limits{w} \begin{bmatrix} I_x(x,y)^2  &amp;
+I_x(x,y)I_y(x,y) \\ I_x(x,y)I_y(x,y) &amp; I_y(x,y)^2\end{bmatrix} \\
+&amp;=\begin{bmatrix} \sum_w I_x(x,y)^2  &amp; \sum_w I_x(x,y)I_y(x,y)
+\\ \sum_w I_x(x,y)I_y(x,y) &amp; \sum_w I_y(x,y)^2\end{bmatrix} \\
+&amp;=\begin{bmatrix} A &amp; B \\ B &amp; C\end{bmatrix}
+\end{align}
+$$</span> 也就是说图像<span
+class="math inline"><em>I</em>(<em>x</em>, <em>y</em>)</span>在点<span
+class="math inline">(<em>x</em>, <em>y</em>)</span>处平移<span
+class="math inline">(<em>Δ</em><em>x</em>, <em>Δ</em><em>y</em>)</span>后的自相关函数可以近似为二项函数：
+<span
+class="math display"><em>c</em>(<em>x</em>, <em>y</em>; <em>Δ</em><em>x</em>, <em>Δ</em><em>y</em>) ≈ <em>A</em><em>Δ</em><em>x</em><sup>2</sup> + 2<em>B</em><em>Δ</em><em>x</em><em>Δ</em><em>y</em> + <em>C</em><em>Δ</em><em>y</em><sup>2</sup></span>
+其中 <span class="math display">$$
+A=\sum_\limits{w}I_x^2,\quad B=\sum_\limits{w}I_xI_y,\quad
+C=\sum_\limits{w}I_y^2
+$$</span> 二次项函数本质上就是一个椭圆函数。如下图所示，椭圆一般方程为：
+<span
+class="math display"><em>A</em><em>x</em><sup>2</sup> + <em>B</em><em>x</em><em>y</em> + <em>C</em><em>y</em><sup>2</sup> + <em>D</em><em>x</em> + <em>E</em><em>y</em> + 1 = 0</span>
+可把<span class="math inline">$[\Delta x, \Delta y]M(x,y)
+\begin{bmatrix} \Delta x\\ \Delta y\end{bmatrix}=A\Delta x^2 + 2B\Delta
+x \Delta y+C\Delta
+y^2=1$</span>类比于一般椭圆。椭圆的扁率和尺寸是由<span
+class="math inline"><em>M</em>(<em>x</em>, <em>y</em>)</span>的特征值<span
+class="math inline"><em>λ</em><sub>1</sub></span>、<span
+class="math inline"><em>λ</em><sub>2</sub></span>决定的，椭圆的方向是由<span
+class="math inline"><em>M</em>(<em>x</em>, <em>y</em>)</span>的特征矢量决定的。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/081646524376603.png" /></p>
+<p>椭圆函数特征值与图像中的<strong>角点、直线（边缘）和平面</strong>之间的关系如下图所示。共可分为三种情况：</p>
+<ul>
+<li><strong>图像中的直线。</strong> 一个特征值大，另一个特征值小，<span
+class="math inline"><em>λ</em><sub>1</sub> ≪ <em>λ</em><sub>2</sub></span>或<span
+class="math inline"><em>λ</em><sub>1</sub> ≫ <em>λ</em><sub>2</sub></span>。自相关函数值在某一方向上大，在其他方向上小。</li>
+<li><strong>图像中的平面。</strong>
+两个特征值都小，且近似相等；自相关函数数值在各个方向上都小。</li>
+<li><strong>图像中的角点。</strong>
+两个特征值都大，且近似相等，自相关函数在所有方向都增大。</li>
+</ul>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/081646535629047.png" /></p>
+<p>根据二次项函数特征值的计算公式，我们可以求<span
+class="math inline"><em>M</em>(<em>x</em>, <em>y</em>)</span>矩阵的特征值。但是Harris给出的角点差别方法并不需要计算具体的特征值，而是计算一个角点响应值<span
+class="math inline"><em>R</em></span>来判断角点。<span
+class="math inline"><em>R</em></span>的计算公式为： <span
+class="math display"><em>R</em> = <em>d</em><em>e</em><em>t</em><em>M</em> − <em>α</em>(<em>t</em><em>r</em><em>a</em><em>c</em><em>e</em><em>M</em>)<sup>2</sup></span>
+示中，<span
+class="math inline"><em>d</em><em>e</em><em>t</em><em>M</em></span>为矩阵<span
+class="math inline">$M=\begin{bmatrix} A &amp; B \\ B &amp;
+C\end{bmatrix}$</span>的行列式；<span
+class="math inline"><em>t</em><em>r</em><em>a</em><em>c</em><em>e</em><em>M</em></span>为矩阵<span
+class="math inline"><em>M</em></span>的迹；<span
+class="math inline"><em>α</em></span>经常为常数，取值范围为<span
+class="math inline">0.04 ∼ 0.06</span>。实际上，特征值是隐含在<span
+class="math inline"><em>d</em><em>e</em><em>t</em><em>M</em></span>和<span
+class="math inline"><em>t</em><em>r</em><em>a</em><em>c</em><em>e</em><em>M</em></span>中的，因为：
+<span class="math display">$$
+\begin{align}
+detM&amp;=\lambda_1\lambda_2=AC-B^2 \\
+traceM&amp;= \lambda_1+\lambda_2 = A+C
+\end{align}
+$$</span></p>
+<h3 id="harris角点算法实现">Harris角点算法实现</h3>
+<p>根据上述讨论，可以将Harris图像角点检测算法归纳如下，共分以下五步：</p>
+<ol type="1">
+<li><p>计算图像 <span
+class="math inline"><em>I</em>(<em>x</em>, <em>y</em>)</span>在<span
+class="math inline"><em>X</em></span>和<span
+class="math inline"><em>Y</em></span>两个方向的梯度<span
+class="math inline"><em>I</em><sub><em>x</em></sub></span>、<span
+class="math inline"><em>I</em><sub><em>y</em></sub></span>。 <span
+class="math display">$$
+I_x=\frac{\partial I}{\partial x}=I\otimes\begin{pmatrix} -1&amp; 0
+&amp;1\end{pmatrix},
+I_y=\frac{\partial I}{\partial y}=I\otimes\begin{pmatrix} -1&amp; 0
+&amp;1\end{pmatrix}^T
+$$</span> 卷积<span class="math inline">$\begin{pmatrix} -1&amp; 0
+&amp;1\end{pmatrix}$</span>的结果该位置的后一个像素与前一个像素之差。</p></li>
+<li><p>计算图像两个方向梯度的乘积。</p></li>
+</ol>
+<p><span
+class="math display"><em>I</em><sub><em>x</em></sub><sup>2</sup> = <em>I</em><sub><em>x</em></sub> ⋅ <em>I</em><sub><em>y</em></sub>,  <em>I</em><sub><em>y</em></sub><sup>2</sup> = <em>I</em><sub><em>y</em></sub> ⋅ <em>I</em><sub><em>y</em></sub>,  <em>I</em><sub><em>x</em><em>y</em></sub> = <em>I</em><sub><em>x</em></sub> ⋅ <em>I</em><sub><em>y</em></sub></span></p>
+<ol start="3" type="1">
+<li>使用高斯函数对<span
+class="math inline"><em>I</em><sub><em>x</em></sub><sup>2</sup></span>、<span
+class="math inline"><em>I</em><sub><em>y</em></sub><sup>2</sup></span>和<span
+class="math inline"><em>I</em><sub><em>x</em><em>y</em></sub></span>进行高斯加权（取<span
+class="math inline"><em>σ</em> = 1</span>），生成矩阵<span
+class="math inline"><em>M</em></span>的元素<span
+class="math inline"><em>A</em></span>、<span
+class="math inline"><em>B</em></span>和<span
+class="math inline"><em>C</em></span>。</li>
+</ol>
+<p><span class="math display">$$
+\begin{align}
+A&amp;=g(I_x^2) =I_x^2\otimes w \\
+B&amp;=g(I_{xy})=I_{xy} \otimes w\\
+C&amp;=g(I_y^2)=I_y^2\otimes w \\
+\end{align}
+$$</span></p>
+<ol start="4" type="1">
+<li>计算每个像素的Harris响应值<span
+class="math inline"><em>R</em></span>，并对小于某一阈值<span
+class="math inline"><em>t</em></span>的<span
+class="math inline"><em>R</em></span>置为零。</li>
+</ol>
+<p><span
+class="math display"><em>R</em> = (<em>d</em><em>e</em><em>t</em><em>M</em> − <em>α</em>(<em>t</em><em>r</em><em>a</em><em>c</em><em>e</em><em>M</em>)<sup>2</sup> &lt; <em>t</em>) ? 0 : <em>d</em><em>e</em><em>t</em><em>M</em> − <em>α</em>(<em>t</em><em>r</em><em>a</em><em>c</em><em>e</em><em>M</em>)<sup>2</sup></span></p>
+<ol start="5" type="1">
+<li>在<span class="math inline">3 × 3</span>或<span
+class="math inline">5 × 5</span>的邻域内进行非极大值抑制（可以理解为局部最大搜索），局部最大值点即为图像中的角点。</li>
+</ol>
+<h4 id="参数alpha的影响">参数<span
+class="math inline"><em>α</em></span>的影响</h4>
+<p>假设已经得到了矩阵<span
+class="math inline"><em>M</em></span>的特征值<span
+class="math inline"><em>λ</em><sub>1</sub> ≥ <em>λ</em><sub>2</sub> ≥ 0</span>,令<span
+class="math inline"><em>λ</em><sub>2</sub> = <em>k</em><em>λ</em><sub>1</sub>, 0 ≤ <em>k</em> ≤ 1</span>。由特征值与矩阵<span
+class="math inline"><em>M</em></span>的迹和行列式的关系可得： <span
+class="math display">$$
+detM=\prod_\limits{i}\lambda_i,\quad traceM=\sum_\limits{i}\lambda_i
+$$</span> 可以得到角点的响应<span class="math inline"><em>R</em></span>:
+<span
+class="math display"><em>R</em> = <em>λ</em><sub>1</sub><em>λ</em><sub>2</sub> − <em>α</em>(<em>λ</em><sub>1</sub> + <em>λ</em><sub>2</sub>)<sup>2</sup> = <em>λ</em><sub>1</sub><sup>2</sup>[<em>k</em> − <em>α</em>(1 + <em>k</em>)<sup>2</sup>]</span>
+假设<span class="math inline"><em>R</em> ≥ 0</span>，可得： <span
+class="math display">$$
+0\leq\alpha\leq\frac{k}{(1+k)^2}\leq0.25
+$$</span>
+<img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/image-20200220174818293.png" style="zoom:80%;" /></p>
+<p>对于较小的<span class="math inline"><em>k</em></span>值，<span
+class="math inline"><em>R</em> ≈ <em>λ</em><sup>2</sup>(<em>k</em> − <em>α</em>), <em>α</em> &lt; <em>k</em></span>。</p>
+<p>由此，可以得出这样的结论：<strong>增大<span
+class="math inline"><em>α</em></span>的值，将减小角点响应值<span
+class="math inline"><em>R</em></span>，降低角点检测的灵性，减少被检测角点的数量；减小<span
+class="math inline"><em>α</em></span>值，将增大角点响应值<span
+class="math inline"><em>R</em></span>，增加角点检测的灵敏性，增加被检测角点的数量。</strong></p>
+<h4 id="harris的特性">Harris的特性</h4>
+<ul>
+<li>Harris角点检测算子<strong>对亮度和对比度的变化不敏感</strong>；</li>
+<li>Harris角点检测算子<strong>具有旋转不变性</strong>；</li>
+<li>Harris角点检测算子<strong>不具有尺度不变性</strong>。</li>
+</ul>
+<h4 id="opencv-hairrs角点检测函数">openCV Hairrs角点检测函数</h4>
+<p>OpenCV的Hairrs角点检测的函数为cornerHairrs()，但是它的输出是一幅浮点值图像，浮点值越高，表明越可能是特征角点，我们需要对图像进行阈值化。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">cornerHarris</span><span class="params">(InputArray src, OutputArray dst, <span class="type">int</span> blockSize, <span class="type">int</span> apertureSize, <span class="type">double</span> k, <span class="type">int</span> borderType = BORDER_DEFAULT)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>src</strong> – 输入的单通道8-bit或浮点图像。</li>
+<li><strong>dst</strong> –
+存储着Harris角点响应的图像矩阵，大小与输入图像大小相同，是一个浮点型矩阵。</li>
+<li><strong>blockSize</strong> – 邻域大小。</li>
+<li><strong>apertureSize</strong> – 扩展的微分算子大。</li>
+<li><strong>k</strong> – 响应公式中的参数<span
+class="math inline"><em>α</em></span> 。</li>
+<li><strong>boderType</strong> – 边界处理的类型。</li>
+</ul>
+<h3 id="删除边缘效应">删除边缘效应</h3>
+<p>为了得到稳定的特征点，除了之前删除DoG响应较低的点，我们还应该注意DoG对图像边缘有较强的响应值，有些极值点的位置是在图像的边缘位置的，因为图像的边缘点很难定位，同时也容易受到噪声的干扰，我们把这些点看做是不稳定的极值点，需要进行去除。</p>
+<p>此处先引进Hessian矩阵，Hessian矩阵是一个多元函数的二阶偏导数构成的方阵，描述了函数的局部曲率。<strong>在边缘梯度的方向上主曲率值比较大，而沿着边缘方向则主曲率值较小。</strong>候选特征点的DoG函数的主曲率与<span
+class="math inline">2 × 2</span>Hessian矩阵<span
+class="math inline"><em>H</em></span>的特征值成正比： <span
+class="math display">$$
+H(x,y)=\begin{bmatrix} I_{xx}(x,y) &amp; I_{xy}(x,y) \\ I_{yx}(x,y)
+&amp; I_{yy}(x,y)\end{bmatrix}
+$$</span>
+注意：Harris角检测利用的是<strong>一阶导数的协方差矩阵</strong>，Hessian是<strong>二阶偏导数</strong>，他们的形式和对角点的判据差不多，所以容易混淆。</p>
+<p>另外，根据Hessian矩阵对称性，如果函数<span
+class="math inline"><em>I</em></span>的二阶偏导数连续，则二阶偏导数的求导顺序没有区别，即<span
+class="math inline"><em>I</em><sub><em>x</em><em>y</em></sub>(<em>x</em>, <em>y</em>) = <em>I</em><sub><em>y</em><em>x</em></sub>(<em>x</em>, <em>y</em>)</span>。</p>
+<p><span
+class="math inline"><em>I</em><sub><em>x</em><em>x</em></sub>(<em>x</em>, <em>y</em>)</span>，<span
+class="math inline"><em>I</em><sub><em>x</em><em>y</em></sub>(<em>x</em>, <em>y</em>)</span>
+和<span
+class="math inline"><em>I</em><sub><em>y</em><em>y</em></sub>(<em>x</em>, <em>y</em>)</span>是候选点邻域位置差分求得的，可参考Harris求法。</p>
+<p>为了避免求具体的值，可以使用<span
+class="math inline"><em>H</em></span>特征值的比例表示<span
+class="math inline"><em>H</em></span>。设<span
+class="math inline"><em>α</em> = <em>λ</em><sub><em>m</em><em>a</em><em>x</em></sub></span>为<span
+class="math inline"><em>H</em></span>的最大特征值，<span
+class="math inline"><em>β</em> = <em>λ</em><sub><em>m</em><em>i</em><em>n</em></sub></span>为<span
+class="math inline"><em>H</em></span>的最小特征值。则有： <span
+class="math display">$$
+\begin{align}
+traceH &amp;= I_{xx}(x,y)+I_{yy}(x,y)=\alpha + \beta \\
+detH &amp;= I_{xx}(x,y)I_{yy}(x,y)-I_{xy}^2(x,y)=\alpha \cdot \beta
+\end{align}
+$$</span> 同样：<span
+class="math inline"><em>t</em><em>r</em><em>a</em><em>c</em><em>e</em><em>H</em></span>表示矩阵<span
+class="math inline"><em>H</em></span>的迹，<span
+class="math inline"><em>d</em><em>e</em><em>t</em><em>H</em></span>表示<span
+class="math inline"><em>H</em></span>的行列式。</p>
+<p>令<span
+class="math inline">$\gamma=\frac{\alpha}{\beta}$</span>表示最大特征值与最小特征值的比值，则：
+<span class="math display">$$
+\frac{traceH^2}{detH}=\frac{(\alpha + \beta)^2}{\alpha \beta}
+=\frac{(\gamma+1)^2}{\gamma}
+$$</span>
+<strong>上式的结果与两个特征值的比例有关，和具体的大小无关。</strong>当两个特征值相等时其值最小，并且随着<span
+class="math inline"><em>γ</em></span>
+的增大而增大。因此为了检测主曲率是否在某个阈值<span
+class="math inline"><em>T</em><sub><em>γ</em></sub></span>下，只需检测：
+<span class="math display">$$
+\frac{traceH^2}{detH} &gt; \frac{(T_\gamma+1)^2}{T_\gamma}
+$$</span> 如果上式成立，则剔除该特征点，否则保留。（Lowe论文中取<span
+class="math inline"><em>T</em><sub><em>γ</em></sub> = 10</span>)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Interpolates a scale-space extremum&#x27;s location and scale to subpixel</span></span><br><span class="line"><span class="comment">// accuracy to form an image feature.  Rejects features with low contrast.</span></span><br><span class="line"><span class="comment">// Based on Section 4 of Lowe&#x27;s paper.</span></span><br><span class="line"><span class="comment">// 特征点精确定位</span></span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">bool</span> <span class="title">adjustLocalExtrema</span><span class="params">( <span class="type">const</span> vector&lt;Mat&gt;&amp; dog_pyr, KeyPoint&amp; kpt, <span class="type">int</span> octv,</span></span></span><br><span class="line"><span class="params"><span class="function">                                <span class="type">int</span>&amp; layer, <span class="type">int</span>&amp; r, <span class="type">int</span>&amp; c, <span class="type">int</span> nOctaveLayers,</span></span></span><br><span class="line"><span class="params"><span class="function">                                <span class="type">float</span> contrastThreshold, <span class="type">float</span> edgeThreshold, <span class="type">float</span> sigma )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">float</span> img_scale = <span class="number">1.f</span>/(<span class="number">255</span>*SIFT_FIXPT_SCALE);</span><br><span class="line">    <span class="type">const</span> <span class="type">float</span> deriv_scale = img_scale*<span class="number">0.5f</span>;</span><br><span class="line">    <span class="type">const</span> <span class="type">float</span> second_deriv_scale = img_scale;</span><br><span class="line">    <span class="type">const</span> <span class="type">float</span> cross_deriv_scale = img_scale*<span class="number">0.25f</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="type">float</span> xi=<span class="number">0</span>, xr=<span class="number">0</span>, xc=<span class="number">0</span>, contr;</span><br><span class="line">    <span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line"> </span><br><span class="line">	<span class="comment">//三维子像元插值</span></span><br><span class="line">    <span class="keyword">for</span>( ; i &lt; SIFT_MAX_INTERP_STEPS; i++ )</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> idx = octv*(nOctaveLayers<span class="number">+2</span>) + layer;</span><br><span class="line">        <span class="type">const</span> Mat&amp; img = dog_pyr[idx];</span><br><span class="line">        <span class="type">const</span> Mat&amp; prev = dog_pyr[idx<span class="number">-1</span>];</span><br><span class="line">        <span class="type">const</span> Mat&amp; next = dog_pyr[idx<span class="number">+1</span>];</span><br><span class="line"> </span><br><span class="line">        <span class="function">Vec3f <span class="title">dD</span><span class="params">((img.at&lt;<span class="type">short</span>&gt;(r, c<span class="number">+1</span>) - img.at&lt;<span class="type">short</span>&gt;(r, c<span class="number">-1</span>))*deriv_scale,</span></span></span><br><span class="line"><span class="params"><span class="function">                 (img.at&lt;<span class="type">short</span>&gt;(r<span class="number">+1</span>, c) - img.at&lt;<span class="type">short</span>&gt;(r<span class="number">-1</span>, c))*deriv_scale,</span></span></span><br><span class="line"><span class="params"><span class="function">                 (next.at&lt;<span class="type">short</span>&gt;(r, c) - prev.at&lt;<span class="type">short</span>&gt;(r, c))*deriv_scale)</span></span>;</span><br><span class="line"> </span><br><span class="line">        <span class="type">float</span> v2 = (<span class="type">float</span>)img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c)*<span class="number">2</span>;</span><br><span class="line">        <span class="type">float</span> dxx = (img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c<span class="number">+1</span>) + </span><br><span class="line">				img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c<span class="number">-1</span>) - v2)*second_deriv_scale;</span><br><span class="line">        <span class="type">float</span> dyy = (img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">+1</span>, c) + </span><br><span class="line">				img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">-1</span>, c) - v2)*second_deriv_scale;</span><br><span class="line">        <span class="type">float</span> dss = (next.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c) + </span><br><span class="line">				prev.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c) - v2)*second_deriv_scale;</span><br><span class="line">        <span class="type">float</span> dxy = (img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">+1</span>, c<span class="number">+1</span>) - </span><br><span class="line">				img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">+1</span>, c<span class="number">-1</span>) - img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">-1</span>, c<span class="number">+1</span>) + </span><br><span class="line">				img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">-1</span>, c<span class="number">-1</span>))*cross_deriv_scale;</span><br><span class="line">        <span class="type">float</span> dxs = (next.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c<span class="number">+1</span>) - </span><br><span class="line">				next.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c<span class="number">-1</span>) - prev.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c<span class="number">+1</span>) + </span><br><span class="line">				prev.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c<span class="number">-1</span>))*cross_deriv_scale;</span><br><span class="line">        <span class="type">float</span> dys = (next.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">+1</span>, c) - </span><br><span class="line">				next.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">-1</span>, c) - prev.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">+1</span>, c) + </span><br><span class="line">				prev.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">-1</span>, c))*cross_deriv_scale;</span><br><span class="line"> </span><br><span class="line">        <span class="function">Matx33f <span class="title">H</span><span class="params">(dxx, dxy, dxs,</span></span></span><br><span class="line"><span class="params"><span class="function">                  dxy, dyy, dys,</span></span></span><br><span class="line"><span class="params"><span class="function">                  dxs, dys, dss)</span></span>;</span><br><span class="line"> </span><br><span class="line">        Vec3f X = H.<span class="built_in">solve</span>(dD, DECOMP_LU);</span><br><span class="line"> </span><br><span class="line">        xi = -X[<span class="number">2</span>];</span><br><span class="line">        xr = -X[<span class="number">1</span>];</span><br><span class="line">        xc = -X[<span class="number">0</span>];</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span>( std::<span class="built_in">abs</span>( xi ) &lt; <span class="number">0.5f</span>  &amp;&amp;  std::<span class="built_in">abs</span>( xr ) &lt; <span class="number">0.5f</span>  &amp;&amp;  std::<span class="built_in">abs</span>( xc ) &lt; <span class="number">0.5f</span> )</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line"> </span><br><span class="line">		<span class="comment">//将找到的极值点对应成像素（整数）</span></span><br><span class="line">        c += <span class="built_in">cvRound</span>( xc );</span><br><span class="line">        r += <span class="built_in">cvRound</span>( xr );</span><br><span class="line">        layer += <span class="built_in">cvRound</span>( xi );</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span>( layer &lt; <span class="number">1</span> || layer &gt; nOctaveLayers ||</span><br><span class="line">           c &lt; SIFT_IMG_BORDER || c &gt;= img.cols - SIFT_IMG_BORDER  ||</span><br><span class="line">           r &lt; SIFT_IMG_BORDER || r &gt;= img.rows - SIFT_IMG_BORDER )</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/* ensure convergence of interpolation */</span></span><br><span class="line">	<span class="comment">// SIFT_MAX_INTERP_STEPS:插值最大步数，避免插值不收敛，程序中默认为5</span></span><br><span class="line">    <span class="keyword">if</span>( i &gt;= SIFT_MAX_INTERP_STEPS )</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"> </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> idx = octv*(nOctaveLayers<span class="number">+2</span>) + layer;</span><br><span class="line">        <span class="type">const</span> Mat&amp; img = dog_pyr[idx];</span><br><span class="line">        <span class="type">const</span> Mat&amp; prev = dog_pyr[idx<span class="number">-1</span>];</span><br><span class="line">        <span class="type">const</span> Mat&amp; next = dog_pyr[idx<span class="number">+1</span>];</span><br><span class="line">        <span class="function">Matx31f <span class="title">dD</span><span class="params">((img.at&lt;<span class="type">short</span>&gt;(r, c<span class="number">+1</span>) - img.at&lt;<span class="type">short</span>&gt;(r, c<span class="number">-1</span>))*deriv_scale,</span></span></span><br><span class="line"><span class="params"><span class="function">                   (img.at&lt;<span class="type">short</span>&gt;(r<span class="number">+1</span>, c) - img.at&lt;<span class="type">short</span>&gt;(r<span class="number">-1</span>, c))*deriv_scale,</span></span></span><br><span class="line"><span class="params"><span class="function">                   (next.at&lt;<span class="type">short</span>&gt;(r, c) - prev.at&lt;<span class="type">short</span>&gt;(r, c))*deriv_scale)</span></span>;</span><br><span class="line">        <span class="type">float</span> t = dD.<span class="built_in">dot</span>(<span class="built_in">Matx31f</span>(xc, xr, xi));</span><br><span class="line"> </span><br><span class="line">        contr = img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c)*img_scale + t * <span class="number">0.5f</span>;</span><br><span class="line">        <span class="keyword">if</span>( std::<span class="built_in">abs</span>( contr ) * nOctaveLayers &lt; contrastThreshold )</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">/* principal curvatures are computed using the trace and det of Hessian */</span></span><br><span class="line">       <span class="comment">//利用Hessian矩阵的迹和行列式计算主曲率的比值</span></span><br><span class="line">	   <span class="type">float</span> v2 = img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c)*<span class="number">2.f</span>;</span><br><span class="line">        <span class="type">float</span> dxx = (img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c<span class="number">+1</span>) + </span><br><span class="line">				img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r, c<span class="number">-1</span>) - v2)*second_deriv_scale;</span><br><span class="line">        <span class="type">float</span> dyy = (img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">+1</span>, c) + </span><br><span class="line">				img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">-1</span>, c) - v2)*second_deriv_scale;</span><br><span class="line">        <span class="type">float</span> dxy = (img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">+1</span>, c<span class="number">+1</span>) - </span><br><span class="line">				img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">+1</span>, c<span class="number">-1</span>) - img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">-1</span>, c<span class="number">+1</span>) + </span><br><span class="line">				img.<span class="built_in">at</span>&lt;<span class="type">short</span>&gt;(r<span class="number">-1</span>, c<span class="number">-1</span>)) * cross_deriv_scale;</span><br><span class="line">        <span class="type">float</span> tr = dxx + dyy;</span><br><span class="line">        <span class="type">float</span> det = dxx * dyy - dxy * dxy;</span><br><span class="line"> </span><br><span class="line">		<span class="comment">//这里edgeThreshold可以在调用SIFT()时输入；</span></span><br><span class="line">		<span class="comment">//其实代码中定义了 static const float SIFT_CURV_THR = 10.f 可以直接使用</span></span><br><span class="line">        <span class="keyword">if</span>( det &lt;= <span class="number">0</span> || tr*tr*edgeThreshold &gt;= (edgeThreshold + <span class="number">1</span>)*(edgeThreshold + <span class="number">1</span>)*det )</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    kpt.pt.x = (c + xc) * (<span class="number">1</span> &lt;&lt; octv);</span><br><span class="line">    kpt.pt.y = (r + xr) * (<span class="number">1</span> &lt;&lt; octv);</span><br><span class="line">    kpt.octave = octv + (layer &lt;&lt; <span class="number">8</span>) + (<span class="built_in">cvRound</span>((xi + <span class="number">0.5</span>)*<span class="number">255</span>) &lt;&lt; <span class="number">16</span>);</span><br><span class="line">    kpt.size = sigma*<span class="built_in">powf</span>(<span class="number">2.f</span>, (layer + xi) / nOctaveLayers)*(<span class="number">1</span> &lt;&lt; octv)*<span class="number">2</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="方向赋值">3. 方向赋值</h2>
+<p>上面我们已经找到了关键点。为了实现图像旋转不变性，需要根据检测到的关键点局部图像结构为特征点方向赋值。我们使用图像的梯度直方图法求关键点局部结构的稳定方向。</p>
+<h3 id="梯度方向和幅值">梯度方向和幅值</h3>
+<p>在前文中，精确定位关键点后也找到特征点的尺度值<span
+class="math inline"><em>σ</em></span>
+，根据这一尺度值，得到最接近这一尺度值的高斯图像： <span
+class="math display"><em>L</em>(<em>x</em>, <em>y</em>) = <em>G</em>(<em>x</em>, <em>y</em>, <em>σ</em>) ⊗ <em>I</em>(<em>x</em>, <em>y</em>)</span>
+使用有限差分，计算以关键点为中心，以<span
+class="math inline">3 × 1.5<em>σ</em></span>为半径的区域内图像梯度的幅值<span
+class="math inline"><em>m</em>(<em>x</em>, <em>y</em>)</span>和幅角<span
+class="math inline"><em>θ</em>(<em>x</em>, <em>y</em>)</span>，公式如下：
+<span class="math display">$$
+\begin{align}
+m(x,y) &amp;= \sqrt{(L(x+1, y) - L(x-1,y))^2+(L(x,y+1)-L(x,y-1))^2} \\
+\theta(x,y)&amp;=arctan(\frac{L(x,y+1)-L(x,y-1)}{L(x+1,y)-L(x-1,y)})
+\end{align}
+$$</span></p>
+<h3 id="梯度直方图">梯度直方图</h3>
+<p>在完成关键点邻域内高斯图像梯度计算后，使用直方图统计邻域内像素对应的梯度方向和幅值。</p>
+<p>梯度方向直方图的横轴是梯度方向角，纵轴是剃度方向角对应的梯度幅值累加值。梯度方向直方图将0°~360°的范围分为36个柱，每10°为一个柱。可看作一定区域内的图像像素点对关键点方向生成所作的贡献。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/1350823039_5697.png" style="zoom:67%;" /></p>
+<p>在计算直方图时，每个加入直方图的采样点都使用<strong>圆形高斯函数函数</strong>进行了<strong>加权处理</strong>，也就是进行<strong>高斯平滑</strong>。Lowe建议子区域的像素的梯度大小<span
+class="math inline"><em>σ</em> = 0.5<em>d</em></span>的高斯加权计算。这主要是因为SIFT算法只考虑了尺度和旋转不变形，没有考虑仿射不变性。通过高斯平滑，可以使关键点附近的梯度幅值有较大权重，从而部分弥补没考虑仿射不变形产生的特征点不稳定。</p>
+<p>通常离散的梯度直方图要进行插值拟合处理，以求取更精确的方向角度值。</p>
+<h3 id="关键点方向">关键点方向</h3>
+<p>直方图峰值代表该关键点处邻域内图像梯度的主方向，也就是该关键点的主方向。在梯度方向直方图中，当存在另一个相当于主峰值<span
+class="math inline">80%</span>能量的峰值时，则将这个方向认为是该关键点的辅方向。</p>
+<p>所以一个关键点可能检测得到多个方向，这可以增强匹配的鲁棒性。Lowe的论文指出大概有<span
+class="math inline">15%</span>关键点具有多方向，但这些点对匹配的稳定性至为关键。</p>
+<p>获得图像关键点主方向后，每个关键点有三个信息<span
+class="math inline">(<em>x</em>, <em>y</em>, <em>σ</em>, <em>θ</em>)</span>：位置、尺度、方向。</p>
+<p>由此我们可以确定一个SIFT特征区域。通常使用一个带箭头的圆或直接使用箭头表示SIFT区域的三个值：中心表示特征点位置，半径表示关键点尺度（<span
+class="math inline"><em>r</em> = 2.5<em>σ</em></span>），箭头表示主方向。</p>
+<p>具有多个方向的关键点可以复制成多份，然后将方向值分别赋给复制后的关键点。如下图：</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/1350826032_9513.png" style="zoom:67%;" /></p>
+<h2 id="关键点描述">3. 关键点描述</h2>
+<p>上文找到的关键点（SIFT特征点）包含<strong>位置、尺度和方向</strong>的信息。接下来的步骤是关键点描述，即用用一组向量将这个关键点描述出来，这个描述子不但包括关键点，也包括关键点周围对其有贡献的像素点。</p>
+<p>用来作为目标匹配的依据（所以描述子应该有较高的独特性，以保证匹配率），也可使关键点具有更多的不变特性，如光照变化、3D视点变化等。</p>
+<p>SIFT描述子<span
+class="math inline"><em>h</em>(<em>x</em>, <em>y</em>, <em>θ</em>)</span>是对关键点附近邻域内高斯图像梯度统计的结果，是一个三维矩阵，但通常用一个矢量来表示。特征向量通过对三维矩阵按一定规律排列得到。</p>
+<h3 id="描述子采样区域">描述子采样区域</h3>
+<p>特征描述子与关键点所在尺度有关，因此对梯度的求取应在特征点对应的高斯图像上进行。</p>
+<p>将关键点附近划分成<span
+class="math inline"><em>d</em> × <em>d</em></span>个子区域，每个子区域尺寸为<span
+class="math inline"><em>m</em><em>σ</em></span>个像元（<span
+class="math inline"><em>d</em> = 4</span>，<span
+class="math inline"><em>m</em> = 3</span>，<span
+class="math inline"><em>σ</em></span>为尺特征点的尺度值）。考虑到实际计算时需要<strong>双线性插值</strong>，故计算的图像区域为<span
+class="math inline"><em>m</em><em>σ</em>(<em>d</em> + 1)</span>，再考虑旋转，则实际计算的图像区域为<span
+class="math inline">$\sqrt{2}m\sigma(d+1)$</span>，如下图所示：</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/1351213289_3302.png" style="zoom: 67%;" /></p>
+<h3 id="区域坐标轴旋转">区域坐标轴旋转</h3>
+<p>为了保证特征矢量具有旋转不变性，要以特征点为中心，在附近邻域内旋转θ角，即旋转为特征点的方向。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/1351213506_4881.png" style="zoom:67%;" /></p>
+<p>旋转后区域内采样点新的坐标为： <span class="math display">$$
+\begin{pmatrix} x' \\ y'\end{pmatrix} = \begin{pmatrix} cos\theta &amp;
+-sin\theta \\ sin\theta &amp; cos\theta\end{pmatrix} \begin{pmatrix} x
+\\ y\end{pmatrix}
+$$</span></p>
+<h3 id="计算采样区域梯度直方图">计算采样区域梯度直方图</h3>
+<p>将旋转后区域划分为<span
+class="math inline"><em>d</em> × <em>d</em></span>个子区域（每个区域间隔为<span
+class="math inline"><em>m</em><em>σ</em></span>
+像元），在子区域内计算8个方向的梯度直方图，绘制每个方向梯度方向的累加值，形成一个种子点。
+与求主方向不同的是，此时，每个子区域梯度方向直方图将0°~360°划分为8个方向区间，每个区间为45°。即每个种子点有8个方向区间的梯度强度信息。由于存在<span
+class="math inline"><em>d</em> × <em>d</em></span>，即<span
+class="math inline">4 × 4</span>个子区域，所以最终共有<span
+class="math inline">4 × 4 × 8 = 128</span>个数据（Lowe建议的数据），形成128维SIFT特征矢量。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/SIFT算法深入理解/1351217343_1515.png" /></p>
+<p>对特征矢量需要加权处理，加权采用<span
+class="math inline">$\frac{m\sigma
+d}{2}$</span>的标准高斯函数。为了除去光照变化影响，还有进一步归一化处理。</p>
+<p>至此SIFT描述子生成，SIFT算法也基本完成了。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/02/23/%E4%BD%BF%E7%94%A8vagrant%E6%90%AD%E5%BB%BAhadoop+spark%E7%8E%AF%E5%A2%83/" rel="prev" title="使用vagrant搭建hadoop+spark环境">
+                  <i class="fa fa-angle-left"></i> 使用vagrant搭建hadoop+spark环境
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/04/17/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" rel="next" title="图像拼接NISwGSP论文阅读笔记">
+                  图像拼接NISwGSP论文阅读笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">smile</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">184k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:48</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/smilelc3" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"smilelc3/smilelc3.github.io","issue_term":"pathname","theme":"github-dark"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

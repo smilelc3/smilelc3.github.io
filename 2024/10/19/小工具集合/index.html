@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"liuchang.men","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false,"highlight_theme":"night"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="小工具集合 基于项目 smilelc3&#x2F;MyLittleTool 和 smilelc3&#x2F;sudoku-solver，并使用 wasm 技术实现 JavaScript 调用 C&#x2F;C++ 和 Go。        16进制转字符串          提交              输出:                      字符串转16进制          提交              输出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小工具集合">
+<meta property="og:url" content="https://liuchang.men/2024/10/19/%E5%B0%8F%E5%B7%A5%E5%85%B7%E9%9B%86%E5%90%88/index.html">
+<meta property="og:site_name" content="生命不息，奋斗不止">
+<meta property="og:description" content="小工具集合 基于项目 smilelc3&#x2F;MyLittleTool 和 smilelc3&#x2F;sudoku-solver，并使用 wasm 技术实现 JavaScript 调用 C&#x2F;C++ 和 Go。        16进制转字符串          提交              输出:                      字符串转16进制          提交              输出">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%B0%8F%E5%B7%A5%E5%85%B7%E9%9B%86%E5%90%88/linear11.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%B0%8F%E5%B7%A5%E5%85%B7%E9%9B%86%E5%90%88/linear16.png">
+<meta property="article:published_time" content="2024-10-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-01T01:23:06.868Z">
+<meta property="article:author" content="smile">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%B0%8F%E5%B7%A5%E5%85%B7%E9%9B%86%E5%90%88/linear11.png">
+
+
+<link rel="canonical" href="https://liuchang.men/2024/10/19/%E5%B0%8F%E5%B7%A5%E5%85%B7%E9%9B%86%E5%90%88/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://liuchang.men/2024/10/19/%E5%B0%8F%E5%B7%A5%E5%85%B7%E9%9B%86%E5%90%88/","path":"2024/10/19/小工具集合/","title":"小工具集合"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>小工具集合 | 生命不息，奋斗不止</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"https://liuchang.men/2024/10/19/%E5%B0%8F%E5%B7%A5%E5%85%B7%E9%9B%86%E5%90%88/"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">生命不息，奋斗不止</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E5%B7%A5%E5%85%B7%E9%9B%86%E5%90%88"><span class="nav-text">小工具集合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hex2Ascii"><span class="nav-text">16进制转字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ascii2Hex"><span class="nav-text">字符串转16进制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linea11Trans"><span class="nav-text">Linear11 格式转换实数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linea16Trans"><span class="nav-text">Linear16 格式转换实数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DateTimeCalc"><span class="nav-text">时间加减计算器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ByteAccByMem"><span class="nav-text">校验和计算 (ByteAcc算法)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UrlEncode"><span class="nav-text">URL 编码 &#x2F; 解码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sudoku"><span class="nav-text">数独求解(舞蹈链算法)</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">smile</p>
+  <div class="site-description" itemprop="description">smile's blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smilelc3" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smilelc3" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:smile@liuchang.men" title="E-Mail → mailto:smile@liuchang.men" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2024/10/19/%E5%B0%8F%E5%B7%A5%E5%85%B7%E9%9B%86%E5%90%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="小工具集合 | 生命不息，奋斗不止">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          小工具集合
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-10-20 00:00:00" itemprop="dateCreated datePublished" datetime="2024-10-20T00:00:00+08:00">2024-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-01 09:23:06" itemprop="dateModified" datetime="2026-02-01T09:23:06+08:00">2026-02-01</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="小工具集合">小工具集合</h1>
+<p>基于项目 <a
+target="_blank" rel="noopener" href="https://github.com/smilelc3/MyLittleTool">smilelc3/MyLittleTool</a>
+和 <a
+target="_blank" rel="noopener" href="https://github.com/smilelc3/sudoku-solver">smilelc3/sudoku-solver</a>，并使用
+<a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/WebAssembly/C_to_Wasm">wasm</a>
+技术实现 <code>JavaScript</code> 调用 <code>C/C++</code> 和
+<code>Go</code>。</p>
+<hr />
+
+<div class="tool-section" id="Hex2Ascii">
+    <h3>16进制转字符串</h3>
+    <textarea placeholder="输入16进制，例如: 0x12 AB ab 0xFa 0x1 6 0X12 x16 X0C（支持换行）" id="inHexStr"></textarea>
+    <button onclick="summit('Hex2Ascii', 'inHexStr', 'outAsciiStr')">提交</button>
+    <div class="output-container">
+        <span class="output-label">输出:</span>
+        <div class="output" id="outAsciiStr"></div>
+    </div>
+</div>
+<hr>
+<div class="tool-section" id="Ascii2Hex">
+    <h3>字符串转16进制</h3>
+    <textarea placeholder="输入字符串" id="inAsciiStr"></textarea>
+    <button onclick="summit('Ascii2Hex', 'inAsciiStr', 'outHexStr')">提交</button>
+    <div class="output-container">
+        <span class="output-label">输出:</span>
+        <div class="output" id="outHexStr"></div>
+    </div>
+</div>
+<hr>
+<div class="tool-section" id="Linea11Trans">
+    <h3>Linear11 格式转换实数</h3>
+    <img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/小工具集合/linear11.png" style="zoom:120%;"/>
+    <input type="text" placeholder="输入Linear11格式数，如：0xfb2f" id="inLinear11" />
+    <button onclick="summit('Linea11Trans', 'inLinear11', 'outRealForLinear11')">提交</button>
+    <div class="output-container">
+        <span class="output-label">输出:</span>
+        <div class="output" id="outRealForLinear11"></div>
+    </div>
+</div>
+<hr>
+<div class="tool-section" id="Linea16Trans">
+    <h3>Linear16 格式转换实数</h3>
+    <img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/小工具集合/linear16.png" style="zoom:50%;"/>
+    <div class="input-container">
+        <input type="text" placeholder="输入N(Exponent)，如：0x17" id="inLinear16Exp" />
+        <input type="text" placeholder="输入Y(Mantissa)，如：0x1800" id="inLinear16Man" />
+    </div>
+    <button onclick="summit('Linea16Trans', 'inLinear16Exp', 'outRealForLinear16')">提交</button>
+    <div class="output-container">
+        <span class="output-label">输出:</span>
+        <div class="output" id="outRealForLinear16"></div>
+    </div>
+</div>
+<hr>
+<div class="tool-section" id="DateTimeCalc">
+    <h3>时间加减计算器</h3>
+    <div class="input-container">
+        <input type="text" placeholder="锚点时间 YYYY-mm-dd HH:MM:SS" id="anchorTime" />
+        <button id="opAdd" class="add-button inactive" onclick="OptoggleButtons('opAdd')">+</button>
+        <button id="opSub" class="sub-button inactive" onclick="OptoggleButtons('opSub')">-</button>
+        <input type="text" placeholder="时间间隔 HH:MM:SS" id="durationTime" />
+    </div>
+    <button onclick="summit('DateTimeCalc', 'anchorTime', 'outCalcTime')">提交</button>
+    <div class="output-container">
+        <span class="output-label">输出:</span>
+        <div class="output" id="outCalcTime"></div>
+    </div>
+</div>
+<hr>
+<div class="tool-section" id="ByteAccByMem">
+    <h3>校验和计算 (ByteAcc算法)</h3>
+    <input type="file" id="fileInput" />
+    <button onclick="summit('ByteAcc', null, 'outByteAcc')">提交</button>
+    <div class="output-container">
+        <span class="output-label">输出:</span>
+        <div class="output" id="outByteAcc"></div>
+    </div>
+</div>
+<hr>
+<div class="tool-section" id="UrlEncode">
+    <h3>URL 编码 / 解码</h3>
+    <input type="text" placeholder="输入字符串" id="inUrlStr" />
+    <button onclick="summit('UrlEncode', 'inUrlStr', 'outUrlStr')">编码</button>
+    <button onclick="summit('UrlDecode', 'inUrlStr', 'outUrlStr')">解码</button>
+    <div class="output-container">
+        <span class="output-label">输出:</span>
+        <div class="output" id="outUrlStr"></div>
+    </div>
+</div>
+<hr>
+<div class="tool-section" id="sudoku">
+    <h3>数独求解(舞蹈链算法)</h3>
+    <table class="sudoku-table">
+        <tbody id="sudoku-tbody">
+        <!-- 动态生成的行和单元格将插入到这里 -->
+        </tbody>
+    </table>
+    <button onclick="solveSudoku()">求解</button>
+    <button onclick="clearSudoku()">清空</button>
+    <div class="output" id="outSudoku">输出:</div>
+</div>
+<hr>
+<script src="/js/MyLittleTool.js"></script>
+<script>
+    let C_Hex2Ascii, C_Ascii2Hex, C_Linear11Trans, C_Linear16Trans, C_ByteAccByMem, C_DateTimeCalc;
+    // 等待 wasm 模块加载
+    Module.onRuntimeInitialized = async () => {
+        C_Hex2Ascii = Module.cwrap('C_Hex2Ascii', 'string', ['string']);
+        C_Ascii2Hex = Module.cwrap('C_Ascii2Hex', 'string', ['string']);
+        C_Linear11Trans = Module.cwrap('C_Linear11Trans', 'string', ['string']);
+        C_Linear16Trans = Module.cwrap('C_Linear16Trans', 'string', ['string', 'string']);
+        C_ByteAccByMem = Module.cwrap('C_ByteAccByMem', 'string', ['number', 'number']);
+        C_DateTimeCalc = Module.cwrap('C_DateTimeCalc', 'string', ['string', 'string', 'string']);
+        console.log("C/C++ Wasm loaded successfully");
+    };
+    // 调用 wasm 中导出的函数或自定义函数
+    function summit(funcName, inputId, outputId) {
+        let input;
+        if (document.getElementById(inputId)) {
+            input = document.getElementById(inputId).value;
+        }
+        let output;
+        switch (funcName) {
+            case 'Hex2Ascii':
+                output = C_Hex2Ascii(input);
+                break;
+            case 'Ascii2Hex':
+                output = C_Ascii2Hex(input);
+                break;
+            case 'Linea11Trans':
+                output = C_Linear11Trans(input);
+                break;
+            case 'Linea16Trans':
+                input2 = document.getElementById("inLinear16Man").value;
+                output = C_Linear16Trans(input, input2);
+                break;
+            case 'DateTimeCalc':
+                input2 = document.getElementById('opAdd').classList.contains('active') ? "+" : "-";
+                input3 = document.getElementById("durationTime").value;
+                output = C_DateTimeCalc(input, input2, input3);
+                break;
+            case 'ByteAcc':
+                return doByteAcc(outputId);
+            case 'UrlEncode':
+                output = encodeURI(input);
+                break;
+            case 'UrlDecode':
+                output = decodeURI(input);
+                break;
+        }
+        updateOutput(outputId, output);
+    }
+    function updateOutput(outputId, output) {
+        document.getElementById(outputId).innerText = `${output}`;
+    }
+    function doByteAcc(outputId) {
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput.files.length === 0) {
+            alert('请先选择一个文件');
+            return;
+        }
+        const file = fileInput.files[0];
+        if (file.size > 2147483648 / 2 * 0.9) {
+            console.log("file size " + file.size + " is out of range")
+            updateOutput(outputId, "文件过大");
+            return;
+        }
+        reader = new FileReader();
+        reader.onload = (event) => {
+            updateOutput(outputId, "处理中");
+            let arrayBuffer = event.target.result;
+            let byteArray = new Uint8Array(arrayBuffer);
+            const length = byteArray.length;
+            // 分配内存并拷贝数据
+            let buffer = Module._malloc(length);
+            try {
+                Module.HEAPU8.set(byteArray, buffer);
+                byteArray = null;
+                arrayBuffer = null;
+                // 调用 C++ 函数打印字节
+                const checksumByteAcc = C_ByteAccByMem(buffer, length);
+                updateOutput(outputId, checksumByteAcc);
+            } catch (error) {
+                console.error("Error during C function call:", error);
+                updateOutput(outputId, "处理出错");
+            } finally { // 释放内存
+                Module._free(buffer);
+                buffer = null;
+                byteArray = null;
+                arrayBuffer = null;
+                reader.onload = null; // 清理事件处理程序
+                reader = null;
+            }
+        };
+        reader.onprogress = (event) => {
+            updateOutput(outputId, "处理中");
+        }
+        reader.readAsArrayBuffer(file);
+    }
+</script>
+<script src="/js/wasm_exec.js"></script>
+<script>
+    let go;
+    async function loadGoWasm() {
+        go = new Go();
+        const response = await fetch("/js/sudoku.wasm");
+        const result = await WebAssembly.instantiateStreaming(response, go.importObject);
+        go.run(result.instance);
+    }
+    loadGoWasm().then(() => {
+        console.log("Go Wasm loaded successfully");
+    }).catch(err => {
+        console.error("Error loading Go Wasm:", err);
+    });
+    function solveSudoku() {
+        const inputs = document.querySelectorAll('.sudoku-input'); // 获取所有输入框
+        const matrix = [];
+        inputs.forEach(input => {   // 将输入值转换为数字，如果为空则为 0
+            matrix.push(input.value ? Number(input.value) : 0);
+        });
+        if (matrix.length != 81) {    // 确保数组长度为 81
+            alert("输入不完整，请确保填写所有数字。");
+            return;
+        }
+        const jsArray = Array.from(matrix);
+        const ret = GO_sudoku(jsArray);
+        if (ret.isSolved) {             // 填充表格
+            inputs.forEach((input, index) => {
+                input.value = ret.result[index]; // 填充结果数组
+                document.getElementById('outSudoku').textContent = '输出: 耗时 ' + ret.timeMs + ' ms';
+            });
+        } else {
+          document.getElementById('outSudoku').textContent = '该数独无解';
+        }
+    };
+    function clearSudoku() {
+        const inputs = document.querySelectorAll('.sudoku-input');
+        inputs.forEach(input => {
+            input.value = ''; // 清空输入框
+            document.getElementById('outSudoku').textContent = '输出:';
+        });
+    };
+</script>
+<script>
+    const tableBody = document.getElementById('sudoku-tbody');
+    for (let i = 0; i < 9; i++) {
+        const row = document.createElement('tr'); // 创建一行
+        for (let j = 0; j < 9; j++) {
+            const cell = document.createElement('td'); // 创建一个单元格
+            const input = document.createElement('input'); // 创建输入框
+            input.type = 'number'; // 设置输入框类型
+            input.className = 'sudoku-input';
+            input.min = 1; // 设置最小值
+            input.max = 9; // 设置最大值
+            input.addEventListener('input', function () {
+                    // 将输入值限制为 1 到 9 的数字
+                    if (this.value.length > 1) {
+                        this.value = this.value.slice(0, 1); // 只保留第一个字符
+                    }
+                    const num = parseInt(this.value, 10);   // 必须满足1~9
+                    if (num < 1 || num > 9 || isNaN(num)) {
+                        this.value = ''; // 清空输入
+                    }
+                });
+            cell.appendChild(input); // 将输入框添加到单元格
+            row.appendChild(cell); // 将单元格添加到行
+        }
+        tableBody.appendChild(row); // 将行添加到表格主体
+    }
+    function validateInput(input) {
+        const value = parseInt(input.value, 10);
+        if (value < 1 || value > 9 || isNaN(value)) {
+            input.value = ''; // 清空输入
+        }
+    }
+</script>
+<script>
+    function OptoggleButtons(activeButton) {
+        const opAddButton = document.getElementById('opAdd');
+        const opSubButton = document.getElementById('opSub');
+
+        if (activeButton === 'opAdd') {
+            opAddButton.classList.add('active');
+            opAddButton.classList.remove('inactive');
+            opSubButton.classList.add('inactive');
+            opSubButton.classList.remove('active');
+        } else {
+            opSubButton.classList.add('active');
+            opSubButton.classList.remove('inactive');
+            opAddButton.classList.add('inactive');
+            opAddButton.classList.remove('active');
+        }
+    }
+</script>
+<style>
+    .input-container {
+        display: flex; /*flex; 属性将输入框放在同一行 */
+        align-items: center;
+        justify-content: center;
+        gap: 10px; /* 输入框之间的间距 */
+    }
+    textarea, input[type="text"], input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 2px solid #4CAF50;
+        border-radius: 5px;
+        font-family: Consolas;
+        font-size: 15px;
+        resize: vertical;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 15px;
+    }
+    .add-button, .sub-button {
+        padding: 0px 0px;
+        width: 80px;
+        height: 40px;
+        font-size: 20px;
+        transition: background-color 0.3s;
+    }
+    .add-button.active {
+        background-color: #007BFF; /* 高亮颜色 */
+        color: white;
+    }
+    .add-button.inactive {
+        background-color: #f0f0f0; /* 低亮颜色 */
+        color: black;
+    }
+    .sub-button.active {
+        background-color: #FF5733; /* 高亮颜色 */
+        color: white;
+    }
+    .sub-button.inactive {
+        background-color: #f0f0f0; /* 低亮颜色 */
+        color: black;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    .output-container {
+        display: flex; /* 使用 Flexbox 布局 */
+        align-items: flex-end;
+        margin-top: 10px;
+    }
+    .output-label {
+        margin-right: 10px;
+    }
+    .output {
+        margin-top: 10px;
+        font-family: Consolas;
+        font-size: 15px;
+        border: 1px solid #aaa;
+        min-height: 30px;
+        border-radius: 5px;
+        flex: 1; /* 使输出框占满剩余的空间 */
+    }
+    .sudoku-table {
+        width: auto;
+        td {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #45a049;
+            text-align: center;
+            vertical-align: middle;
+            position: relative; /* 为了绝对定位标签 */
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        .sudoku-input {
+        border: none;
+        text-align: center;
+        font-size: 22px;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        outline: none;
+        color: #333; /* 输入框中数字的颜色 */
+        background-color: #f9f9f9;
+        }
+        /* 隐藏数字输入框的上下箭头 */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        td:first-child {
+            border-left: 2px solid #4CAF50; /* 左边框加粗 */
+        }
+        td:nth-child(3n) {
+            border-right: 2px solid #4CAF50; /* 右边框加粗 */
+        }
+        tr:first-child td {
+            border-top: 2px solid #4CAF50; /* 上边框加粗 */
+        }
+        tr:nth-child(3n) td {
+            border-bottom: 2px solid #4CAF50; /* 下边框加粗 */
+        }
+    }
+</style>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/07/09/%E5%8A%A0%E5%87%8F%E4%B9%98%E9%99%A4%E7%9A%84%E5%8F%96%E6%A8%A1%E8%BF%90%E7%AE%97/" rel="prev" title="加减乘除的取模运算">
+                  <i class="fa fa-angle-left"></i> 加减乘除的取模运算
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/03/04/%E6%9C%8D%E5%8A%A1%E5%99%A84%E7%BA%BF%E9%A3%8E%E6%89%87%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89%E4%BB%A5%E5%8F%8A%E8%BD%AC%E9%80%9F%E8%AF%BB%E5%8F%96%E6%9C%BA%E5%88%B6/" rel="next" title="服务器4线风扇接口定义以及转速读取机制">
+                  服务器4线风扇接口定义以及转速读取机制 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">smile</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">184k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:48</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/smilelc3" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"smilelc3/smilelc3.github.io","issue_term":"pathname","theme":"github-dark"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

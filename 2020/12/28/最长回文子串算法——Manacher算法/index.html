@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"liuchang.men","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false,"highlight_theme":"night"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="最长回文子串算法——Manacher算法 Manacher算法是一个用来查找一个字符串中的最长回文子串(不是最长回文序列)的线性算法。其优点就是把时间复杂度从暴力算法的O(n2)优化到O(n)。  Manacher 算法，又被中国程序员戏称为“马拉车”算法  暴力匹配算法 暴力匹配算法的原理 暴力匹配算法的原理很简单，如下：  依次向尾部进行遍历，访问一个字符； 以此字符为中心点向两边扩展，记录该">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最长回文子串算法——Manacher算法">
+<meta property="og:url" content="https://liuchang.men/2020/12/28/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="生命不息，奋斗不止">
+<meta property="og:description" content="最长回文子串算法——Manacher算法 Manacher算法是一个用来查找一个字符串中的最长回文子串(不是最长回文序列)的线性算法。其优点就是把时间复杂度从暴力算法的O(n2)优化到O(n)。  Manacher 算法，又被中国程序员戏称为“马拉车”算法  暴力匹配算法 暴力匹配算法的原理 暴力匹配算法的原理很简单，如下：  依次向尾部进行遍历，访问一个字符； 以此字符为中心点向两边扩展，记录该">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/image-20210105211714361.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/%E6%9C%AA%E6%A0%87%E9%A2%98-1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/%E6%9C%AA%E6%A0%87%E9%A2%98-2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/%E6%9C%AA%E6%A0%87%E9%A2%98-3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/%E6%9C%AA%E6%A0%87%E9%A2%98-4.png">
+<meta property="article:published_time" content="2020-12-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-01T01:23:06.868Z">
+<meta property="article:author" content="smile">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/image-20210105211714361.png">
+
+
+<link rel="canonical" href="https://liuchang.men/2020/12/28/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://liuchang.men/2020/12/28/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/","path":"2020/12/28/最长回文子串算法——Manacher算法/","title":"最长回文子串算法——Manacher算法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>最长回文子串算法——Manacher算法 | 生命不息，奋斗不止</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"https://liuchang.men/2020/12/28/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">生命不息，奋斗不止</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95manacher%E7%AE%97%E6%B3%95"><span class="nav-text">最长回文子串算法——Manacher算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95"><span class="nav-text">暴力匹配算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-text">暴力匹配算法的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">暴力匹配算法存在的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#manacher%E7%AE%97%E6%B3%95%E7%9A%84%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-text">Manacher算法的预处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#manacher%E7%AE%97%E6%B3%95%E6%A0%B8%E5%BF%83"><span class="nav-text">Manacher算法核心</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="nav-text">算法流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">时间复杂度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-text">代码</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">smile</p>
+  <div class="site-description" itemprop="description">smile's blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smilelc3" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smilelc3" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:smile@liuchang.men" title="E-Mail → mailto:smile@liuchang.men" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2020/12/28/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E7%AE%97%E6%B3%95%E2%80%94%E2%80%94Manacher%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="最长回文子串算法——Manacher算法 | 生命不息，奋斗不止">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          最长回文子串算法——Manacher算法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-12-29 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-29T00:00:00+08:00">2020-12-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-01 09:23:06" itemprop="dateModified" datetime="2026-02-01T09:23:06+08:00">2026-02-01</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1
+id="最长回文子串算法manacher算法">最长回文子串算法——Manacher算法</h1>
+<p><a
+target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2">Manacher算法</a>是一个用来查找一个字符串中的<strong>最长回文子串</strong>(不是最长回文序列)的<strong>线性算法</strong>。其优点就是把时间复杂度从暴力算法的<span
+class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span>优化到<span
+class="math inline"><em>O</em>(<em>n</em>)</span>。</p>
+<blockquote>
+<p>Manacher 算法，又被中国程序员戏称为“马拉车”算法</p>
+</blockquote>
+<h2 id="暴力匹配算法">暴力匹配算法</h2>
+<h3 id="暴力匹配算法的原理">暴力匹配算法的原理</h3>
+<p>暴力匹配算法的原理很简单，如下：</p>
+<ol type="1">
+<li>依次向尾部进行遍历，访问一个字符；</li>
+<li>以此字符为中心点向两边扩展，记录该点的最长回文长度；</li>
+<li>取各个字符的回文子串长度的<strong>max</strong>。</li>
+</ol>
+<h3 id="暴力匹配算法存在的问题">暴力匹配算法存在的问题</h3>
+<ol type="1">
+<li><p>偶数回文串需要额外修改</p>
+<p>在奇数字符串中，例如 <code>aba</code>，对应的回文长度是
+<code>131</code>。而例如<code>abba</code>，以使用中心扩展的比较原则下计算出来的回文长度是
+<code>1111</code>，我们对奇数回文串求出了正确答案，但是在偶数回文串上并没有得到我们想要的结果，需要针对偶数情况进行额外修改。</p></li>
+<li><p>时间复杂度<span
+class="math inline"><em>O</em>(<em>n</em><sup>2</sup>)</span></p>
+<p>外层需要遍历每一个字符，而每到一个新字符就需要向两边扩展比对，所以时间复杂度达到了O(<span
+class="math inline"><em>n</em> * <em>n</em></span>)。</p></li>
+</ol>
+<p><strong>Manacher算法本质上也是基于暴力匹配的方法，只不过做了一点简单的预处理，且在扩展时提供了加速</strong></p>
+<h2 id="manacher算法的预处理">Manacher算法的预处理</h2>
+<p>Manacher算法对偶数字符串做了预处理，这个预处理可以巧妙的让所有（包括奇和偶）字符串都变为奇数回文串。操作实现也很简单，就是将原字符串的<strong>首部</strong>和<strong>尾部</strong>以及<strong>每两个字符间</strong>插入一个特殊字符（假设为<code>#</code>号），这个字符不会影响最终的结果，这一步预处理操作后的效果就是原字符串的长度从<span
+class="math inline"><em>n</em></span>改变成了<span
+class="math inline">2<em>n</em> + 1</span>。比如我们的原字符串是
+<code>abba</code>，假设预处理后的字符串是
+<code>#a#b#b#a#</code>，我们在任意一个点，比如字符
+<code>#</code>，向两端匹配只会出现原始字符匹配原始字符，<code>#</code>匹配
+<code>#</code>
+的情况，不会出现<strong>原字符串字符</strong>与<strong>特殊字符</strong>匹配的情况，这样就能保证我们不会改变原字符串的匹配规则。该预处理得到进行下一步扩展的字符串，并且从预处理后的字符串得到的最长回文字符串的长度除以<span
+class="math inline">2</span>就是原字符串的最长回文子串长度，也就是我们想要得到的结果。</p>
+<h2 id="manacher算法核心">Manacher算法核心</h2>
+<h3 id="概念">概念</h3>
+<ul>
+<li><p><code>ManacherString</code>：经过Manacher预处理的字符串，以下的概念都是基于ManasherString产生的。</p></li>
+<li><p>回文半径：经过处理后的字符串的长度一定是奇数，回文半径就是以回文中心字符的回文子串长度的一半。</p></li>
+<li><p>回文直径：<span
+class="math inline"><em>回</em><em>文</em><em>半</em><em>径</em> * 2 − 1</span>。</p></li>
+<li><p>最右回文边界<span
+class="math inline"><em>R</em></span>：遍历字符串时，每个字符的最长回文子串都会有个<strong>右</strong>边界，而<span
+class="math inline"><em>R</em></span>则是所有已知右边界中最右的位置。R值保持单增。</p></li>
+<li><p>回文中心<span
+class="math inline"><em>C</em></span>：取得当前<span
+class="math inline"><em>R</em></span>的上一次更新时候的回文中心。</p></li>
+<li><p>半径数组<span
+class="math inline"><em>P</em>[]</span>：该数组记录原字符每一个字符对应的最长回文半径。</p></li>
+</ul>
+<h3 id="算法流程">算法流程</h3>
+<p><strong>步骤1</strong>：将原字符串转换为<code>ManacherString</code>，定义为<span
+class="math inline"><em>S</em></span></p>
+<p><strong>步骤2</strong>：<span
+class="math inline"><em>R</em></span>和<span
+class="math inline"><em>C</em></span>的初始值为<span
+class="math inline">−1</span>，创建半径数组<span
+class="math inline"><em>P</em>[]</span></p>
+<ul>
+<li>存在与概念相差的小偏差，<span
+class="math inline"><em>R</em></span>实际是最右边界位置的右一位。</li>
+</ul>
+<p><strong>步骤3</strong>：开始从下标<span
+class="math inline"><em>i</em> = 0</span>到<span
+class="math inline"><em>l</em><em>e</em><em>n</em>(<em>S</em>) − 1</span>，去遍历字符串<span
+class="math inline"><em>S</em></span></p>
+<p>后续存在多个分支，总览如下：</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/最长回文子串算法——Manacher算法/image-20210105211714361.png" /></p>
+<p>​ <strong>分支1</strong>：当 <span
+class="math inline"><em>i</em> &gt; <em>R</em></span>
+时，暴力匹配当前i位置字符的最长回文长度，并判断更新R和C。例如<code>aabcd</code>：
+<span class="math inline"><em>i</em> = 0</span>，<span
+class="math inline"><em>R</em> = −1</span> 时，初次更新<span
+class="math inline"><em>R</em> = 1</span>（<span
+class="math inline"><em>i</em> = 0</span>字符<code>a</code>的最长回文右边界下标0的右一位），<span
+class="math inline"><em>C</em> = 0</span></p>
+<p>​ <strong>分支2</strong>：<span
+class="math inline"><em>i</em> ≤ <em>R</em></span> ​时，也就是说当前<span
+class="math inline"><em>i</em></span>下标的字符已经在某个字符的回文半径覆盖中，该分支存在三种情况，解释三种情况前，需要先理解以下模型：</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/最长回文子串算法——Manacher算法/未标题-1.png" /></p>
+<p><span class="math inline"><em>L</em></span>是当前<span
+class="math inline"><em>R</em></span>关于<span
+class="math inline"><em>C</em></span>的对称点，<span
+class="math inline"><em>i</em><sup>′</sup></span>是<span
+class="math inline"><em>i</em></span>关于<span
+class="math inline"><em>C</em></span>的对称点，因此<span
+class="math inline"><em>i</em><sup>′</sup> = 2 * <em>C</em> − <em>i</em></span>，并且因为从左至右遍历<span
+class="math inline"><em>i</em></span>，所以<span
+class="math inline"><em>i</em><sup>′</sup></span>的回文区域是前面已知的（信息保存在半径数组<span
+class="math inline"><em>P</em>[<em>i</em><sup>′</sup>]</span>中）。我们可以依赖该信息判断是否进行加速。</p>
+<p>​ <strong>情况1</strong>：<span
+class="math inline"><em>i</em><sup>′</sup></span>的回文区域在<span
+class="math inline">$\overline{LR}$</span>的内部，因为<strong>整个<span
+class="math inline">$\overline{LR}$</span>就是一个回文串</strong>，我们可以直接得出<span
+class="math inline"><em>i</em></span>的回文直径与<span
+class="math inline"><em>i</em><sup>′</sup></span>相同。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/最长回文子串算法——Manacher算法/未标题-2.png" /></p>
+<p>​ <strong>情况2</strong>：<span
+class="math inline"><em>i</em><sup>′</sup></span>的回文半径左边界超过<span
+class="math inline"><em>L</em></span>，这种情况，仅能保证<span
+class="math inline"><em>i</em></span>的回文半径是<span
+class="math inline"><em>i</em></span>到<span
+class="math inline"><em>R</em></span>。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/最长回文子串算法——Manacher算法/未标题-3.png" /></p>
+<p>​ <strong>情况3</strong>：<span
+class="math inline"><em>i</em><sup>′</sup></span>的回文区域左边界恰好和<span
+class="math inline"><em>L</em></span>重合，此时<span
+class="math inline"><em>i</em></span>的回文半径至少是<span
+class="math inline"><em>i</em></span>到<span
+class="math inline"><em>R</em></span>，并且回文区域从<span
+class="math inline"><em>R</em></span>继续向外部匹配。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/最长回文子串算法——Manacher算法/未标题-4.png" /></p>
+<h3 id="时间复杂度">时间复杂度</h3>
+<p>Manacher算法时间复杂度为<span
+class="math inline"><em>O</em>(<em>n</em>)</span>。我们可以想象下，这就是一个
+<span class="math inline"><em>i</em></span>在追逐<span
+class="math inline"><em>R</em></span>的游戏，无非两种情况：</p>
+<ol type="1">
+<li><span class="math inline"><em>R</em></span>不动，同时<span
+class="math inline"><em>i</em></span>向右追一步。（花<span
+class="math inline"><em>O</em>(1)</span>时间计算<span
+class="math inline"><em>P</em>[<em>i</em>]</span>）</li>
+<li><span class="math inline"><em>R</em></span>继续往右走几步，同时<span
+class="math inline"><em>i</em></span>追上一步。（所谓更新<span
+class="math inline"><em>R</em></span>，更新<span
+class="math inline"><em>C</em></span>）</li>
+</ol>
+<p>当<span
+class="math inline"><em>R</em></span>到达最右边界以后，就剩下<span
+class="math inline"><em>i</em></span>一步一步追上来。</p>
+<p>因此，<strong>每个字符最多被访问两次</strong>，一次被<span
+class="math inline"><em>R</em></span>经过，一次被追赶的<span
+class="math inline"><em>i</em></span>经过。所以时间复杂度是<span
+class="math inline"><em>O</em>(2 * (2<em>n</em> + 1)) = <em>O</em>(<em>n</em>)</span>。</p>
+<h2 id="代码">代码</h2>
+<p>代码引用自我的github仓库地址：<a
+target="_blank" rel="noopener" href="https://github.com/smilelc3/leetcode/blob/master/leetcode-go/longest-palindromic-substring/longest-palindromic-substring.go">longest-palindromic-substring.go</a></p>
+<p>有关题目可参考Leetcode题目： <a
+target="_blank" rel="noopener" href="https://leetcode.com/problems/longest-palindromic-substring/">Longest
+Palindromic Substring</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/11/30/%E6%95%B0%E7%8B%AC%E6%B1%82%E8%A7%A3%20go%E8%AF%AD%E8%A8%80%E7%89%88/" rel="prev" title="数独求解 go语言版">
+                  <i class="fa fa-angle-left"></i> 数独求解 go语言版
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/03/31/%E6%95%B0%E6%8D%AE%E5%BA%93SQL%20JOINS%E7%AC%94%E8%AE%B0%E6%B1%87%E6%80%BB/" rel="next" title="数据库SQL JOINS笔记汇总">
+                  数据库SQL JOINS笔记汇总 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">smile</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">184k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:48</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/smilelc3" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"smilelc3/smilelc3.github.io","issue_term":"pathname","theme":"github-dark"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

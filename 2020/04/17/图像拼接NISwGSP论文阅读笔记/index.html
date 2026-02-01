@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"liuchang.men","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false,"highlight_theme":"night"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Natural Image Stitching with the Global Similarity Prior 论文原文 摘要： 本文提出了一种将多个图像拼接在一起的方法，使得拼接图像看起来尽可能自然。我们的方法采用局部扭曲模型，用网格引导每个图像的变形。目标函数用于指定扭曲的所需特征。除了良好的对齐和最小的局部失真之外，我们还在目标函数中添加了全局先验相似性。该先验约束每个图像的扭曲，使其类似">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像拼接NISwGSP论文阅读笔记">
+<meta property="og:url" content="https://liuchang.men/2020/04/17/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="生命不息，奋斗不止">
+<meta property="og:description" content="Natural Image Stitching with the Global Similarity Prior 论文原文 摘要： 本文提出了一种将多个图像拼接在一起的方法，使得拼接图像看起来尽可能自然。我们的方法采用局部扭曲模型，用网格引导每个图像的变形。目标函数用于指定扭曲的所需特征。除了良好的对齐和最小的局部失真之外，我们还在目标函数中添加了全局先验相似性。该先验约束每个图像的扭曲，使其类似">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200417134144351.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200417134211548.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200417134250872.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200417134506426.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200417134952668.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200417135000689.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200417135309006.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200417135324408.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418175032212.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418175515541.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418175149902.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418175633671.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418175154752.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418175710259.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418175204843.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418175851168.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418175404357.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418180038446.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418175419077.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418180100625.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418175424455.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200418180234432.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200417140621565.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200417140955934.png">
+<meta property="article:published_time" content="2020-04-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-02-01T01:23:06.868Z">
+<meta property="article:author" content="smile">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/smilelc3/blog/main/images/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/image-20200417134144351.png">
+
+
+<link rel="canonical" href="https://liuchang.men/2020/04/17/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://liuchang.men/2020/04/17/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/","path":"2020/04/17/图像拼接NISwGSP论文阅读笔记/","title":"图像拼接NISwGSP论文阅读笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>图像拼接NISwGSP论文阅读笔记 | 生命不息，奋斗不止</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":false,"archive":false,"delay":true,"timeout":3000,"priority":true,"url":"https://liuchang.men/2020/04/17/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"}</script>
+  <script src="/js/third-party/quicklink.js" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">生命不息，奋斗不止</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#natural-image-stitching-with-the-global-similarity-prior"><span class="nav-text">Natural
+Image Stitching with the Global Similarity Prior</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-text">1 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="nav-text">2 相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-text">3 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#apap%E7%94%9F%E6%88%90%E5%8C%B9%E9%85%8D%E7%82%B9"><span class="nav-text">3.1 APAP生成匹配点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E7%BD%91%E6%A0%BC%E5%8F%98%E5%BD%A2%E7%BC%9D%E5%90%88"><span class="nav-text">3.2 通过网格变形缝合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%A9%E6%94%BE%E5%92%8C%E6%97%8B%E8%BD%AC%E9%80%89%E6%8B%A9"><span class="nav-text">4 缩放和旋转选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%84%A6%E8%B7%9D%E4%BC%B0%E8%AE%A1%E5%92%8C3d%E6%97%8B%E8%BD%AC"><span class="nav-text">4.1 焦距估计和3D旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E8%A7%92%E5%BA%A6%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-text">4.2 旋转角度的选择</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E5%92%8C%E7%BB%93%E6%9E%9C"><span class="nav-text">5 实验和结果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">6 结论</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-text">参考文献</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">smile</p>
+  <div class="site-description" itemprop="description">smile's blog</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/smilelc3" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;smilelc3" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:smile@liuchang.men" title="E-Mail → mailto:smile@liuchang.men" rel="noopener me"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liuchang.men/2020/04/17/%E5%9B%BE%E5%83%8F%E6%8B%BC%E6%8E%A5NISwGSP%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="smile">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="生命不息，奋斗不止">
+      <meta itemprop="description" content="smile's blog">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="图像拼接NISwGSP论文阅读笔记 | 生命不息，奋斗不止">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          图像拼接NISwGSP论文阅读笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-04-18 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-18T00:00:00+08:00">2020-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-01 09:23:06" itemprop="dateModified" datetime="2026-02-01T09:23:06+08:00">2026-02-01</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>17k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>16 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1
+id="natural-image-stitching-with-the-global-similarity-prior">Natural
+Image Stitching with the Global Similarity Prior</h1>
+<p><a
+target="_blank" rel="noopener" href="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/NISwGSP.pdf"
+title="NISwGSP.pdf">论文原文</a></p>
+<p><strong>摘要：</strong>
+本文提出了一种将多个图像拼接在一起的方法，使得拼接图像看起来尽可能自然。我们的方法采用局部扭曲模型，用网格引导每个图像的变形。目标函数用于指定扭曲的所需特征。除了良好的对齐和最小的局部失真之外，我们还在目标函数中添加了全局先验相似性。该先验约束每个图像的扭曲，使其类似于整体的相似变换。选择相似性变换对拼接的自然性至关重要。我们提出了为每个图像选择合适的比例和旋转的方法。所有图像的扭曲被一起解决，以最小化全局失真。综合评估表明，所提出的方法始终优于多种最先进的方法，包括AutoStitch，APAP，SPHP和ANNAP。</p>
+<p><strong>关键词：</strong> 图像拼接，全景图，图像扭曲</p>
+<span id="more"></span>
+<h2 id="介绍">1 介绍</h2>
+<p>图像拼接是将多个图像组合成具有更宽视场的更大图像的处理过程<a
+href="#fn1" class="footnote-ref" id="fnref1"
+role="doc-noteref"><sup>1</sup></a>。早期的方法专注于提高无缝拼接的对齐精度，例如找到全局参数扭曲以使图像对齐。全球扭曲很强大，但往往不够灵活。为了解决全局扭曲模型的不足和提高对准质量，已经提出了几种局部扭曲模型，例如平滑变化的仿射（SVA）扭曲<a
+href="#fn2" class="footnote-ref" id="fnref2"
+role="doc-noteref"><sup>2</sup></a>和尽可能投射（APAP）扭曲<a
+href="#fn3" class="footnote-ref" id="fnref3"
+role="doc-noteref"><sup>3</sup></a>。这些方法采用多个局部参数扭曲以获得更好的对准精度。投影（仿射）正则化用于平滑地推断超出图像重叠的扭曲并且整体上类似于整体变换。拼接图像基本上是单视角的。因此，它们存在形状/区域变形的问题，并且缝合图像的部分可能被严重且不均匀地拉伸。当将多个图像拼接成非常宽的视角时，问题甚至更加严重。在这种情况下，失真累积并且远离基础图像的图像通常被显着拉伸。因此，拼接图像的视野通常具有限制。圆柱形和球形扭曲通过将图像投影到圆柱体或球体上来解决透视弯曲的相当窄视图的问题。不幸的是，这些扭曲通常会弯曲直线，并且只有在同一相机中心捕获的图像时才有效。</p>
+<p>目前，有几种方法试图在保证图像对齐质量的同时，解决缝合图像中存在的畸变和视野受限的问题。由于具有宽视野的单视点图像不可避免地会引起严重的形状/尺寸失真，因此这些方法提供了多视点的拼接图像。Chang等人提出了形状保持半投影（SPHP）扭曲，它是投影变换和相似变换的空间组合<a
+href="#fn4" class="footnote-ref" id="fnref4"
+role="doc-noteref"><sup>4</sup></a>。SPHP将重叠区域的投影变换平滑地推断为非重叠区域的相似性变换。投影变换在重叠区域中保持良好的对齐方式，而非重叠区域的相似性变换则可以保留图像的原始视角并减少了失真。除了投影变换之外，SPHP还可以与APAP结合使用，以实现更好的对准质量。但是，SPHP扭曲有几个问题（1）通过分析两个图像之间的单应性来形成SPHP变形。它继承了单应性的局限性，并存在视野受限的问题。因此，在拼接许多图像时通常会失败。（2）如果图像之间的空间关系为一维，则SPHP可以更好地处理变形。当空间关系为2D时，SPHP可能仍会失真（以图5为例）。（3）正如Lin等人所指出的<a
+href="#fn5" class="footnote-ref" id="fnref5"
+role="doc-noteref"><sup>5</sup></a>，SPHP从单应性派生相似性转换。如果使用全局单应性，则派生的相似度变换可能会表现出不自然的旋转（例如图4(e)）。他们提出了一种自适应的“可能的自然变形”（AANAP）变形来解决旋转不自然的问题。AANAP扭曲将单应性线性化，然后将其缓慢更改为代表摄像机运动的估计全局相似度变换。AANAP仍然存在两个问题。首先，拼接多个图像时局部仍然存在失真（图4(f)，图5和图6）。其次，对全局相似性变换的估计并不可靠，并且仍然可能存在不自然的旋转和缩放（图1(b)，图3和图5）。</p>
+<p>我们提出一种图像拼接方法，以解决这些问题并稳健地合成自然拼接图像。我们的方法采用局部变形模型。每个图像的变形均由网格划分。设计目标函数以指定所需的扭曲特性。将所有图像的扭曲一起求解，以获得最佳解决方案。优化导致线性系统稀疏，可以有效解决。关键思想是添加一个全局相似项，以要求每个图像的扭曲总体上都类似于相似变换。先前的方法已经表明，相似变换可以有效地减少失真<a
+href="#fn6" class="footnote-ref" id="fnref6"
+role="doc-noteref"><sup>6</sup></a><a href="#fn7" class="footnote-ref"
+id="fnref7"
+role="doc-noteref"><sup>7</sup></a>，但是它们通常是局部施加的。相反，我们为每张图像提出了全局相似度，其中恰当地选择比例和旋转度对于拼接图像的自然性至关重要。根据我们的观察，旋转度的选择对于拼接自然性至关重要。很少有人关注图像拼接的旋转选择问题。AutoStitch假定用户很少相对于地平线转动相机，并且可以通过计算向上矢量来使波浪全景图变直<a
+href="#fn8" class="footnote-ref" id="fnref8"
+role="doc-noteref"><sup>8</sup></a>。AANAP使用特征匹配来确定最佳相似度转换<a
+href="#fn9" class="footnote-ref" id="fnref9"
+role="doc-noteref"><sup>9</sup></a>。然而，这些试探法不够鲁棒。我们提出了健壮的方法来为每个图像选择合适的比例和旋转度。</p>
+<p>我们的方法具有以下优点。首先，它没有有限视野的问题，这是APAP和SPHP共享的问题。其次，通过一起解决所有图像的扭曲，我们的方法可以最大限度地减少全局失真。最后，它为每个图像指定适当的比例和旋转，以使拼接图像看起来比以前的方法更自然。简而言之，我们的方法实现了以下目标：精确对准，减少形状失真，自然性并且不受视野限制。我们在42组图像上评估了所提出的方法，并且所提出的方法始终优于AutoStitch，APAP，SPHP和AANAP。图1展示了以前方法的常见问题。在图1(a)中，APAP
++ BA（束调整）<a href="#fn10" class="footnote-ref" id="fnref10"
+role="doc-noteref"><sup>10</sup></a>通过将图像投影到圆柱体上克服了有限视场的问题。然而，它使用错误的比例和旋转，并且结果在图像上表现出非均匀的失真。AANAP不会正确选择旋转和缩放。在图1(b)中，误差累积并严重弯曲了拼接结果。我们的结果（图1(c)）看起来更自然，因为它可以正确选择比例和旋转。我们的方法也可以结合水平检测，结果可以进一步改进（图1（d））。</p>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">(a) APAP+BA</th>
+<th><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200417134144351.png"
+title="图1(a)" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">(b) AANAP</td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200417134211548.png"
+title="图1(b)" /></td>
+</tr>
+<tr>
+<td style="text-align: center;">(c) 我们的成果（3D方法）</td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200417134250872.png"
+title="图1(c)" /></td>
+</tr>
+<tr>
+<td style="text-align: center;">(d) 带指定水平线的我们的成果</td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200417134506426.png"
+title="图1(d)" /></td>
+</tr>
+</tbody>
+</table>
+<p>图1 18个图像的拼接。</p>
+<h2 id="相关工作">2 相关工作</h2>
+<p>Szeliski对图像拼接进行了全面的调研<a href="#fn11"
+class="footnote-ref" id="fnref11"
+role="doc-noteref"><sup>11</sup></a>。图像拼接技术通常利用参数转换来全局或局部对齐图像。早期的方法使用全局参数扭曲，例如相似性，仿射和投影变换。有些人认为相机运动仅包含3D旋转。进行投影以将视球映射到图像平面以获得二维合成图像。一个著名的例子是Brown等人提出的AutoStitch方法<a
+href="#fn12" class="footnote-ref" id="fnref12"
+role="doc-noteref"><sup>12</sup></a>。Gao等人提出了双重单应性变形，专门处理包含两个主导平面的场景<a
+href="#fn13" class="footnote-ref" id="fnref13"
+role="doc-noteref"><sup>13</sup></a>。扭曲函数由具有空间变化权重的两个单应性矩阵的线性组合定义。由于它们的扭曲基于投影变换，因此生成的图像会受到投影失真（会拉伸和扩大区域）的影响。</p>
+<p>局部扭曲模型采用多个局部参数扭曲以提高对齐精度。Lin等人通过使用平滑变化的仿射缝制场来优先处理用于图像缝制的局部扭曲模型<a
+href="#fn14" class="footnote-ref" id="fnref14"
+role="doc-noteref"><sup>14</sup></a>。它们的翘曲是全局仿射的，同时允许局部变形。Zaragoza等人提出了在可能的情况下尽可能普遍地投影，同时允许局部偏差以更好地对齐<a
+href="#fn15" class="footnote-ref" id="fnref15"
+role="doc-noteref"><sup>15</sup></a>。</p>
+<p>几种方法没有关注对准质量，而是解决了拼接图像中的失真问题。Chang等人提出了保形的半投影扭曲，它是投影变换和相似变换的空间组合<a
+href="#fn16" class="footnote-ref" id="fnref16"
+role="doc-noteref"><sup>16</sup></a>。投影变换在重叠区域中保持良好的对齐方式，而非重叠区域的相似性变换则保留了图像的原始视角并减少了失真。这种方法有时会导致不自然的旋转。Lin等人提出了一种自适应的自然可行（AANAP）弯曲来解决旋转不自然的问题<a
+href="#fn17" class="footnote-ref" id="fnref17"
+role="doc-noteref"><sup>17</sup></a>。</p>
+<p>已经提出了一些投影模型以减少由于投影引起的视觉失真。Zelnik-Manor等人用多平面投影代替圆柱投影<a
+href="#fn18" class="footnote-ref" id="fnref18"
+role="doc-noteref"><sup>18</sup></a>。Kopf等人提出了局部适应的投影，该投影为整体圆柱形，而局部透视<a
+href="#fn19" class="footnote-ref" id="fnref19"
+role="doc-noteref"><sup>19</sup></a>。Carroll等人提出了一种减少广角图像失真的内容保留投影<a
+href="#fn20" class="footnote-ref" id="fnref20"
+role="doc-noteref"><sup>20</sup></a>。当不满足这些模型的基本假设时，就会发生失准，并且可以使用后处理方法（例如反虚像和混合）将其隐藏。</p>
+<h2 id="方法">3 方法</h2>
+<p>我们的方法采用局部扭曲模型，包括以下步骤：</p>
+<ol type="1">
+<li><p>特征检测和匹配</p></li>
+<li><p>图像匹配图的验证<a href="#fn21" class="footnote-ref" id="fnref21"
+role="doc-noteref"><sup>21</sup></a></p></li>
+<li><p>APAP的匹配点生成<a href="#fn22" class="footnote-ref" id="fnref22"
+role="doc-noteref"><sup>22</sup></a></p></li>
+<li><p>焦距和3D旋转估计</p></li>
+<li><p>比例和旋转选择</p></li>
+<li><p>网格优化</p></li>
+<li><p>通过纹理映射合成结果</p></li>
+</ol>
+<p>输入是一组N个图像，<span
+class="math inline"><em>I</em><sub>1</sub>, <em>I</em><sub>2</sub>, ..., <em>I</em><sub><em>N</em></sub></span>。在不失一般性的情况下，我们使用<span
+class="math inline"><em>I</em><sub>0</sub></span>作为参考图像。我们首先通过SIFT<a
+href="#fn23" class="footnote-ref" id="fnref23"
+role="doc-noteref"><sup>23</sup></a>检测每个图像中的特征及其匹配。步骤2确定图像间的邻接关系。在成对比对的质量方面，APAP表现最佳。因此，步骤3对相邻图像对应用APAP，并使用对齐结果来生成匹配点。细节将在3.1节中给出。我们的方法通过网格变形来缝合图像。3.2节描述了我们的能量函数设计。为了使拼接尽可能自然，我们添加了一个全局相似项，要求每个变形图像经历一个相似变换。为了确定每个图像的相似性变换，我们的方法估计每个图像的焦距和3D旋转（步骤4），然后选择最佳比例和旋转（步骤5）。第4节描述了这两个步骤的细节。最后，结果通过步骤6和7合成。</p>
+<h3 id="apap生成匹配点">3.1 APAP生成匹配点</h3>
+<p>设<span
+class="math inline"><em>J</em></span>表示由步骤2检测到的一组相邻图像对。对于<span
+class="math inline"><em>J</em></span>中的一对相邻图像<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>和<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>，我们应用APAP使用来自步骤1的特征和匹配来对齐它们。请注意，APAP是一种基于网格的方法，每个图像都有一个用于对齐的网格。我们在<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>和<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>的重叠部分中收集<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>的网格顶点作为匹配点集合<span
+class="math inline">${\rm M}^{ij}$</span>。对于<span
+class="math inline">${\rm
+M}^{ij}$</span>中的每个匹配点，我们知道它在<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>中的对应关系，因为<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>和<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>已被APAP对齐。同样，我们为<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>设置了一组匹配点<span
+class="math inline">${\rm M}^{ji}$</span>。</p>
+<p>图2给出了匹配点的示例。给定图2（a）中的特征和匹配项，我们使用APAP对齐两个图像。对齐后，对于左图，我们有一组匹配点，它们只是APAP对齐后重叠区域中的网格点。对于这些匹配点，我们在右边的图像中有它们的对应关系。在进一步的步骤中，我们使用匹配点代替特征点，因为匹配点更均匀地分布。</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;"><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200417134952668.png"
+title="图2(a)" /></th>
+<th style="text-align: center;"><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200417135000689.png"
+title="图2(b)" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">(a) 特征点</td>
+<td style="text-align: center;">(b) 匹配点（左对右）</td>
+</tr>
+</tbody>
+</table>
+<p>图2 特征点与匹配点。(a) 特征点及其匹配 (b)匹配点及其匹配</p>
+<h3 id="通过网格变形缝合">3.2 通过网格变形缝合</h3>
+<p>我们的拼接方法基于基于网格的图像变形。对于每个图像，我们使用网格来引导图像变形。设<span
+class="math inline">${\rm V}_i$</span>和<span class="math inline">${\rm
+E}_i$</span>表示图像<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>的网格中的顶点和边的集合。<span
+class="math inline">$\rm
+V$</span>表示所有顶点的集合。我们的拼接算法试图找到一组变形的顶点位置<span
+class="math inline">$\tilde{\rm V}$</span>，使得能量函数<span
+class="math inline">$\Psi(\rm
+V)$</span>最小化。良好拼接的标准可能因应用领域而异。在我们的方法中，我们将多个图像拼接到一个全局平面上，并希望拼接图像看起来像原始图像一样自然。关于自然度的定义，我们假设原始图像对用户来说是自然的。因此，在局部上，我们的方法尽可能地保留每个图像的原始视角。同时，在全局上，试图通过为图像寻找合适的比例和旋转来保持良好的结构。两者都有助于拼接的自然性。因此，我们的能量函数由三个项组成：对齐项<span
+class="math inline"><em>Ψ</em><sub><em>a</em></sub></span>，局部相似项<span
+class="math inline"><em>Ψ</em><sub><em>l</em></sub></span>和全局相似项<span
+class="math inline"><em>Ψ</em><sub><em>g</em></sub></span>。</p>
+<p><strong>对齐项</strong><span
+class="math inline"><em>Ψ</em><sub><em>a</em></sub></span>。该术语通过使匹配点与其对应关系对齐来确保变形后的对齐质量。它被定义为</p>
+<p><span class="math display">$$
+\Psi_a({\rm V}) = \sum^N_{i=1}\sum_{(i,j)\in {\rm J}}\sum_{p^{ij}_{k}\in
+{\rm M}^{ij}}\| \tilde{v}(p^{ij}_k)-\tilde{v}(\Phi(p^{ij}_k))\| ^2
+\tag{1}
+$$</span></p>
+<p>其中<span
+class="math inline"><em>Φ</em>(<em>p</em>)</span>返回给定匹配点<span
+class="math inline"><em>p</em></span>的对应关系点。函数<span
+class="math inline"><em>ṽ</em>(<em>p</em>)</span>将<span
+class="math inline"><em>p</em></span>的位置表示为四个顶点位置的线性组合<span
+class="math inline">$\sum^4_{i=1} \alpha_i
+\tilde{v_i}$</span>，其中<span
+class="math inline"><em>ṽ</em><sub><em>i</em></sub></span>表示<span
+class="math inline"><em>p</em></span>所在的四边形的四个角，<span
+class="math inline"><em>α</em><sub><em>i</em></sub></span>是相应的双线性权重。</p>
+<p><strong>局部相似项</strong><span
+class="math inline"><em>Ψ</em><sub><em>l</em></sub></span>。该项用于正则化，并且将对齐约束从重叠区域传播到非重叠区域。我们对这个术语的选择是确保每个四边形经历一个相似变换，以便形状不会过度扭曲。
+<span class="math display">$$
+\Psi_l({\rm V}) = \sum^N_{i=1} \sum_{(j,k)\in {\rm E}_i}\|
+(\tilde{v}^i_k - \tilde{v}^i_j) - {\rm S}^i_{jk}(v^i_k-v^i_j)\| ^2
+\tag{2}
+$$</span></p>
+<p>其中<span
+class="math inline"><em>v</em><sub><em>j</em></sub><sup><em>i</em></sup></span>是原始顶点的位置，而<span
+class="math inline"><em>ṽ</em><sub><em>j</em></sub><sup><em>i</em></sup></span>表示变形后顶点的位置。<span
+class="math inline">${\rm S}_{jk}^i$</span>是边<span
+class="math inline">(<em>j</em>, <em>k</em>)</span>的相似变换，可以表示为</p>
+<p><span class="math display">$$
+\begin{align}
+{\rm S}^i_{jk}=
+    \begin{bmatrix}
+        c(e^i_{jk})\ s(e^i_{jk}) \\
+        -s(e^i_{jk})\ c(e^i_{jk})
+    \end{bmatrix} \tag{3}
+\end{align}
+$$</span></p>
+<p>系数<span
+class="math inline"><em>c</em>(<em>e</em><sub><em>j</em><em>k</em></sub><sup><em>i</em></sup>)</span>和<span
+class="math inline"><em>s</em>(<em>e</em><sub><em>j</em><em>k</em></sub><sup><em>i</em></sup>)</span>可以表示为顶点变量的线性组合。细节可见<a
+href="#fn24" class="footnote-ref" id="fnref24"
+role="doc-noteref"><sup>24</sup></a>。</p>
+<p><strong>全局相似项</strong><span
+class="math inline"><em>Ψ</em><sub><em>g</em></sub></span>。该项要求每个变形图像尽可能经过相似地变换。这对于拼接图像的自然性至关重要。简而言之，如果没有该项，拼接结果可能是倾斜且非均匀变形的，如AANAP和SPHP所示（图4和图5）。此外，它消除了<span
+class="math inline"><em>v</em><sub><em>i</em></sub><sup><em>j</em></sup> = 0</span>的一般解。确定适当的比例和旋转的过程在第4节中描述。假设我们已经确定了图像<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>的期望缩放比例<span
+class="math inline"><em>s</em><sub><em>i</em></sub></span>和旋转角<span
+class="math inline"><em>θ</em><sub><em>i</em></sub></span>。全局相似性定义为
+<span class="math display">$$
+\Psi_g({\rm V})=\sum^N_{i=1}\sum_{e^i_j\in {\rm
+E}_i}w(e^i_j)^2[(c(e^i_j)-s_i\cos\theta_i)^2 +
+(s(e^i_j)-s_i\sin\theta_i)^2] \tag{4}
+$$</span></p>
+<p>这需要为<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>中每个边<span
+class="math inline"><em>e</em><sub><em>j</em></sub><sup><em>i</em></sup></span>的做相似变换，类似于我们为<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>确定的相似变换。函数<span
+class="math inline"><em>c</em>(<em>e</em>)</span>和<span
+class="math inline"><em>s</em>(<em>e</em>)</span>返回如等式3中所述的输入边<span
+class="math inline"><em>e</em></span>的相似变换的系数的表达式。权重函数<span
+class="math inline"><em>w</em>(<em>e</em><sub><em>j</em></sub><sup><em>i</em></sup>)</span>将更多权重分配给远离重叠区域的边界。对于重叠区域中的四边形，对齐起着更重要的作用。另一方面，对于远离重叠区域的边缘，因为没有对齐约束，所以先验相似性更重要。具体而言，<span
+class="math inline"><em>w</em>(<em>e</em><sub><em>j</em></sub><sup><em>i</em></sup>)</span>定义为</p>
+<p><span class="math display">$$
+w(e^i_j)=\beta+\frac{\gamma}{|Q(e^i_j)|}\sum_{q_k \in
+Q(e^i_j)}{\frac{d(q_k,{\rm M}^i)}{\sqrt{R^2_i+C^2_i}}} \tag{5}
+$$</span></p>
+<p>其中<span class="math inline"><em>β</em></span>和<span
+class="math inline"><em>γ</em></span>是控制该项权重的常数；<span
+class="math inline"><em>Q</em>(<em>e</em><sub><em>j</em></sub><sup><em>i</em></sup>)</span>是共享边<span
+class="math inline"><em>e</em><sub><em>j</em></sub><sup><em>i</em></sup></span>的四边形集合（1或2个四边形，取决于边是否在网格的边界上）；<span
+class="math inline">${\rm M}^i$</span>表示<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>的重叠区域中的四边形组；函数<span
+class="math inline">$d(q_k, {\rm M}^i)$</span>返回四边形<span
+class="math inline"><em>q</em><sub><em>k</em></sub></span>到网格空间中重叠区域中的四边形的距离；<span
+class="math inline"><em>R</em><sub><em>i</em></sub></span>和<span
+class="math inline"><em>C</em><sub><em>i</em></sub></span>表示<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>的网格网格中的行数和列数。概括而言，边缘的权重与边缘到网格空间中重叠区域的归一化距离成比例。</p>
+<p>​ 网格的最佳变形由以下因素确定：</p>
+<p><span class="math display">$$
+{\rm \tilde{V}}=\arg\min_{\rm{\tilde{V}}}{\Psi_a}({\rm
+V})+\lambda_l\Psi_l({\rm V})+\Psi_g({\rm V}) \tag{6}
+$$</span></p>
+<p>注意，在<span
+class="math inline"><em>Ψ</em><sub><em>g</em></sub></span>中有两个参数，<span
+class="math inline"><em>β</em></span>和<span
+class="math inline"><em>γ</em></span>，控制全局相似项的相对重要性。在我们的所有实验中，我们设置<span
+class="math inline"><em>λ</em><sub><em>l</em></sub> = 0.56</span>，<span
+class="math inline"><em>β</em> = 6</span>和<span
+class="math inline"><em>γ</em> = 20</span>。根据经验，我们发现参数非常稳定，因为各项之间没有严重的冲突。优化可以通过稀疏线性求解器有效地求解。</p>
+<h2 id="缩放和旋转选择">4 缩放和旋转选择</h2>
+<p>本节描述如何确定每个图像<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>的最佳尺度<span
+class="math inline"><em>s</em><sub><em>i</em></sub></span>和旋转角度<span
+class="math inline"><em>θ</em><sub><em>i</em></sub></span>，这是缝合结果自然性的关键。</p>
+<h3 id="焦距估计和3d旋转">4.1 焦距估计和3D旋转</h3>
+<p>我们通过改进AutoStitch<a href="#fn25" class="footnote-ref"
+id="fnref25"
+role="doc-noteref"><sup>25</sup></a>提出的束调整方法来估计每个图像的焦距和3D旋转角度。我们以两种方式改进他们的方法：更好的初始化和更好的点匹配。更好的初始化改善了方法的收敛性。</p>
+<p>从两幅图像之间的单应性，我们可以估计两幅图像<a href="#fn26"
+class="footnote-ref" id="fnref26" role="doc-noteref"><sup>26</sup></a><a
+href="#fn27" class="footnote-ref" id="fnref27"
+role="doc-noteref"><sup>27</sup></a><a href="#fn28" class="footnote-ref"
+id="fnref28"
+role="doc-noteref"><sup>28</sup></a>的焦距。在执行APAP之后，我们对网格的每个四边形都有一个单应性。因此，每个四边形给出一个对图像焦距的估计。我们将这些估计的中值作为焦距的初始化并形成<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>的初始内在矩阵<span
+class="math inline">${\rm K}_i$</span>。一旦我们得到<span
+class="math inline">${\rm
+K}_i$</span>，我们通过最小化以下投影误差获得<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>和<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>之间的3D旋转<span
+class="math inline">${\rm R}_{ij}$</span>的初始估计：</p>
+<p><span class="math display">$$
+{\rm R}_{ij} = \arg \min_{\rm R} \sum_{p^{ij}_k \in {\rm M}^{ij}} \|
+{\rm K}_j {\rm R} {\rm K}^{-1}_i p^{ij}_k - \Phi(p^{ij}_k) \|^2 \tag{7}
+$$</span></p>
+<p>它可以通过SVD解决。请注意，AutoStitch使用特征点及其匹配来估计两个图像之间的3D旋转。特征点的问题在于它们不均匀地分布在图像空间中并且可能具有不利影响。我们使用匹配点而不是特征点来估计3D旋转。</p>
+<p>随着<span class="math inline">${\rm K}_i$</span>和<span
+class="math inline">${\rm
+R}_{ij}$</span>的更好初始化，执行束调整可获得每个图像<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>的焦距<span
+class="math inline"><em>f</em><sub><em>i</em></sub></span>和3D旋转<span
+class="math inline">${\rm R}_i$</span>。等式4中<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>的标度<span
+class="math inline"><em>s</em><sub><em>i</em></sub></span>可以设置为</p>
+<p><span class="math display">$$
+s_i=f_0/f_i \tag{8}
+$$</span></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;"><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200417135309006.png"
+title="图3(a)" /></th>
+<th style="text-align: center;"><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200417135324408.png"
+title="图3(b)" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">(a) AANAP</td>
+<td style="text-align: center;">(b) 我们的结果（3D方法）</td>
+</tr>
+</tbody>
+</table>
+<p>图3
+AANAP没有选择正确的旋转(a)。我们的方法做得更好，产生了更自然的结果。</p>
+<h3 id="旋转角度的选择">4.2 旋转角度的选择</h3>
+<p>正如第1节所述，尽管旋转角度的选择对于自然性至关重要，但很少有人关注它。AutoStitch假设用户很少相对于地平线扭曲相机，并且可以通过计算上矢量<a
+href="#fn29" class="footnote-ref" id="fnref29"
+role="doc-noteref"><sup>29</sup></a>来拉直波浪状全景图。AANAP使用特征匹配来确定最佳相似性变换<a
+href="#fn30" class="footnote-ref" id="fnref30"
+role="doc-noteref"><sup>30</sup></a>。启发式方法不够鲁棒，如图3所示。</p>
+<p>旋转选择的目的是为每个图像<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>分配旋转角<span
+class="math inline"><em>θ</em><sub><em>i</em></sub></span>。我们提出了几种确定旋转的方法，2D方法和3D方法。在描述这些方法之前，我们首先定义几个术语。</p>
+<p><strong>相对旋转范围。</strong>给定一对相邻图像<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>和<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>，其每对匹配点唯一地确定相对旋转角。假设第<span
+class="math inline"><em>k</em></span>对匹配点给出了相对旋转角<span
+class="math inline"><em>θ</em><sub><em>k</em></sub><sup><em>i</em><em>j</em></sup></span>。我们将<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>和<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>之间的相对旋转范围<span
+class="math inline"><em>Θ</em><sup><em>i</em><em>j</em></sup></span>定义为
+<span
+class="math display"><em>Θ</em><sup><em>i</em><em>j</em></sup> = [<em>θ</em><sub><em>m</em><em>i</em><em>n</em></sub><sup><em>i</em><em>j</em></sup>, <em>θ</em><sub><em>m</em><em>a</em><em>x</em></sub><sup><em>i</em><em>j</em></sup>]</span></p>
+<p>此处<span
+class="math inline"><em>θ</em><sub><em>m</em><em>i</em><em>n</em></sub><sup><em>i</em><em>j</em></sup> = min<sub><em>k</em></sub><em>θ</em><sub><em>k</em></sub><sup><em>i</em><em>j</em></sup></span>并且<span
+class="math inline"><em>θ</em><sub><em>m</em><em>a</em><em>x</em></sub><sup><em>i</em><em>j</em></sup> = max<sub><em>k</em></sub><em>θ</em><sub><em>m</em><em>a</em><em>x</em></sub><sup><em>i</em><em>j</em></sup></span>。</p>
+<p><strong>最小线段失真旋转（MLDR）</strong>。人类对线条更敏感。因此，我们提出了一个步骤，用于找到相对于线对齐的两个相邻图像之间的最佳相对旋转。我们首先使用LSD检测器<a
+href="#fn31" class="footnote-ref" id="fnref31"
+role="doc-noteref"><sup>31</sup></a>检测线。通过APAP给出的对齐，我们可以找到两个相邻图像<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>和<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>之间的线的对应关系。每对对应线唯一地确定一个相对旋转角度。我们使用RANSAC作为一种强大的投票机制来确定<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>和<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>之间的相对旋转角度。每条线的投票权取决于其长度和宽度的乘积。最终的相对旋转角度被视为所有内部旋转角度的平均值。我们将<span
+class="math inline"><em>ϕ</em><sup><em>i</em><em>j</em></sup></span>表示为由MLDR确定的<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>和<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>之间的相对旋转角。</p>
+<p>给定由MLDR估计的所有相对旋转角<span
+class="math inline"><em>ϕ</em><sup><em>i</em><em>j</em></sup></span>，我们可以找到一组旋转角<span
+class="math inline">{<em>θ</em><sub><em>i</em></sub>}</span>以尽可能地满足MLDR成对旋转关系。我们将<span
+class="math inline"><em>θ</em><sub><em>i</em></sub></span>表示为单位2D矢量<span
+class="math inline">(<em>u</em><sub><em>i</em></sub>, <em>v</em><sub><em>i</em></sub>)</span>并表示以下能量函数：</p>
+<p><span class="math display">$$
+{\rm E}_{MLDR}=\sum_{(i,j)\in {\rm J}}\Bigg\|
+R(\phi^{ij})\begin{bmatrix} u_i \\ v_i\end{bmatrix} - \begin{bmatrix}
+u_j \\ v_j\end{bmatrix}
+\Bigg\|^2 \tag{10}
+$$</span></p>
+<p>其中<span class="math inline">${\rm R}(\phi^{ij})$</span>是由<span
+class="math inline"><em>ϕ</em><sup><em>i</em><em>j</em></sup></span>指定的2D旋转矩阵。通过最小化<span
+class="math inline">${\rm E}_{MLDR}$</span>，我们找到一组旋转角度<span
+class="math inline"><em>θ</em><sub><em>i</em></sub></span>以尽可能地满足MLDR成对旋转角度约束。为了避免这个简单的解决方案，我们需要至少一个约束来求解方程10。我们提出了两种方法来获得额外的约束。</p>
+<p><strong>旋转选择（2D方法）。</strong>在这种方法中，我们与Brown等人做出了类似的假设<a
+href="#fn32" class="footnote-ref" id="fnref32"
+role="doc-noteref"><sup>32</sup></a>，假设用户很少相对于地平线扭曲相机。也就是说，如果可能的话，我们更喜欢<span
+class="math inline"><em>θ</em><sub><em>i</em></sub> = 0<sup>∘</sup></span>。首先，我们需要确定一个图像的旋转角度。在不失一般性的情况下，让参考图像的角度为<span
+class="math inline">0<sup>∘</sup></span>，即<span
+class="math inline"><em>θ</em><sub>0</sub> = 0<sup>∘</sup></span>。一旦对于某个图像<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>具有旋转角<span
+class="math inline"><em>θ</em><sub><em>i</em></sub></span>，我们就可以通过<span
+class="math inline"><em>Θ</em><sub><em>j</em></sub> = <em>Θ</em><sup><em>i</em><em>j</em></sup> + <em>θ</em><sub><em>i</em></sub></span>确定与<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>相邻的图像<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>的旋转范围。如果<span
+class="math inline">0<sup>∘</sup></span>在<span
+class="math inline"><em>Θ</em><sub><em>j</em></sub></span>范围内，则意味着零旋转是合理的，我们应该设置<span
+class="math inline"><em>θ</em><sub><em>j</em></sub> = 0</span>。通过沿邻接图使用BFS传播旋转范围，我们可以找到一组旋转<span
+class="math inline">0<sup>∘</sup></span>的图像。详细过程的伪代码在补充材料中给出。设<span
+class="math inline"><em>Ω</em></span>是旋转角度等于<span
+class="math inline">0<sup>∘</sup></span>的图像集合。我们通过最小化下列式子找到<span
+class="math inline"><em>θ</em><sub><em>i</em></sub></span> <span
+class="math display">$$
+\begin{align}
+&amp;{\rm E}_{MLDR}+\lambda_z{\rm E}_{ZERO}  \tag{11} \\
+&amp;{\rm E}_{ZERO}=\sum_{i\in\Omega}\Bigg\|
+\begin{bmatrix} u_i \\ v_i \end{bmatrix} -
+\begin{bmatrix} 1 \\ 0 \end{bmatrix}
+\Bigg\|^2 \tag{12}
+\end{align}
+$$</span></p>
+<p>并且<span
+class="math inline"><em>λ</em><sub><em>z</em></sub> = 1000</span>，使得<span
+class="math inline"><em>Ω</em></span>中的图像可能被指定为零旋转，即保持它们的原始方向。</p>
+<p><strong>旋转选择（3D方法）。</strong>在此方法中，我们使用在本节开头估计的3D旋转矩阵<span
+class="math inline">${\rm R}_i$</span>。我们首先分解3D旋转矩阵<span
+class="math inline">${\rm R}_i$</span>以获得相对于<span
+class="math inline"><em>z</em></span>轴的旋转角<span
+class="math inline"><em>α</em><sub><em>i</em></sub></span>。两个相邻图像<span
+class="math inline"><em>I</em><sub><em>i</em></sub></span>和<span
+class="math inline"><em>I</em><sub><em>j</em></sub></span>之间的相对旋转可以确定为<span
+class="math inline"><em>α</em><sup><em>i</em><em>j</em></sup> = <em>α</em><sub><em>j</em></sub> − <em>α</em><sub><em>i</em></sub></span>。如果<span
+class="math inline"><em>α</em><sup><em>i</em><em>j</em></sup> ∈ <em>Θ</em><sup><em>i</em><em>j</em></sup></span>，则意味着估计是合理的并且可以使用。否则，我们应该使用MLDR的相对旋转<span
+class="math inline"><em>ϕ</em><sup><em>i</em><em>j</em></sup></span>。设<span
+class="math inline"><em>Ω</em></span>是使用<span
+class="math inline"><em>ϕ</em><sup><em>i</em><em>j</em></sup></span>的配对集，<span
+class="math inline">$\bar{\Omega}={\rm
+J}-\Omega$</span>为其他部分。通过最小化确定旋转角度 <span
+class="math display">$$
+\sum_{(i,j)\in \Omega}\Bigg\|R(\phi^{ij}) \begin{bmatrix} u_i \\ v_i
+\end{bmatrix} -\begin{bmatrix} u_j \\ v_j \end{bmatrix} \Bigg \|^2 +
+\lambda_{\gamma} \sum_{(i,j)\in \bar{\Omega}} \Bigg\| R(\alpha^{ij})
+\begin{bmatrix} u_i \\ v_i\end{bmatrix} - \begin{bmatrix} u_j \\ v_j
+\end{bmatrix} \Bigg\|^2 \tag{13}
+$$</span></p>
+<p>我们设置<span
+class="math inline"><em>λ</em><sub><em>γ</em></sub> = 10</span>以给予3D旋转更多权重。</p>
+<table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 48%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr>
+<th>(a)</th>
+<th><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418175032212.png"
+title="图4(a)" /></th>
+<th><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418175515541.png"
+title="图4(a)" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(b)</td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418175149902.png"
+title="图4(b)" /></td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418175633671.png"
+title="图4(b)" /></td>
+</tr>
+<tr>
+<td>(c)</td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418175154752.png"
+title="图4(c)" /></td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418175710259.png"
+title="图4(c)" /></td>
+</tr>
+<tr>
+<td>(d)</td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418175204843.png"
+title="图4(d)" /></td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418175851168.png"
+title="图4(d)" /></td>
+</tr>
+<tr>
+<td>(e)</td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418175404357.png"
+title="图4(e)" /></td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418180038446.png"
+title="图4(e)" /></td>
+</tr>
+<tr>
+<td>(f)</td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418175419077.png"
+title="图4(f)" /></td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418180100625.png"
+title="图4(f)" /></td>
+</tr>
+<tr>
+<td>(g)</td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418175424455.png"
+title="图4(g)" /></td>
+<td><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200418180234432.png"
+title="图4(g)" /></td>
+</tr>
+</tbody>
+</table>
+<p>图4所示。两图拼接的一个例子。(a) AutoStitch，(b)
+AutoStitch+ours，(c)APAP，(d) ASAP，(e) SPHP+APAP，(f) AANAP，(g) Ours
+(3D method)。</p>
+<h1 id="实验和结果">5 实验和结果</h1>
+<p>我们将方法（2D和3D版本）与四种方法进行比较，AutoStitch<a href="#fn33"
+class="footnote-ref" id="fnref33"
+role="doc-noteref"><sup>33</sup></a>，APAP<a href="#fn34"
+class="footnote-ref" id="fnref34"
+role="doc-noteref"><sup>34</sup></a>，SPHP<a href="#fn35"
+class="footnote-ref" id="fnref35"
+role="doc-noteref"><sup>35</sup></a>和AANAP<a href="#fn36"
+class="footnote-ref" id="fnref36"
+role="doc-noteref"><sup>36</sup></a>。实验在具有2.8GHz CPU和16GB
+RAM的MacBook Pro上进行。使用VLFeat<a href="#fn37" class="footnote-ref"
+id="fnref37"
+role="doc-noteref"><sup>37</sup></a>提取SIFT特征。对于基于网格的方法，网格大小设为<span
+class="math inline">40 × 40</span>。我们在42组图像上测试了6种方法（3种来自<a
+href="#fn38" class="footnote-ref" id="fnref38"
+role="doc-noteref"><sup>38</sup></a>，6种来自<a href="#fn39"
+class="footnote-ref" id="fnref39"
+role="doc-noteref"><sup>39</sup></a>，4种来自<a href="#fn40"
+class="footnote-ref" id="fnref40"
+role="doc-noteref"><sup>40</sup></a>，7种来自<a href="#fn41"
+class="footnote-ref" id="fnref41"
+role="doc-noteref"><sup>41</sup></a>，3种来自<a href="#fn42"
+class="footnote-ref" id="fnref42"
+role="doc-noteref"><sup>42</sup></a>和19种我们自己收集）。所有比较都可以在补充材料中找到。图像数量从2到35不等。我们收集的测试集比现有测试集更具挑战性。我们将发布所有代码和数据以便于进一步比较。不考虑特征检测和匹配，对于<span
+class="math inline">800 × 600</span>的分辨率，我们的方法需要0.1秒来拼接两个图像（图4）和8s用于35个图像（图6）。</p>
+<p>图4比较了拼接两幅图像的所有方法。图4(a)显示了AutoStitch的结果。请注意，存在明显的错位。我们的方法可用于赋予其他具有APAP对齐能力的方法。图4(b)显示了很大程度上消除了未对准的结果。虽然具有良好的对准质量，但APAP存在透视畸变问题（图4(c)）。可以将APAP的视角模型改为相似模型，如ASAP，类似于Schaefer等人的方法<a
+href="#fn43" class="footnote-ref" id="fnref43"
+role="doc-noteref"><sup>43</sup></a>。图4(d)显示了ASAP的结果。尽管相似模型在减少失真方面表现良好，但不能很好地对准（特写处）。此外，拼接结果将表现出具有倾斜和不均匀变形的伪影。SPHP存在不自然旋转的问题（图4(e)）。AANAP在这个例子中给出了一个合理的结果（图4(f)），但地板上的线条略微扭曲，如特写中更清楚地显示。在这个例子中，我们的方法具有最佳的缝合质量（图4(g)）。</p>
+<p>图1给出了通过缝合18个图像获得全景图的示例。由于视野有限，SPHP在这个例子上失败了。APAP
++ BA通过将图像投影到圆柱体上来克服这个问题<a href="#fn44"
+class="footnote-ref" id="fnref44"
+role="doc-noteref"><sup>44</sup></a>。然而，由于不正确的比例和旋转估计，结果表现出对图像的非均匀失真（图1(a)）。AANAP不会正确选择旋转和缩放。如图1(b)所示，误差会累积并显著地弯曲拼接结果。请注意，该问题不能通过全景图矩形化的方法<a
+href="#fn45" class="footnote-ref" id="fnref45"
+role="doc-noteref"><sup>45</sup></a>来解决，因为它会在不参考原始图像的情况下尽可能地保持输入全景的原始方向。全景图可以变成矩形但场景仍然是弯曲的。我们的结果（图1(c)）看起来更自然，因为它可以正确选择比例和旋转角度。我们的方法很灵活，可以扩展以符合一些其他约束。在这个例子中，我们使用消失点检测方法<a
+href="#fn46" class="footnote-ref" id="fnref46"
+role="doc-noteref"><sup>46</sup></a>来检测一个图像的水平线。通过这个附加约束，拼接图像更好地与地平线对齐，以获得更自然的结果（图1(d)）。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200417140621565.png"
+title="图5" /></p>
+<p>图5所示。六张图片拼接样例。(左上)AutoStitch，(左下)SPHP+APAP，(右上)AANAP，(右下)我们的结果（2D方法）。</p>
+<p>在图5中拼接六个图像的示例中，AutoStitch由于其球形投影（左上角）而引入明显的失真。SPHP无法处理图像之间的2D拓扑并导致失真（左下）。AANAP的结果表现出不自然的旋转和形状扭曲（右上）。我们的结果在所有结果中看起来最自然（右下）。图6的输入包含35个图像。AutoStitch受到球形投影（左上角）引起的失真的影响。AANAP在整个图像上都有扭曲（右上角）。我们的两种方法都能提供更自然的结果。2D方法更好地保持每个图像的透视（左下），而3D方法保持原始场景的更好的3D透视（右下）。</p>
+<p>总之，虽然ASAP，AANAP，SPHP和我们的方法都使用相似性，但我们的方法给出了更好的结果。差异来自于如何利用相似性。SPHP尝试减少视角失真，但是当视野宽广（图1）并且图像之间的空间关系是2D（图5）时，它会失败。AANAP试图解决不自然的旋转，但它不够稳健而且经常失败（图1(b)，图3和图5）。此外，AANAP不会优化形状失真，它一次只能拼接两个图像。拼接多个图像时可能存在局部失真（图4(f)，图5和图6）。我们的方法比以前的方法更好地解决了所有这些问题。</p>
+<p><img data-src="https://raw.githubusercontent.com/smilelc3/blog/main/images/图像拼接NISwGSP论文阅读笔记/image-20200417140955934.png"
+title="图6" /></p>
+<p>图6所示。这是一个拼接35张图片的例子。(左上)AutoStitch，(右上)AANAP，(左下)2D方法，(右下)3D方法。</p>
+<h1 id="结论">6 结论</h1>
+<p>本文提出一种图像拼接方法，用于合成自然结果。我们的方法采用局部变形模型。通过添加全局先验相似性，我们的方法可以在保持良好对齐的同时减少失真。更重要的是，借助我们的缩放尺度和旋转角度选择方法，全局先验相似性会产生更自然的拼接图像。
+本文提出了两个主要的贡献。第一，它提出了一种结合APAP的对齐精度和更小相似度失真的方法。尽管可以探究各个部分，但我们以不同的方式利用它们。该方法也可以处理多个图像的自然对齐。第二，它提出了用于稳健估计图像间的恰当地相似性变换的方法。它们有两个目的：进一步在局部加强相似性并建立良好的全局结构。实验证实了该方法的有效性和鲁棒性。</p>
+<h1 id="参考文献">参考文献</h1>
+<section id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Szeliski R. Image alignment and stitching: a tutorial,
+foundations and trends in computer graphics and computer vision[J]. Now
+Publishers, 2006, 2(1): 120.<a href="#fnref1" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Lin W Y, Liu S, Matsushita Y, et al. Smoothly varying
+affine stitching[C]//CVPR 2011. IEEE, 2011: 345-352.<a href="#fnref2"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Zaragoza J, Chin T J, Brown M S, et
+al. As-projective-as-possible image stitching with moving
+DLT[C]//Proceedings of the IEEE conference on computer vision and
+pattern recognition. 2013: 2339-2346.<a href="#fnref3"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Chang C H, Sato Y, Chuang Y Y. Shape-preserving
+half-projective warps for image stitching[C]//Proceedings of the IEEE
+Conference on Computer Vision and Pattern Recognition. 2014:
+3254-3261.<a href="#fnref4" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Lin C C, Pankanti S U, Natesan Ramamurthy K, et
+al. Adaptive as-natural-as-possible image stitching[C]//Proceedings of
+the IEEE Conference on Computer Vision and Pattern Recognition. 2015:
+1155-1163.<a href="#fnref5" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Chang C H, Sato Y, Chuang Y Y. Shape-preserving
+half-projective warps for image stitching[C]//Proceedings of the IEEE
+Conference on Computer Vision and Pattern Recognition. 2014:
+3254-3261.<a href="#fnref6" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Lin C C, Pankanti S U, Natesan Ramamurthy K, et
+al. Adaptive as-natural-as-possible image stitching[C]//Proceedings of
+the IEEE Conference on Computer Vision and Pattern Recognition. 2015:
+1155-1163.<a href="#fnref7" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Brown M, Lowe D G. Automatic panoramic image stitching
+using invariant features[J]. International journal of computer vision,
+2007, 74(1): 59-73.<a href="#fnref8" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Lin C C, Pankanti S U, Natesan Ramamurthy K, et
+al. Adaptive as-natural-as-possible image stitching[C]//Proceedings of
+the IEEE Conference on Computer Vision and Pattern Recognition. 2015:
+1155-1163.<a href="#fnref9" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Zaragoza J, Tat-Jun C, Tran Q H, et
+al. As-Projective-As-Possible Image Stitching with Moving DLT[J]. IEEE
+transactions on pattern analysis and machine intelligence, 2014, 36(7):
+1285.<a href="#fnref10" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>Szeliski R. Image alignment and stitching: a tutorial,
+foundations and trends in computer graphics and computer vision[J]. Now
+Publishers, 2006, 2(1): 120.<a href="#fnref11" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>Brown M, Lowe D G. Recognising panoramas[C]//ICCV.
+2003, 3: 1218.<a href="#fnref12" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>Gao J, Kim S J, Brown M S. Constructing image panoramas
+using dual-homography warping[C]//CVPR 2011. IEEE, 2011: 49-56.<a
+href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p>Lin W Y, Liu S, Matsushita Y, et al. Smoothly varying
+affine stitching[C]//CVPR 2011. IEEE, 2011: 345-352.<a href="#fnref14"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p>Zaragoza J, Chin T J, Brown M S, et
+al. As-projective-as-possible image stitching with moving
+DLT[C]//Proceedings of the IEEE conference on computer vision and
+pattern recognition. 2013: 2339-2346.<a href="#fnref15"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p>Chang C H, Sato Y, Chuang Y Y. Shape-preserving
+half-projective warps for image stitching[C]//Proceedings of the IEEE
+Conference on Computer Vision and Pattern Recognition. 2014:
+3254-3261.<a href="#fnref16" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p>Lin C C, Pankanti S U, Natesan Ramamurthy K, et
+al. Adaptive as-natural-as-possible image stitching[C]//Proceedings of
+the IEEE Conference on Computer Vision and Pattern Recognition. 2015:
+1155-1163.<a href="#fnref17" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p>Zelnik-Manor L, Peters G, Perona P. Squaring the circle
+in panoramas[C]//Tenth IEEE International Conference on Computer Vision
+(ICCV’05) Volume 1. IEEE, 2005, 2: 1292-1299.<a href="#fnref18"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p>Kopf J, Lischinski D, Deussen O, et al. Locally adapted
+projections to reduce panorama distortions[C]//Computer Graphics Forum.
+Oxford, UK: Blackwell Publishing Ltd, 2009, 28(4): 1083-1089.<a
+href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p>Carroll R, Agrawal M, Agarwala A. Optimizing
+content-preserving projections for wide-angle images[C]//ACM
+Transactions on Graphics (TOG). ACM, 2009, 28(3): 43.<a href="#fnref20"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21"><p>Brown M, Lowe D G. Automatic panoramic image stitching
+using invariant features[J]. International journal of computer vision,
+2007, 74(1): 59-73.<a href="#fnref21" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn22"><p>Zaragoza J, Chin T J, Brown M S, et
+al. As-projective-as-possible image stitching with moving
+DLT[C]//Proceedings of the IEEE conference on computer vision and
+pattern recognition. 2013: 2339-2346.<a href="#fnref22"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn23"><p>Lowe D G. Distinctive image features from
+scale-invariant keypoints[J]. International journal of computer vision,
+2004, 60(2): 91-110.<a href="#fnref23" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn24"><p>Igarashi T, Igarashi Y. Implementing
+as-rigid-as-possible shape manipulation and surface flattening[J].
+journal of graphics, gpu, and game tools, 2009, 14(1): 17-30.<a
+href="#fnref24" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn25"><p>Brown M, Lowe D G. Automatic panoramic image stitching
+using invariant features[J]. International journal of computer vision,
+2007, 74(1): 59-73.<a href="#fnref25" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn26"><p>Szeliski R. Image alignment and stitching: a tutorial,
+foundations and trends in computer graphics and computer vision[J]. Now
+Publishers, 2006, 2(1): 120.<a href="#fnref26" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn27"><p>Shum H Y, Szeliski R. Panoramic image mosaics[R].
+Technical Report MSR-TR-97-23, Microsoft Research, 1997.<a
+href="#fnref27" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn28"><p>Szeliski R, Shum H Y. Creating full view panoramic
+image mosaics and environment maps[C]//Proceedings of the 24th annual
+conference on Computer graphics and interactive techniques. 1997:
+251-258.<a href="#fnref28" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn29"><p>Brown M, Lowe D G. Automatic panoramic image stitching
+using invariant features[J]. International journal of computer vision,
+2007, 74(1): 59-73.<a href="#fnref29" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn30"><p>Lin C C, Pankanti S U, Natesan Ramamurthy K, et
+al. Adaptive as-natural-as-possible image stitching[C]//Proceedings of
+the IEEE Conference on Computer Vision and Pattern Recognition. 2015:
+1155-1163.<a href="#fnref30" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn31"><p>Von Gioi R G, Jakubowicz J, Morel J M, et al. LSD: a
+line segment detector[J]. Image Processing On Line, 2012, 2: 35-55.<a
+href="#fnref31" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn32"><p>Brown M, Lowe D G. Automatic panoramic image stitching
+using invariant features[J]. International journal of computer vision,
+2007, 74(1): 59-73.<a href="#fnref32" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn33"><p>Brown M, Lowe D G. Automatic panoramic image stitching
+using invariant features[J]. International journal of computer vision,
+2007, 74(1): 59-73.<a href="#fnref33" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn34"><p>Zaragoza J, Chin T J, Brown M S, et
+al. As-projective-as-possible image stitching with moving
+DLT[C]//Proceedings of the IEEE conference on computer vision and
+pattern recognition. 2013: 2339-2346.<a href="#fnref34"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn35"><p>Chang C H, Sato Y, Chuang Y Y. Shape-preserving
+half-projective warps for image stitching[C]//Proceedings of the IEEE
+Conference on Computer Vision and Pattern Recognition. 2014:
+3254-3261.<a href="#fnref35" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn36"><p>Lin C C, Pankanti S U, Natesan Ramamurthy K, et
+al. Adaptive as-natural-as-possible image stitching[C]//Proceedings of
+the IEEE Conference on Computer Vision and Pattern Recognition. 2015:
+1155-1163.<a href="#fnref36" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn37"><p>Vedaldi A, Fulkerson B. VLFeat: An open and portable
+library of computer vision algorithms[C]//Proceedings of the 18th ACM
+international conference on Multimedia. 2010: 1469-1472.<a
+href="#fnref37" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn38"><p>Lin C C, Pankanti S U, Natesan Ramamurthy K, et
+al. Adaptive as-natural-as-possible image stitching[C]//Proceedings of
+the IEEE Conference on Computer Vision and Pattern Recognition. 2015:
+1155-1163.<a href="#fnref38" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn39"><p>Chang C H, Sato Y, Chuang Y Y. Shape-preserving
+half-projective warps for image stitching[C]//Proceedings of the IEEE
+Conference on Computer Vision and Pattern Recognition. 2014:
+3254-3261.<a href="#fnref39" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn40"><p>Zaragoza J, Chin T J, Brown M S, et
+al. As-projective-as-possible image stitching with moving
+DLT[C]//Proceedings of the IEEE conference on computer vision and
+pattern recognition. 2013: 2339-2346.<a href="#fnref40"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn41"><p>Nomura Y, Zhang L, Nayar S K. Scene collages and
+flexible camera arrays[C]//Proceedings of the 18th Eurographics
+conference on Rendering Techniques. 2007: 127-138.<a href="#fnref41"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn42"><p>Gao J, Kim S J, Brown M S. Constructing image panoramas
+using dual-homography warping[C]//CVPR 2011. IEEE, 2011: 49-56.<a
+href="#fnref42" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn43"><p>Schaefer S, McPhail T, Warren J. Image deformation
+using moving least squares[M]//ACM SIGGRAPH 2006 Papers. 2006:
+533-540.<a href="#fnref43" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn44"><p>Zaragoza J, Tat-Jun C, Tran Q H, et
+al. As-Projective-As-Possible Image Stitching with Moving DLT[J]. IEEE
+transactions on pattern analysis and machine intelligence, 2014, 36(7):
+1285.<a href="#fnref44" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn45"><p>He K, Chang H, Sun J. Rectangling panoramic images via
+warping[J]. ACM Transactions on Graphics (TOG), 2013, 32(4): 1-10.<a
+href="#fnref45" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn46"><p>Lezama J, Grompone von Gioi R, Randall G, et
+al. Finding vanishing points via point alignments in image primal and
+dual domains[C]//Proceedings of the IEEE Conference on Computer Vision
+and Pattern Recognition. 2014: 509-515.<a href="#fnref46"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/02/23/SIFT%E7%AE%97%E6%B3%95%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3/" rel="prev" title="SIFT算法深入理解">
+                  <i class="fa fa-angle-left"></i> SIFT算法深入理解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/09/30/Tmux%20%E5%BF%AB%E6%8D%B7%E9%94%AE%E9%80%9F%E6%9F%A5%E8%A1%A8/" rel="next" title="Tmux 快捷键速查表">
+                  Tmux 快捷键速查表 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">smile</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">184k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:48</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/smilelc3" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"smilelc3/smilelc3.github.io","issue_term":"pathname","theme":"github-dark"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>
